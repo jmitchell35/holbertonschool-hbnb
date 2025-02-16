@@ -93,6 +93,7 @@ Methods and attributes for each class.
 * The user submits a review (e.g., rating, comment) for a specific property.
 * The facade layer validates the input and passes it to the business logic layer.
 * The business logic layer creates a new Review object, associates it with the corresponding Place and User, and saves it to the database. 
+
 <ins>**Fetching a List of Places**</ins>: 
 
 * The user requests a list of available properties.
