@@ -57,31 +57,46 @@ These four entities are the backbone of the app, as they both provide the class 
 
 <ins>**Design Decisions**</ins>: 
 
-The app has to match the Facade design pattern for smooth and flawless implementation of its different features. The facade pattern relies on a facade class to provide instanciation for some kind of "entry object", thanks to which all underlying objects and methods will unfold as they are needed as remote from the user as possible.
+The app has to match the Facade design pattern for smooth and flawless implementation of its different features. The facade pattern relies on a facade class to provide instantiation of some kind of "entry object", thanks to which all underlying objects and methods will unfold as they are needed as remote from the user as possible.
 
-This Facade class is called by every API routing function matching all possible operations carried out by a user of the app. Each API call made by the user from the JavaScript layer of the UI reaches a routing function whose job is to provide an entry point for the desired back-end operation and attached data (picked up from the body of the HTTP request). Complying with the microframework orientation of the Flask framework, these routin functions are al stand-alone functions, unrelated to any kind of class. A Back-end relying on a Django framework would probably work the other way around to match its class-oriented behavior. Once instantiated, the Facade Class object allows for the instantiation of entity-specific facades providing a type level. The Facade pattern keeps unfolding as each entity facade instantiates Entity Gateways objects, providing a method level, hence access to the entity's methods (such as register for a user). The data from the API call is then matched to our four main entity classes, for format validation. This allows the Entity Gateways to submit requests to the DB Client Service class, which interfaces with the DBMS.
+This Facade class is called by every API routing function matching all possible operations carried out by a user of the app. Each API call made by the user from the JavaScript layer of the UI reaches a back-end routing function whose job is to provide an entry point for the desired operations (communication with the DB, external API calls...) and attached data (picked up from the body of the HTTP request). Complying with the microframework philosophy of the Flask framework, these routing functions are all stand-alone functions, unrelated to any kind of class. A back-end relying on a Django framework would probably work the other way around to match its class-oriented approach. Once instantiated, the Facade Class object allows for the instantiation of entity-specific facades providing a type level. The Facade pattern keeps unfolding as each entity facade instantiates Entity Gateways objects, providing a method level, hence access to the entity's methods (such as register for a user). The data from the API call is then matched to our four main entity classes, for format validation. This allows the Entity Gateways to submit requests to the DB Client Service class, which interfaces with the DBMS.
 
 This Facade design enforces the Single Responsibility Principle, strictly delimiting each classe's perimeter.
 
 In other words, a single-entity operation would end-up with an API routing function instantiating a Facade object, and then return an object.entity.method(data) statement.
 ```
+# CASE 1: Single-entity operation
+# Only instantiates facade and uses domain facade directly
 @app.route('/api/users/register', methods=['POST'])
 def register_user():
     data = request.get_json()
-    facade = ApplicationFacade()
-    # Route directly delegates to user domain
-    return facade.users.register(data)
+    app_facade = ApplicationFacade()  # Just instantiation
+    return app_facade.users.register(data)  # Direct use of domain facade
 ```
 
 A cross-entity or complex operation, however, would call a method directly implemented in the Facade Class. This way, a simple Facade object is created fron the user's API call, and the Facade class handles orchestrating all the back-end work.
+```
+# CASE 2: Cross-entity operation
+# Instantiates facade AND calls coordination method
+@app.route('/api/bookings/create', methods=['POST'])
+def create_booking():
+    data = request.get_json()
+    app_facade = ApplicationFacade()  # First instantiation
+    # Then calls cross-entity method
+    return app_facade.create_booking_with_validation(  
+        user_id=data['userId'],
+        property_id=data['propertyId'],
+        dates=data['dates']
+    )
+```
 
-In this Facade pattern, our four entity classes (User, Place, Review, Amenity) are the keystone, deept in the core of the design.
+In this Facade pattern, our four entity classes (User, Place, Review, Amenity) are the keystone, deep in the core of the design.
 
 <ins>**Entities Relationships**</ins>:
 
 * The User class is central to the system, as it interacts with both Place and Review. It is then "used by both". It would seem appropriate to not set up a dependency of the Review entity towrds the User class so that reviews can be persisted, as they remain relevant, after a user is deleted.
 * The Place class aggregates Review and Amenity objects, ensuring that reviews are tied to specific properties.
-* The use of encapsulation ensures that each class manages its own data and behavior, promoting modularity and reusability. 
+* The use of encapsulation ensures that each class manages its own data and behavior, promoting modularity and reusability.
 
 
 ## 4. API Interaction Flow 
