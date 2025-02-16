@@ -61,7 +61,7 @@ The app has to match the Facade design pattern for smooth and flawless implement
 
 This Facade class is called by every API routing function matching all possible operations carried out by a user of the app. Each API call made by the user from the JavaScript layer of the UI reaches a back-end routing function whose job is to provide an entry point for the desired operations (communication with the DB, external API calls...) and attached data (picked up from the body of the HTTP request). Complying with the microframework philosophy of the Flask framework, these routing functions are all stand-alone functions, unrelated to any kind of class. A back-end relying on a Django framework would probably work the other way around to match its class-oriented approach. Once instantiated, the Facade Class object allows for the instantiation of entity-specific facades providing a type level. The Facade pattern keeps unfolding as each entity facade instantiates Entity Gateways objects, providing a method level, hence access to the entity's methods (such as register for a user). The data from the API call is then matched to our four main entity classes, for format validation. This allows the Entity Gateways to submit requests to the DB Client Service class, which interfaces with the DBMS.
 
-This Facade design enforces the Single Responsibility Principle, strictly delimiting each classe's perimeter.
+This Facade design enforces the Single Responsibility Principle, strictly delimiting each class's perimeter.
 
 In other words, a single-entity operation would end-up with an API routing function instantiating a Facade object, and then return an object.entity.method(data) statement.
 ```
