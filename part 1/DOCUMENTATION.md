@@ -28,7 +28,7 @@ providing a clear understanding of the system's design and functionality.
 **High-Level Package Diagram**: 
  
 
- ![Diagramme des Packages](images/High-Level_Package_Diagram.png)
+ ![Paquage Diagram](images/High-Level_Package_Diagram.png)
 
  
 
@@ -70,13 +70,11 @@ Methods and attributes for each class.
 
 ## 4. API Interaction Flow 
 
-**Sequence Diagrams**:
-
-
-
-**Explanatory Notes**: 
+**Sequence Diagrams**: 
 
 <ins>**User Registration**</ins>: 
+
+![Diagram user](images/Sequence_Diagram_User.png)
 
 * The user submits registration details (e.g., name, email, password) through the presentation layer. 
 * The facade layer validates the input and passes it to the business logic layer. 
@@ -84,17 +82,23 @@ Methods and attributes for each class.
 
 <ins>**Place Creation**</ins>: 
 
+![Diagram place](images/Sequence_Diagram_Place.png)
+
 * The user submits property details (e.g., title, description, price) through the presentation layer.
 * The facade layer validates the input and forwards it to the business logic layer.
 * The business logic layer creates a new Place object, associates it with the logged-in user, and saves it to the database. 
 
 <ins>**Review Submission**</ins>: 
 
+![Diagram review](images/Sequence_Diagram_Review.png)
+
 * The user submits a review (e.g., rating, comment) for a specific property.
 * The facade layer validates the input and passes it to the business logic layer.
 * The business logic layer creates a new Review object, associates it with the corresponding Place and User, and saves it to the database. 
 
 <ins>**Fetching a List of Places**</ins>: 
+
+![Diagram fetch](images/Sequence_Diagram_Fetch.png)
 
 * The user requests a list of available properties.
 * The facade layer forwards the request to the business logic layer.
