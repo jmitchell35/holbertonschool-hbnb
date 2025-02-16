@@ -98,6 +98,32 @@ In this Facade pattern, our four entity classes (User, Place, Review, Amenity) a
 * The Place class aggregates Review and Amenity objects, ensuring that reviews are tied to specific properties.
 * The use of encapsulation ensures that each class manages its own data and behavior, promoting modularity and reusability.
 
+Overall, the relationships are :
+
+Generalization (inheritance):
+* BaseFacade -> EntityFacades
+* BaseGateway -> EntityGateways
+* BaseModel -> EntityModels
+
+Composition:
+* ApplicationFacade owns EntityFacades
+* EntityFacades own their respective EntityGateways
+
+Dependency:
+* EntityGateways depend on EntityModels
+* EntityFacades depend on their EntityGateways
+* All Gateways depend on DatabaseClient
+
+Association:
+* EntityGateways are associated with their corresponding EntityModels
+* EntityFacades are associated with their corresponding EntityGateways
+* ApplicationFacade is associated with all EntityFacades
+
+Aggregation:
+* User class aggregates places objects (as an owner) or reviews objects (as an author)
+* Place class aggregates amenity objects (as features or services) and reviews (as their main topic)
+
+No realization (interface implementation) relationships are present in this structure.
 
 ## 4. API Interaction Flow 
 
