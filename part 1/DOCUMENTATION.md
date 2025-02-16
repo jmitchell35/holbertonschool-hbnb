@@ -28,7 +28,7 @@ providing a clear understanding of the system's design and functionality.
 **High-Level Package Diagram**: 
  
 
- 
+ ![Diagramme des Packages](images/High-Level_Package_Diagram.png)
 
  
 
