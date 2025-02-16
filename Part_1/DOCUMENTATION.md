@@ -42,7 +42,7 @@ providing a clear understanding of the system's design and functionality.
 
 **Detailed Class Diagram**:
 
-[Click here to see diagram](./jpg/Class_diagram.drawio)
+[Click here to see diagram](https://app.diagrams.net/#G1es0sS85BDmLfkTrpuBMlcameV20_ycK5#%7B%22pageId%22%3A%224iQGp0F2QipZq8b3e1VB%22%7D)
 
 **Explanatory Notes**:
 
