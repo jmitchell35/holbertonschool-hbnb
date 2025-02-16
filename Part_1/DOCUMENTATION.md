@@ -53,7 +53,7 @@ providing a clear understanding of the system's design and functionality.
 * Review: Represents a review submitted by a user for a place, with attributes like rating, comment, and date. 
 * Amenities: Are properties features, like air conditionning, a swimming pool...
 
-These four entities are the backbone of the app, as they both provide the class for back-end manegment of their instances, and data modeling for writing into the Persistence Layer's Data Base (DB) through de Gateway classes reponsible for transmitting the queries to the Database Client Service class. More about these classes is explained below.
+These four entities are the backbone of the app, as they both provide the class for back-end management of their instances, and data modeling for writing into the Persistence Layer's Data Base (DB) through de Gateway classes reponsible for transmitting the queries to the Database Client Service class. More about these classes is explained below.
 
 <ins>**Design Decisions**</ins>: 
 
