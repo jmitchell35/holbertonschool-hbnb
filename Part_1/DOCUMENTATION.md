@@ -28,7 +28,7 @@ providing a clear understanding of the system's design and functionality.
 **High-Level Package Diagram**: 
  
 
- ![Paquage Diagram](./Part_1/jpg/High-Level_Paquage_Diagram.jpg)
+ ![Paquage Diagram](./jpg/High-Level_Paquage_Diagram.jpg)
  
 **Explanatory Notes**: 
 
@@ -72,7 +72,7 @@ Methods and attributes for each class.
 
 <ins>**User Registration**</ins>: 
 
-![Diagram user](./Part_1/jpg/Sequence_Diagram_User.jpg)
+![Diagram user](./jpg/Sequence_Diagram_User.jpg)
 
 * The user submits registration details (e.g., name, email, password) through the presentation layer. 
 * The facade layer validates the input and passes it to the business logic layer. 
@@ -80,7 +80,7 @@ Methods and attributes for each class.
 
 <ins>**Place Creation**</ins>: 
 
-![Diagram place](./Part_1/jpg/Sequence_Diagram_Place.jpg)
+![Diagram place](./jpg/Sequence_Diagram_Place.jpg)
 
 * The user submits property details (e.g., title, description, price) through the presentation layer.
 * The facade layer validates the input and forwards it to the business logic layer.
@@ -88,7 +88,7 @@ Methods and attributes for each class.
 
 <ins>**Review Submission**</ins>: 
 
-![Diagram review](./Part_1/jpg/Sequence_Diagram_Review.jpg)
+![Diagram review](./jpg/Sequence_Diagram_Review.jpg)
 
 * The user submits a review (e.g., rating, comment) for a specific property.
 * The facade layer validates the input and passes it to the business logic layer.
@@ -96,7 +96,7 @@ Methods and attributes for each class.
 
 <ins>**Fetching a List of Places**</ins>: 
 
-![Diagram fetch](./Part_1/jpg/Sequence_Diagram_Fetch.jpg)
+![Diagram fetch](./jpg/Sequence_Diagram_Fetch.jpg)
 
 * The user requests a list of available properties.
 * The facade layer forwards the request to the business logic layer.
