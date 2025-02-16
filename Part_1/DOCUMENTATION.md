@@ -42,13 +42,7 @@ providing a clear understanding of the system's design and functionality.
 
 **Detailed Class Diagram**:
 
-<!--
-(c'est la consigne de l'exercice tu peux supprimer)
-Include the Detailed Class Diagram for the Business Logic Layer here. The diagram should show: 
-Key entities (e.g., User, Place, Review). 
-Relationships between entities (e.g., a User can create multiple Places, and a Place can have multiple Reviews). 
-Methods and attributes for each class. 
--->
+[Click here to see diagram](https://drive.google.com/file/d/1es0sS85BDmLfkTrpuBMlcameV20_ycK5/view?usp=sharing)
 
 **Explanatory Notes**:
 
