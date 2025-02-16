@@ -28,9 +28,8 @@ providing a clear understanding of the system's design and functionality.
 **High-Level Package Diagram**: 
  
 
- ![Paquage Diagram](./Part_1/jpg/High-Level_Package_Diagram.jpg)
+ ![Paquage Diagram](./Part_1/jpg/High-Level_Paquage_Diagram.jpg)
  
-
 **Explanatory Notes**: 
 
 - **Layered Architecture**: The system is divided into layers to promote separation of concerns, making the application modular, scalable, and easier to maintain. 
