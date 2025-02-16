@@ -25,7 +25,7 @@ providing a clear understanding of the system's design and functionality.
 
 ## 2. High-Level Architecture 
 
-**High-Level Package Diagram** 
+**High-Level Package Diagram**: 
  
 
  
@@ -52,7 +52,7 @@ Relationships between entities (e.g., a User can create multiple Places, and a P
 Methods and attributes for each class. 
 {:/comment}
 
-**Explanatory Notes** 
+**Explanatory Notes**:
 
  <ins>**Entities and Relationships**</ins>: 
 
