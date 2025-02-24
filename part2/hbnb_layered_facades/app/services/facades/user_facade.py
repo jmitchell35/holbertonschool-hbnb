@@ -1,4 +1,4 @@
-from app.persistence.gateways.user import UserGateway
+from app.persistence.gateways.user_gateway import UserGateway
 from app.services.facades import BaseFacade
 
 class UserFacade(BaseFacade):

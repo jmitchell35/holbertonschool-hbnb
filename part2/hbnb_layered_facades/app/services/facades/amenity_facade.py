@@ -1,4 +1,4 @@
-from app.persistence.gateways.amenity import AmenityGateway
+from app.persistence.gateways.amenity_gateway import AmenityGateway
 from app.services.facades import BaseFacade
 
 class AmenityFacade(BaseFacade):

@@ -1,4 +1,4 @@
-from app.persistence.gateways.place import PlaceGateway
+from app.persistence.gateways.place_gateway import PlaceGateway
 from app.services.facades import BaseFacade
 
 class PlaceFacade(BaseFacade):
