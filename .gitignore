@@ -1,0 +1,8 @@
+# __pycache__ files
+*.py[cod]
+
+# __pycache__ directories
+__pycache__/
+
+# venv directories
+*venv/
