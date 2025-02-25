@@ -25,7 +25,7 @@ This README is meant as a reminder of the architecture and design of a simplifie
 * For audit reasons, the creation and update datetime should be registered for all entities.
 
 # Project architecture
-
+```
 hbnb_layered_facades/
 ├── README.md
 ├── app/
@@ -72,6 +72,7 @@ hbnb_layered_facades/
 ├── test_amenity.py
 ├── test_place_review.py
 └── test_user.py
+```
 
 # Testing
 
