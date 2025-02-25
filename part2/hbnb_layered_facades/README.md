@@ -1,4 +1,4 @@
-# Problem Description
+# HBnB Evolution part 2
 This README is meant as a reminder of the architecture and design of a simplified version of an AirBnB-like application, named HBnB Evolution. The application will allow users to perform the following primary operations:
 1. **User Management**: Users can register, update their profiles, and be identified as either regular users or administrators.
 2. **Place Management**: Users can list properties (places) they own, specifying details such as name, description, price, and location (latitude and longitude). Each place can also have a list of amenities.
