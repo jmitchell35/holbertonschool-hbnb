@@ -1,5 +1,6 @@
-from app.models.base_model import BaseModel
-class Amenity(BaseModel):
+from app.models.base_model import BaseEntity
+
+class Amenity(BaseEntity):
     def __init__(self, name):
         super().__init__()
         self.name = name

@@ -5,6 +5,9 @@ class UserGateway(InMemoryRepository):
     def __init__(self):
         super().__init__()
 
+    def add(self, obj):
+        self._storage[obj.id] = obj
+        return obj
+        
     def email_exists(self, email):
-        # checks storage for existing email
-        return self.get_by_attribute('email', email) is not None
+        return self.get_by_attribute('email', email)

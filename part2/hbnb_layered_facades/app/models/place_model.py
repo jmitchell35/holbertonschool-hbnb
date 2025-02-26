@@ -1,5 +1,6 @@
-from app.models.base_model import BaseModel
-class Place(BaseModel):
+from app.models.base_model import BaseEntity
+
+class Place(BaseEntity):
     def __init__(self, title, description, price, latitude, longitude, owner):
         super().__init__()
         self.title = title
