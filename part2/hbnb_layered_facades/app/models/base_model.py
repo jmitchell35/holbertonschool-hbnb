@@ -8,7 +8,7 @@ class BaseModel(ABC):
         pass
     
     @abstractmethod
-    def update(self):
+    def update(self, data=None):
         pass
     
 class BaseEntity(BaseModel):
@@ -17,5 +17,6 @@ class BaseEntity(BaseModel):
         self.created_at = datetime.now()
         self.updated_at = datetime.now()
     
-    def update(self):
+    def update(self, data=None):
         self.updated_at = datetime.now()
+        return self

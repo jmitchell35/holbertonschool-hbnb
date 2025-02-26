@@ -44,11 +44,11 @@ class UserFacade:
             'email', user_data['email'])
 
         if not existing_email or updating_user.id == existing_email.id:
-            updating_user.update(user_data)
+            updating_user = updating_user.update(user_data)
             verif = updating_user.format_validation()
             if not verif:
                 return {'error': 'Invalid input data'}, 400
-            written = self.gateway.add(updating_user)
+            written = self.gateway.update(updating_user)
             return {'id': written.id, 'first_name': written.first_name, 'last_name': written.last_name, 'email': written.email}, 200
         else:
             return {'error': 'Email already registered'}, 400

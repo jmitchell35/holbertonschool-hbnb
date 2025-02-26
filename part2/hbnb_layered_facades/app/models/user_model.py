@@ -36,9 +36,12 @@ class User(BaseEntity):
         except (EmailNotValidError, AttributeError):
             return None
         
-    def update(self, data):
+    def update(self, data=None):
         super().update()
+        if not data:
+            return self
         updatable_attr = ['first_name', 'last_name', 'email']
         for key in data:
             if key in updatable_attr:
-                self.key = data[key]
+                setattr(self, key, data[key])
+        return self
