@@ -9,9 +9,12 @@ class UserGateway(InMemoryRepository):
         self._storage[obj.id] = obj
         return obj
     
-    def update(self, user):
-        self._storage[user.id] = user
-        return user
+    def update(self, obj_id, data):
+        obj = self.get(obj_id)
+        if obj:
+            obj.update(data)
+            return obj
+        return None
         
     def email_exists(self, email):
         return self.get_by_attribute('email', email)
