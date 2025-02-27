@@ -9,3 +9,7 @@ class EmailAlreadyExists(UserError):
 class InvalidUserData(UserError):
     """Raised when user data is invalid"""
     pass
+
+class InvalidAmenityData(Exception):
+    """Raised when amenity data is invalid."""
+    pass
