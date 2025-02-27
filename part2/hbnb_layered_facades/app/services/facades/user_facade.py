@@ -25,7 +25,7 @@ class UserFacade:
             'last_name': user.last_name, 
             'email': user.email,
             'is_admin': user.is_admin,
-            'created at': user.created_at.isoformat(),
+            'created_at': user.created_at.isoformat(),
             'updated_at': user.updated_at.isoformat()
         } 
         for user in users
