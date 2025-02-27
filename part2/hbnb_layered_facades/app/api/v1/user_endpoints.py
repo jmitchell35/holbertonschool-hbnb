@@ -28,15 +28,16 @@ class UserList(Resource):
         # Retrieves validated request data / payload / body as dict object
         user_data = api.payload
 
-        # Simulate email uniqueness check (to be replaced by real validation with persistence)
-        return facade.users.create_user(user_data)
+        # Simulate email uniqueness check (to be replaced when DB added)
+        return facade.user_facade.create_user(user_data)
 
     @api.response(200, 'Users list retrieved successfully')
     def get(self):
         """Retrieve list of users"""
-        return facade.users.get_all_users()
+        return facade.user_facade.get_all_users()
 
 @api.route('/<user_id>')
+# user_id comes from route, not payload / body
 @api.doc(params={'user_id': 'The user ID'})
 class UserResource(Resource):
     @api.expect(user_model, validate=False)
@@ -44,20 +45,20 @@ class UserResource(Resource):
     @api.response(404, 'User not found')
     def get(self, user_id):
         """Get user details by ID"""
-        user = facade.users.gateway.get(user_id)
+        user = facade.user_facade.get(user_id)
         if not user:
             return {'error': 'User not found'}, 404
         return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 200
-    
+
     @api.expect(user_model, validate=True)
     @api.response(200, 'User details updated successfully')
     @api.response(404, 'User not found')
     @api.response(400, 'Invalid input data')
     def put(self, user_id):
         """Update one user details"""
-        user = facade.users.gateway.get(user_id)
+        user = facade.user_facade.get(user_id)
         if not user:
             return {'error': 'User not found'}, 404
         
-        return facade.users.update_user(user_id, api.payload)
+        return facade.user_facade.update_user(user_id, api.payload)
         

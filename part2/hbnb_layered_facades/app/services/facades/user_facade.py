@@ -23,22 +23,23 @@ class UserFacade:
             'id': user.id, 
             'first_name': user.first_name, 
             'last_name': user.last_name, 
-            'email': user.email,
-            'is_admin': user.is_admin,
-            'created_at': user.created_at.isoformat(),
-            'updated_at': user.updated_at.isoformat()
+            'email': user.email
         } 
         for user in users
     ]
         
     def update_user(self, user_id, user_data):
+        # retreive user updating his profile
         updating_user = self.gateway.get_by_attribute('id', user_id)
+        # retreiving user associated with email if any
         existing_email = self.gateway.get_by_attribute(
             'email', user_data['email'])
 
+        # Either email is not registered, or registered email matches user
         if not existing_email or updating_user.id == existing_email.id:
             updating_user.update(user_data)
             
+            # checking format validation before writing into storage
             verif = updating_user.format_validation()
             if not verif:
                 return {'error': 'Invalid input data'}, 400
@@ -51,3 +52,6 @@ class UserFacade:
                 'last_name': written.last_name,
                 'email': written.email
             }, 200
+            
+    def get(self, user_id):
+        return self.gateway.get(user_id)

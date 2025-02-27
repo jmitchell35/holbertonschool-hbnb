@@ -5,10 +5,10 @@ from app.services.facades.amenity_facade import AmenityFacade
 
 class HBnBFacade:
     def __init__(self):
-        self.users = UserFacade()
-        self.places = PlaceFacade()
-        self.reviews = ReviewFacade()
-        self.amenities = AmenityFacade()
+        self.user_facade = UserFacade()
+        self.place_facade = PlaceFacade()
+        self.review_facade = ReviewFacade()
+        self.amenity_facade = AmenityFacade()
 
     # Placeholder method for creating a user
     def create_user(self, user_data):
