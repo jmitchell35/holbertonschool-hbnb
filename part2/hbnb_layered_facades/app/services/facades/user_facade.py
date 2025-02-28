@@ -1,6 +1,5 @@
 from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
-from app.services.exception import EmailAlreadyExists, InvalidUserData
 
 class UserFacade:
     def __init__(self):
@@ -8,14 +7,14 @@ class UserFacade:
     
     def create_user(self, user_data):
         if self.gateway.email_exists(user_data['email']):
-            raise EmailAlreadyExists(f"Email {user_data['email']} is already registered")
+            return {'error': 'Email already registered'}, 400
         
         user = User(**user_data)
         verif = user.format_validation()
         if not verif:
-            raise InvalidUserData("Invalid input data")
+            return {'error': 'Invalid input data'}, 400
         written = self.gateway.add(user)
-        return written
+        return {'id': written.id, 'first_name': written.first_name, 'last_name': written.last_name, 'email': written.email}, 201
     
     def get_all_users(self):
         users = self.gateway.get_all()
