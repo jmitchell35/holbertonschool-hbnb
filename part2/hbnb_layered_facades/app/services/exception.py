@@ -9,3 +9,7 @@ class EmailAlreadyExists(UserError):
 class InvalidUserData(UserError):
     """Raised when user data is invalid"""
     pass
+
+class UserNotFound(UserError):
+    """Raised when user is not found in storage"""
+    pass
