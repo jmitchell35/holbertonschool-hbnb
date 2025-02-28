@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask import jsonify
+from app.services.exception import EmailAlreadyExists, InvalidUserData
 
 # Defines /users api route, adds documentation for swagger (description)
 api = Namespace('users', description='User operations')
@@ -28,8 +29,18 @@ class UserList(Resource):
         # Retrieves validated request data / payload / body as dict object
         user_data = api.payload
 
-        # Simulate email uniqueness check (to be replaced when DB added)
-        return facade.user_facade.create_user(user_data)
+        try:
+            user = facade.user_facade.create_user(user_data)
+            return {
+                'id': user.id, 
+                'first_name': user.first_name, 
+                'last_name': user.last_name, 
+                'email': user.email
+            }, 201
+        except EmailAlreadyExists as e:
+            return {'error': str(e)}, 400
+        except InvalidUserData as e:
+            return {'error': str(e)}, 400
 
     @api.response(200, 'Users list retrieved successfully')
     def get(self):
@@ -61,4 +72,3 @@ class UserResource(Resource):
             return {'error': 'User not found'}, 404
         
         return facade.user_facade.update_user(user_id, api.payload)
-        
