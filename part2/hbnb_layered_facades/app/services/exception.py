@@ -13,3 +13,6 @@ class InvalidUserData(UserError):
 class InvalidAmenityData(Exception):
     """Raised when amenity data is invalid."""
     pass
+
+class AmenityAlreadyExists(Exception):
+    """Raised when attempting to register an existing amenity"""
