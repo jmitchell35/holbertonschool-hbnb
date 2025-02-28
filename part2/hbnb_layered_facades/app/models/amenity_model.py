@@ -15,3 +15,13 @@ class Amenity(BaseEntity):
         if len(self.name) > 50:
             return None
         return self
+
+    def update(self, data=None):
+        super().update()
+        if not data:
+            return self
+        updatable_attr = ['name']
+        for key in data:
+            if key in updatable_attr:
+                setattr(self, key, data[key])
+        return self

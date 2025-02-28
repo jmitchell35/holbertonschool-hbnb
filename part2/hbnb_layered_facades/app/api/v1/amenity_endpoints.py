@@ -59,10 +59,10 @@ class AmenityResource(Resource):
         # Placeholder for the logic to update an amenity by ID
         try:
             amenity = facade.amenity_facade.get(amenity_id)        
-            uptd_amenity = facade.amenity_facade.update_amenity(amenity, api.payload)
+            updt_amenity = facade.amenity_facade.update_amenity(amenity, api.payload)
             return {
-                'id': uptd_amenity.id,
-                'name': uptd_amenity.name
+                'id': updt_amenity.id,
+                'name': updt_amenity.name
             }, 200
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404

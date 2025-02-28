@@ -7,5 +7,7 @@ def create_app():
     
     from app.api.v1.user_endpoints import api as users_ns
     api.add_namespace(users_ns, path='/users')
+    from app.api.v1.amenity_endpoints import api as amenities_ns
+    api.add_namespace(amenities_ns, path='/amenities')
 
     return app
