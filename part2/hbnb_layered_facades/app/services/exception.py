@@ -13,3 +13,13 @@ class InvalidUserData(UserError):
 class UserNotFound(UserError):
     """Raised when user is not found in storage"""
     pass
+
+class InvalidAmenityData(Exception):
+    """Raised when amenity data is invalid."""
+    pass
+
+class AmenityAlreadyExists(Exception):
+    """Raised when attempting to register an existing amenity"""
+
+class AmenityNotFound(Exception):
+    """Raised when amenity is not found in storage"""
