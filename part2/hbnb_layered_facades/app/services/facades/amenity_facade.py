@@ -1,6 +1,6 @@
 from app.persistence.gateways.amenity_gateway import AmenityGateway
 from app.models.amenity_model import Amenity
-from app.services.exception import InvalidAmenityData, AmenityAlreadyExists
+from app.services.exception import InvalidAmenityData, AmenityAlreadyExists, AmenityNotFound
 
 class AmenityFacade:
     def __init__(self):
@@ -28,12 +28,20 @@ class AmenityFacade:
     ]
 
     def get(self, amenity_id):
-        return self.gateway.get(amenity_id)
+
+        amenity = self.gateway.get(amenity_id)
+        if amenity is None:
+            raise AmenityNotFound
+        return amenity
     
-    def update_amenity(self, amenity_id, amenity_name):
-        updating_amenity = self.gateway.get_by_attribute('id', amenity_id)
+    def update_amenity(self, amenity, amenity_name):
+        updating_amenity = self.gateway.get_by_attribute('id', amenity.id)
+        if not updating_amenity:
+            raise AmenityNotFound
+
         updating_amenity.update(amenity_name)
 
         verif = updating_amenity.format_validation()
         if not verif:
-            raise
+            raise InvalidAmenityData
+        return self.gateway.update(amenity.id, amenity_name)

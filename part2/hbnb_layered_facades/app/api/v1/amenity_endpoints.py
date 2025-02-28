@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from app.services.exception import InvalidAmenityData, AmenityAlreadyExists
+from app.services.exception import InvalidAmenityData, AmenityAlreadyExists, AmenityNotFound
 
 
 api = Namespace('amenities', description='Amenity operations')
@@ -44,10 +44,11 @@ class AmenityResource(Resource):
     def get(self, amenity_id):
         """Get amenity details by ID"""
         # Placeholder for the logic to retrieve an amenity by ID
-        amenity = facade.amenity_facade.get(amenity_id)
-        if not amenity:
+        try:
+            amenity = facade.amenity_facade.get(amenity_id)
+            return {'id': amenity.id, 'name': amenity.name}, 200
+        except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
-        return {'id': amenity.id, 'name': amenity.name}, 200
 
     @api.expect(amenity_model)
     @api.response(200, 'Amenity updated successfully')
@@ -56,8 +57,16 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
         """Update an amenity's information"""
         # Placeholder for the logic to update an amenity by ID
-        amenity = facade.amenity_facade.get(amenity_id)
-        if not amenity:
-            return {'error': 'User not found'}, 404
-        
-        return facade.amenity_facade.update_amenity(amenity_id, api.payload), 200
+        try:
+            amenity = facade.amenity_facade.get(amenity_id)        
+            uptd_amenity = facade.amenity_facade.update_amenity(amenity, api.payload)
+            return {
+                'id': uptd_amenity.id,
+                'name': uptd_amenity.name
+            }, 200
+        except AmenityNotFound:
+            return {'error': 'Amenity not found'}, 404
+        except AmenityAlreadyExists:
+            return {'error': 'Amenity already registered'}, 400
+        except InvalidAmenityData:
+            return {'error': 'Invalid input data'}, 400

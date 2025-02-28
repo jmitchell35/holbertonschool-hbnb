@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask import jsonify
-from app.services.exception import EmailAlreadyExists, InvalidUserData
+from app.services.exception import (EmailAlreadyExists, InvalidUserData,
+                                    UserNotFound)
 
 # Defines /users api route, adds documentation for swagger (description)
 api = Namespace('users', description='User operations')
@@ -32,15 +33,15 @@ class UserList(Resource):
         try:
             user = facade.user_facade.create_user(user_data)
             return {
-                'id': user.id, 
-                'first_name': user.first_name, 
-                'last_name': user.last_name, 
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
                 'email': user.email
             }, 201
-        except EmailAlreadyExists as e:
-            return {'error': str(e)}, 400
-        except InvalidUserData as e:
-            return {'error': str(e)}, 400
+        except EmailAlreadyExists:
+            return {'error': 'Email already registered'}, 400
+        except InvalidUserData:
+            return {'error': 'Invalid Input data'}, 400
 
     @api.response(200, 'Users list retrieved successfully')
     def get(self):
@@ -56,19 +57,36 @@ class UserResource(Resource):
     @api.response(404, 'User not found')
     def get(self, user_id):
         """Get user details by ID"""
-        user = facade.user_facade.get(user_id)
-        if not user:
+        try:
+            user = facade.user_facade.get(user_id)
+            return {
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'email': user.email
+                }, 200
+        except UserNotFound:
             return {'error': 'User not found'}, 404
-        return {'id': user.id, 'first_name': user.first_name, 'last_name': user.last_name, 'email': user.email}, 200
 
     @api.expect(user_model, validate=True)
     @api.response(200, 'User details updated successfully')
     @api.response(404, 'User not found')
+    @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
     def put(self, user_id):
         """Update one user details"""
-        user = facade.user_facade.get(user_id)
-        if not user:
+        try:
+            user = facade.user_facade.get(user_id)
+            uptd_user = facade.user_facade.update_user(user, api.payload)
+            return {
+                'id': uptd_user.id,
+                'first_name': uptd_user.first_name,
+                'last_name': uptd_user.last_name,
+                'email': uptd_user.email
+                }, 200
+        except UserNotFound:
             return {'error': 'User not found'}, 404
-        
-        return facade.user_facade.update_user(user_id, api.payload)
+        except EmailAlreadyExists:
+            return {'error': 'Email already registered'}, 400
+        except InvalidUserData:
+            return {'error': 'Invalid Input data'}, 400
