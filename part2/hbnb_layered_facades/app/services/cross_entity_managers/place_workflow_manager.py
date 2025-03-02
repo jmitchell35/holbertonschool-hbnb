@@ -1,4 +1,6 @@
-from app.services.exception import UserNotFound, InvalidPlaceData, OwnerNotFound, PlaceNotFound, AmenityNotFound
+from app.services.exception import (UserNotFound, InvalidPlaceData,
+                                    OwnerNotFound, PlaceNotFound,
+                                    AmenityNotFound)
 
 class PlaceWorkflowManager():
     def __init__(self, place_facade, user_facade, amenity_facade):
@@ -19,13 +21,10 @@ class PlaceWorkflowManager():
         try:
             place = self.place_facade.get(place_id)
             owner = self.user_facade.get(place.owner_id)
-            amenity_list = []
-            for id in place.amenities:
-                obj = self.amenity_facade.get(id)
-                amenity_list.append({
-                    'id': obj.id,
-                    'name': obj.name
-                })
+            # list + dict constructors
+            amenity_list = [{'id': obj.id, 'name': obj.name} 
+                for id in place.amenities
+                if (obj := self.amenity_facade.get(id))]  # walrus operator
             return {
                 'id': place.id,
                 'title': place.title,
