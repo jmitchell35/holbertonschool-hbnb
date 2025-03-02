@@ -30,3 +30,13 @@ class Place(BaseEntity):
         if self.longitude < -180.0 or self.longitude > 180.0:
             return None
         return self
+    
+    def update(self, data=None):
+        super().update()
+        if not data:
+            return self
+        updatable_attr = ['title', 'description', 'price', 'latitude', 'longitude', 'amenities']
+        for key in data:
+            if key in updatable_attr:
+                setattr(self, key, data[key])
+        return self

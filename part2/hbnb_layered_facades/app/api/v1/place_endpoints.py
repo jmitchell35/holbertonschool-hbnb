@@ -38,11 +38,6 @@ place_model = api.model('Place', {
         required=True, description='Longitude of the place'),
     'owner_id': fields.String(
         required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_model, description='Owner of the place'),
-    'amenities': fields.List(fields.Nested(amenity_model),
-                             description='List of amenities'),
-    'reviews': fields.List(fields.Nested(review_model),
-                           description='List of reviews')
 })
 
 @api.route('/')
@@ -102,3 +97,18 @@ class PlaceResource(Resource):
             return {'error': 'Owner not found'}, 404
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
+    
+    @api.expect(place_model)
+    @api.response(200, 'Place updated successfully')
+    @api.response(404, 'Place not found')
+    @api.response(400, 'Invalid input data')
+    def put(self, place_id):
+        try:
+            facade.place_manager.update_place(place_id, api.payload)
+            return {
+                "message": "Place updated successfully"
+            }, 200
+        except PlaceNotFound:
+            return {'error': 'Place not found'}, 404
+        except InvalidPlaceData:
+            return {'error': 'Invalid input data'}, 400

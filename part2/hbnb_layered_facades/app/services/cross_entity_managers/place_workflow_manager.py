@@ -52,3 +52,14 @@ class PlaceWorkflowManager():
             raise OwnerNotFound
         except AmenityNotFound:
             raise AmenityNotFound
+        
+    def update_place(self, place_id, place_data):
+        try:
+            if 'amenities' in place_data.keys():
+                for id in place_data['amenities']:
+                    self.amenity_facade.get(id)
+            return self.place_facade.update_place(place_id, place_data)
+        except PlaceNotFound:
+            raise PlaceNotFound
+        except (AmenityNotFound, InvalidPlaceData):
+            raise InvalidPlaceData

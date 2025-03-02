@@ -32,3 +32,15 @@ class PlaceFacade:
         if place is None:
             raise PlaceNotFound
         return place
+    
+    def update_place(self, place_id, place_data):
+        # retreive place updating his profile
+        updating_place = self.gateway.get_by_attribute('id', place_id)
+        if not updating_place:
+            raise PlaceNotFound
+        updating_place.update(place_data)
+        # checking format validation before writing into storage
+        verif = updating_place.format_validation()
+        if not verif:
+            raise InvalidPlaceData
+        return self.gateway.update(place_id, place_data)
