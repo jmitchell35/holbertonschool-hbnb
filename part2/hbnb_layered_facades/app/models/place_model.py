@@ -23,10 +23,10 @@ class Place(BaseEntity):
     def format_validation(self):
         if type(self.price) is not float:
             return None
-        if self.price < 0:
+        if self.price < 0.0:
             return None
-        if self.latitude < -90 or self.latitude > 90:
+        if self.latitude < -90.0 or self.latitude > 90.0:
             return None
-        if self.longitude < -180 or self.latitude > 180:
+        if self.longitude < -180.0 or self.longitude > 180.0:
             return None
         return self

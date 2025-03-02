@@ -22,8 +22,7 @@ class PlaceFacade:
                 'price': place.price,
                 'latitude': place.latitude,
                 'longitude': place.longitude,
-                'owner_id': place.owner_id,
-                'amenties': place.amenities
+                'owner_id': place.owner_id
             }
             for place in places
         ]

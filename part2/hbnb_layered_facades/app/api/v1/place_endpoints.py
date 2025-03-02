@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.services.exception import InvalidPlaceData, UserNotFound
 
 api = Namespace('places', description='Place operations')
 
@@ -15,9 +16,7 @@ place_model = api.model('Place', {
     'longitude': fields.Float(
         required=True, description='Longitude of the place'),
     'owner_id': fields.String(
-        required=True, description='ID of the owner'),
-    'amenities': fields.List(
-        fields.String(), required=True, description="List of amenities IDs")
+        required=True, description='ID of the owner')
 })
 
 @api.route('/')
@@ -29,20 +28,21 @@ class PlaceList(Resource):
     def post(self):
         """Create a new place"""
         place_data = api.payload
-        place = facade.place_facade.create_place(place_data)
 
-        if not place:
+        try:
+            place = facade.place_facade.create_place(place_data)
+            return {
+                'title': place.title,
+                'description': place.description,
+                'price': place.price,
+                'latitude': place.latitude,
+                'longitude': place.longitude,
+                'owner_id': place.owner_id,
+            }, 201
+        except InvalidPlaceData:
             return {'error': 'Invalid input data'}, 400
-
-        return {
-            'title': place.title,
-            'description': place.description,
-            'price': place.price,
-            'latitude': place.latitude,
-            'longitude': place.longitude,
-            'owner_id': place.owner_id,
-            'amenities': place.amenities
-        }, 201
+        except UserNotFound:
+            return {'error': 'User not found'}, 404
 
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
