@@ -1,8 +1,29 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from app.services.exception import InvalidPlaceData, OwnerNotFound, PlaceNotFound, AmenityNotFound
+from app.services.exception import (InvalidPlaceData, OwnerNotFound,
+                                    PlaceNotFound, AmenityNotFound)
 
 api = Namespace('places', description='Place operations')
+
+review_model = api.model('PlaceReview', {
+    'id': fields.String(description='Review ID'),
+    'text': fields.String(description='Text of the review'),
+    'rating': fields.Integer(description='Rating of the place (1-5)'),
+    'user_id': fields.String(description='ID of the user')
+})
+
+amenity_model = api.model('Amenity', {
+    'name': fields.String(required=True, description='Name of the amenity')
+})
+
+user_model = api.model('User', {
+    'first_name': fields.String(
+        required=True, description='First name of the user'),
+    'last_name': fields.String(
+        required=True, description='Last name of the user'),
+    'email': fields.String(
+        required=True, description='Email of the user')
+})
 
 place_model = api.model('Place', {
     'title': fields.String(
@@ -16,7 +37,12 @@ place_model = api.model('Place', {
     'longitude': fields.Float(
         required=True, description='Longitude of the place'),
     'owner_id': fields.String(
-        required=True, description='ID of the owner')
+        required=True, description='ID of the owner'),
+    'owner': fields.Nested(user_model, description='Owner of the place'),
+    'amenities': fields.List(fields.Nested(amenity_model),
+                             description='List of amenities'),
+    'reviews': fields.List(fields.Nested(review_model),
+                           description='List of reviews')
 })
 
 @api.route('/')

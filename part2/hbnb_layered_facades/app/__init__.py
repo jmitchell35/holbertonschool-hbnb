@@ -3,7 +3,13 @@ from flask_restx import Api
 
 def create_app():
     app = Flask(__name__)
-    api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API', doc='/api/v1/')
+    api = Api(
+        app,
+        version='1.0',
+        title='HBnB API',
+        description='HBnB Application API',
+        doc='/api/v1/'
+    )
     
     from app.api.v1.user_endpoints import api as users_ns
     api.add_namespace(users_ns, path='/users')
@@ -11,5 +17,7 @@ def create_app():
     api.add_namespace(places_ns, path='/places')
     from app.api.v1.amenity_endpoints import api as amenities_ns
     api.add_namespace(amenities_ns, path='/amenities')
+    from app.api.v1.review_endpoints import api as review_ns
+    api.add_namespace(review_ns, path='/reviews')
 
     return app
