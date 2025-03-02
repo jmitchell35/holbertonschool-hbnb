@@ -13,7 +13,7 @@ class HBnBFacade:
         self.place_manager = PlaceWorkflowManager(
             self.place_facade,
             self.user_facade,
-            self.amenety_facade
+            self.amenity_facade
         )
 
     # Placeholder method for creating a user

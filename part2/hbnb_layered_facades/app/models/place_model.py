@@ -1,7 +1,7 @@
 from app.models.base_model import BaseEntity
 
 class Place(BaseEntity):
-    def __init__(self, title, description, price, latitude, longitude, owner_id):
+    def __init__(self, title, description, price, latitude, longitude, owner_id, amenities=[]):
         super().__init__()
         self.title = title
         self.description = description
@@ -9,7 +9,7 @@ class Place(BaseEntity):
         self.latitude = latitude
         self.longitude = longitude
         self.owner_id = owner_id
-        self.amenities = []
+        self.amenities = amenities
         self.reviews = []  # List to store related reviews
 
     def add_review(self, review):

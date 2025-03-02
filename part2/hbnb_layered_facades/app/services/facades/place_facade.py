@@ -1,6 +1,6 @@
 from app.persistence.gateways.place_gateway import PlaceGateway
 from app.models.place_model import Place
-from app.services.exception import InvalidPlaceData
+from app.services.exception import InvalidPlaceData, PlaceNotFound
 
 class PlaceFacade:
     def __init__(self):
@@ -26,3 +26,9 @@ class PlaceFacade:
             }
             for place in places
         ]
+    
+    def get(self, place_id):
+        place = self.gateway.get(place_id)
+        if place is None:
+            raise PlaceNotFound
+        return place
