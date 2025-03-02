@@ -1,6 +1,5 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask import jsonify
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
                                     UserNotFound)
 

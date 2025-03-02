@@ -8,7 +8,7 @@ class AmenityFacade:
 
     def create_amenity(self, amenity_name):
         if self.gateway.amenity_exists(amenity_name['name']):
-            raise AmenityAlreadyExists(f'Amenity {amenity_name['name']} is already registered')
+            raise AmenityAlreadyExists(f"Amenity {amenity_name['name']} is already registered")
 
         amenity = Amenity(**amenity_name)
         verif = amenity.format_validation()

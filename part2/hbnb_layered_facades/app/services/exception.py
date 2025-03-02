@@ -23,3 +23,6 @@ class AmenityAlreadyExists(Exception):
 
 class AmenityNotFound(Exception):
     """Raised when amenity is not found in storage"""
+
+class InvalidPlaceData(Exception):
+    """Raised when place data is invalid"""
