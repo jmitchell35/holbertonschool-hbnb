@@ -81,30 +81,21 @@ class PlaceList(Resource):
             return {'error': 'Owner not found'}, 404
 
     @api.response(200, 'List of places retrieved successfully')
-    @api.marshal_list_with(place_output_model)
     def get(self):
         """Retrieve a list of all places"""
-        list_of_places = facade.place_facade.get_all_places()
-        return list_of_places
+        return facade.place_facade.get_all_places()
 
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
 class PlaceResource(Resource):
+    @api.marshal_with(place_output_model, code=200)
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get place details by ID"""
         try:
             place = facade.place_manager.get_place_details(place_id)
-            return {
-                'id': place.get('id'),
-                'title': place.get('title'),
-                'description': place.get('description'),
-                'latitude': place.get('latitude'),
-                'longitude': place.get('longitude'),
-                'owner': place.get('owner'),
-                'amenities': place.get('amenities')
-            }
+            return place, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
         except OwnerNotFound:
@@ -119,9 +110,7 @@ class PlaceResource(Resource):
     def put(self, place_id):
         try:
             facade.place_manager.update_place(place_id, api.payload)
-            return {
-                "message": "Place updated successfully"
-            }, 200
+            return { "message": "Place updated successfully"}, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
         except InvalidPlaceData:
