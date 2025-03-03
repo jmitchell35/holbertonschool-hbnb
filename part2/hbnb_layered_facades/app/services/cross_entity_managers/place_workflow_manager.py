@@ -36,15 +36,18 @@ class PlaceWorkflowManager():
                 'id': place.id,
                 'title': place.title,
                 'description': place.description,
+                'price': place.price,
                 'latitude': place.latitude,
                 'longitude': place.longitude,
+                'owner_id': place.owner_id,
                 'owner': {
                     'id': owner.id,
                     'first_name': owner.first_name,
                     'last_name': owner.last_name,
                     'email': owner.email
                 },
-                'amenities': amenity_list
+                'amenities': amenity_list,
+                'reviews': place.reviews
             }
         except PlaceNotFound:
             raise PlaceNotFound
