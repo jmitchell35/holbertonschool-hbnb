@@ -8,7 +8,8 @@ def create_app():
         version='1.0',
         title='HBnB API',
         description='HBnB Application API',
-        doc='/api/v1/'
+        doc='/api/v1/',
+        prefix='/api/v1/'
     )
     
     from app.api.v1.user_endpoints import api as users_ns
