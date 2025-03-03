@@ -17,12 +17,10 @@ class PlaceFacade:
         places = self.gateway.get_all()
         return [
             {
+                'id': place.id,
                 'title': place.title,
-                'description': place.description,
-                'price': place.price,
                 'latitude': place.latitude,
-                'longitude': place.longitude,
-                'owner_id': place.owner_id
+                'longitude': place.longitude
             }
             for place in places
         ]
