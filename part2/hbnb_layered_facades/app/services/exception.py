@@ -10,6 +10,10 @@ class AmenityError(Exception):
     """Base exception for amenity-related errors"""
     pass
 
+class ReviewError(Exception):
+    """Base exception for amenity-related errors"""
+    pass
+
 class EmailAlreadyExists(UserError):
     """Raised when attempting to register with an existing email"""
     pass
@@ -39,4 +43,10 @@ class PlaceNotFound(PlaceError):
     pass
 
 class OwnerNotFound(PlaceError):
+    pass
+
+class ReviewNotFound(ReviewError):
+    pass
+
+class InvalidReviewData(ReviewError):
     pass
