@@ -63,9 +63,7 @@ place_output_model = api.model('Place', {
 
 @api.route('/')
 class PlaceList(Resource):
-
     @api.expect(place_input_model, validate=True)
-    @api.marshal_with(place_input_model, code=201)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -74,7 +72,15 @@ class PlaceList(Resource):
 
         try:
             place = facade.place_manager.create_place(place_data)
-            return place, 201
+            return {
+                "id": place.id,
+                "title": place.title,
+                "description": place.description,
+                "price": place.price,
+                "latitude": place.latitude,
+                "longitude": place.longitude,
+                "owner_id": place.owner_id
+            }, 201
         except InvalidPlaceData:
             return {'error': 'Invalid input data'}, 400
         except OwnerNotFound:
