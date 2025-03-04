@@ -50,3 +50,23 @@ class PlaceFacade:
         if review_id in place.reviews:
             raise ReviewNotFound
         return place
+    
+    def is_valid(self, place_data):
+        if 'price' in place_data.keys() and\
+            (type(place_data['price']) is not float or
+            place_data['price'] < 0.0):
+            raise InvalidPlaceData
+
+        if 'latitude' in place_data.keys() and\
+            (type(place_data['latitude']) is not float or
+            place_data['latitude'] < -90.0 or
+            place_data['latitude'] > 90.0):
+            raise InvalidPlaceData
+        
+        if 'longitude' in place_data.keys() and\
+            (type(place_data['longitude']) is not float or
+            place_data['longitude'] < -180.0 or
+            place_data['longitude'] > 180.0):
+            raise InvalidPlaceData
+
+        return True
