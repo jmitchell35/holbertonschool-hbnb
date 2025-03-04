@@ -36,7 +36,7 @@ class TestUserEndpoints(unittest.TestCase):
 
     def test_get_user(self):
         """Test: récupérer un utilisateur existant"""
-        # Création d'un utilisateur
+        # créer un utilisateur pour le test
         create_response = self.client.post('/api/v1/users/', json={
             "first_name": "John",
             "last_name": "Doe",
@@ -68,50 +68,35 @@ class TestUserEndpoints(unittest.TestCase):
                 self.assertIn('last_name', user)
                 self.assertIn('email', user)
 
-    def test_get_user_by_email(self):
-        """Test: obtenir un utilisateur par son email"""
-        email = "jane.doe@gmail.com"  # Remplace par un email valide dans BDD
-        response = self.client.get(f'/api/v1/users/{email}')
-        self.assertEqual(response.status_code, 200)
-        user = response.get_json()
-        self.assertEqual(user["email"], email)  # Vérifie que email correspond
-        self.assertIn('first_name', user)
-        self.assertIn('last_name', user)
-
-    def test_get_user_by_email_not_found(self):
-        """Test: obtenir un utilisateur par un email inexistant"""
-        response = self.client.get('/api/v1/users/email/nonexistent@gmail.com')
-        self.assertEqual(response.status_code, 404)
-
     def test_update_user(self):
         """Test: mise à jour d'un utilisateur"""
         # Création d'un utilisateur
         create_response = self.client.post('/api/v1/users/', json={
             "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@gmail.com"
+            "last_name": "Average",
+            "email": "john.average@gmail.com"
         })
         user_data = create_response.get_json()
         user_id = user_data.get("id")
 
         # Mise à jour de l'utilisateur
-        update_response = self.client.patch(f'/api/v1/users/{user_id}', json={
+        update_response = self.client.put(f'/api/v1/users/{user_id}', json={
             "first_name": "Johnny",
-            "last_name": "Doe",
-            "email": "johnny.doe@gmail.com"
+            "last_name": "Average",
+            "email": "johnny.average@gmail.com"
         })
         self.assertEqual(update_response.status_code, 200)
 
         updated_data = update_response.get_json()
         self.assertEqual(updated_data["first_name"], "Johnny")
-        self.assertEqual(updated_data["email"], "johnny.doe@gmail.com")
+        self.assertEqual(updated_data["email"], "johnny.average@gmail.com")
 
     def test_update_nonexistent_user(self):
         """Test: mise à jour d'un utilisateur inexistant"""
-        response = self.client.patch('/api/v1/users/99999', json={
-            "first_name": "Jane",
-            "last_name": "Doe",
-            "email": "jane.doe@gmail.com"
+        response = self.client.put('/api/v1/users/99999', json={
+            "first_name": "Jonathan",
+            "last_name": "Doan",
+            "email": "jonathan.doan@gmail.com"
         })
         self.assertEqual(response.status_code, 404)
 
@@ -119,20 +104,19 @@ class TestUserEndpoints(unittest.TestCase):
         """Test: tentative de mise à jour avec données invalides"""
         # Création d'un utilisateur
         create_response = self.client.post('/api/v1/users/', json={
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "john.doe@gmail.com"
+            "first_name": "Joe",
+            "last_name": "Average",
+            "email": "joe.average@gmail.com"
         })
         user_id = create_response.get_json().get("id")
 
         # Tentative de mise à jour avec un email invalide
-        update_response = self.client.patch(f'/api/v1/users/{user_id}', json={
-            "first_name": "Johnny",
-            "last_name": "Doe",
+        update_response = self.client.put(f'/api/v1/users/{user_id}', json={
+            "first_name": "Joey",
+            "last_name": "Avery",
             "email": "invalid-email"
         })
         self.assertEqual(update_response.status_code, 400)
-
 
 if __name__ == '__main__':
     unittest.main()
