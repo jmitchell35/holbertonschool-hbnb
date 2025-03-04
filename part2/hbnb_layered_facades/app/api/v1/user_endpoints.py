@@ -10,13 +10,9 @@ api = Namespace('users', description='User operations')
 user_model = api.model('User', {
     'first_name': fields.String(
         required=True,
-        min_length = 1,
-        max_length = 50,
         description='First name of the user'),
     'last_name': fields.String(
         required=True,
-        min_length = 1,
-        max_length = 50,
         description='Last name of the user'),
     'email': fields.String(
         required=True,
