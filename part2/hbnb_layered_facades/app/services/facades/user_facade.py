@@ -65,12 +65,20 @@ class UserFacade:
     def is_valid(self, data):
         from email_validator import validate_email, EmailNotValidError
         
-        if type(data['first_name']) is not str or\
-            type(data['last_name']) is not str:
+        if 'first_name' in data.keys() and type(data['first_name']) is not str:
             return False
-        if len(data['first_name']) > 50 or len(data['first_name']) < 1 or\
-            len(data['last_name']) > 50 or len(data['last_name']) < 1:
+
+        if 'last_name' in data.keys() and type(data['last_name']) is not str:
             return False
+
+        if 'first_name' in data.keys() and (len(data['first_name']) > 50 or
+            len(data['first_name']) < 1):
+                return False
+        
+        if 'last_name' in data.keys() and (len(data['last_name']) > 50 or
+            len(data['last_name']) < 1):
+            return False
+
         if 'is_admin' in data.keys() and type(data['is_admin']) is not bool:
             return False
 
