@@ -72,7 +72,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         place_id = place_data.get("id")
 
         # Mise à jour de la place
-        update_response = self.client.patch(f'/api/v1/places/{place_id}',
+        update_response = self.client.put(f'/api/v1/places/{place_id}',
                                             json={
             "title": "Appartement 2 chambres",
             "description": "Plus grand et mieux situé",
@@ -89,7 +89,7 @@ class TestPlaceEndpoints(unittest.TestCase):
 
     def test_update_nonexistent_place(self):
         """Test: mise à jour d'une place inexistante"""
-        response = self.client.patch('/api/v1/places/99999', json={
+        response = self.client.put('/api/v1/places/99999', json={
             "title": "Appartement 3 chambres",
             "description": "Spacieux et moderne",
             "price": 200,
@@ -113,7 +113,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         place_id = create_response.get_json().get("id")
 
         # Tentative de mise à jour avec un prix négatif
-        update_response = self.client.patch(f'/api/v1/places/{place_id}',
+        update_response = self.client.put(f'/api/v1/places/{place_id}',
                                             json={
             "title": "Appartement 2 chambres",
             "description": "Plus grand et mieux situé",
