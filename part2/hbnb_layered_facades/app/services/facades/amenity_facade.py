@@ -6,16 +6,12 @@ class AmenityFacade:
     def __init__(self):
         self.gateway = AmenityGateway()
 
-    def create_amenity(self, amenity_name):
-        if self.gateway.amenity_exists(amenity_name['name']):
-            raise AmenityAlreadyExists(f"Amenity {amenity_name['name']} is already registered")
-
-        amenity = Amenity(**amenity_name)
-        verif = amenity.format_validation()
-        if not verif:
+    def create_amenity(self, amenity_data):
+        amenity = Amenity(**amenity_data)
+        if self.is_valid(amenity_data) == False:
             raise InvalidAmenityData('Invalid input data')
-        written = self.gateway.add(amenity)
-        return written
+        self.gateway.add(amenity)
+        return amenity
     
     def get_all_amenities(self):
         amenities = self.gateway.get_all()
@@ -28,20 +24,27 @@ class AmenityFacade:
     ]
 
     def get(self, amenity_id):
-
         amenity = self.gateway.get(amenity_id)
         if amenity is None:
             raise AmenityNotFound
         return amenity
-    
-    def update_amenity(self, amenity, amenity_name):
+
+    def update_amenity(self, amenity, amenity_data):
         updating_amenity = self.gateway.get_by_attribute('id', amenity.id)
         if not updating_amenity:
             raise AmenityNotFound
 
-        updating_amenity.update(amenity_name)
+        if self.is_valid(amenity_data) == False:
+            raise InvalidAmenityData('Invalid input data')
 
-        verif = updating_amenity.format_validation()
-        if not verif:
+        updating_amenity.update(amenity_data)
+        return updating_amenity
+    
+    def is_valid(self, data):
+        if not data or 'name' not in data.keys():
             raise InvalidAmenityData
-        return verif
+        if type(data['name']) is not str:
+            raise InvalidAmenityData
+        if len(data['name']) > 50 or len(data['name']) < 3:
+            raise InvalidAmenityData
+        return True
