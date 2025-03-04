@@ -129,6 +129,16 @@ class TestPlaceEndpoints(unittest.TestCase):
         self.assertEqual(update_response.status_code, 200)
         updated_data = update_response.get_json()
         self.assertEqual(updated_data['message'], 'Place updated successfully')
+        get_response = self.client.get(
+            f'/api/v1/places/{self.__class__.place_id}')
+        self.assertEqual(get_response.status_code, 200)
+        get_data = get_response.get_json()
+        self.assertEqual(get_data['title'], "Appartement 2 chambres")
+        self.assertEqual(get_data['description'], "Plus grand et mieux situé")
+        self.assertEqual(get_data['price'], 150.0)
+        self.assertEqual(get_data['latitude'], 48.8584)
+        self.assertEqual(get_data['longitude'], 2.2945)
+        
 
     def test_update_nonexistent_place(self):
         """Test: mise à jour d'une place inexistante"""
