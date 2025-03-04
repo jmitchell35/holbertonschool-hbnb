@@ -36,11 +36,12 @@ class UserFacade:
         if not updating_user:
             raise UserNotFound
         # retreiving user associated with email if any
-        existing_email = self.gateway.get_by_attribute(
-            'email', user_data['email'])
+        if 'email' in user_data.keys():
+            existing_email = self.gateway.get_by_attribute(
+                'email', user_data['email'])
         
-        if existing_email and updating_user.id != existing_email.id:
-            raise EmailAlreadyExists
+            if existing_email and updating_user.id != existing_email.id:
+                raise EmailAlreadyExists
 
         # Either email is not registered, or registered email matches user
         updating_user.update(user_data)
