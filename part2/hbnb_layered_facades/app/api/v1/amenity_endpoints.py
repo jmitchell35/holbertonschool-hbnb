@@ -26,10 +26,8 @@ class AmenityList(Resource):
                 'id': amenity.id,
                 'name': amenity.name
             }, 201
-        except InvalidAmenityData as e:
-            return {'error': str(e)}, 400
-        except AmenityAlreadyExists as e:
-            return {'error': str(e)}, 400
+        except InvalidAmenityData:
+            return {'error': 'Invalid input data'}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):
