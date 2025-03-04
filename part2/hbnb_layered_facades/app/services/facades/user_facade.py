@@ -66,25 +66,27 @@ class UserFacade:
         from email_validator import validate_email, EmailNotValidError
 
         if 'first_name' in data.keys() and type(data['first_name']) is not str:
-            return False
+            raise InvalidUserData
 
         if 'last_name' in data.keys() and type(data['last_name']) is not str:
-            return False
+            raise InvalidUserData
 
         if 'first_name' in data.keys() and (len(data['first_name']) > 50 or
             len(data['first_name']) < 1):
-                return False
+                raise InvalidUserData
 
         if 'last_name' in data.keys() and (len(data['last_name']) > 50 or
             len(data['last_name']) < 1):
-            return False
+                raise InvalidUserData
 
         if 'is_admin' in data.keys() and type(data['is_admin']) is not bool:
-            return False
+            raise InvalidUserData
 
         try:
-            emailinfo = validate_email(data['email'], check_deliverability=True)
-            data['email'] = emailinfo.normalized
+            if 'email' in data.keys():
+                emailinfo = validate_email(data['email'],
+                                           check_deliverability=True)
+                data['email'] = emailinfo.normalized
             return True
         except (EmailNotValidError, AttributeError):
-            return False
+            raise InvalidUserData

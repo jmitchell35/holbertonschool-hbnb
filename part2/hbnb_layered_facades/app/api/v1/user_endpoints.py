@@ -43,7 +43,7 @@ class UserList(Resource):
         except EmailAlreadyExists:
             return {'error': 'Email already registered'}, 400
         except InvalidUserData:
-            return {'error': 'Invalid Input data'}, 400
+            return {'error': 'Invalid input data'}, 400
 
     @api.response(200, 'Users list retrieved successfully')
     def get(self):
@@ -54,7 +54,6 @@ class UserList(Resource):
 # user_id comes from route, not payload / body
 @api.doc(params={'user_id': 'The user ID'})
 class UserResource(Resource):
-    @api.expect(user_model, validate=False)
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
     def get(self, user_id):
@@ -91,4 +90,4 @@ class UserResource(Resource):
         except EmailAlreadyExists:
             return {'error': 'Email already registered'}, 400
         except InvalidUserData:
-            return {'error': 'Invalid Input data'}, 400
+            return {'error': 'Invalid input data'}, 400

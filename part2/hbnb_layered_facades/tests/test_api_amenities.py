@@ -1,6 +1,5 @@
 import unittest
 from app import create_app
-from flask import json
 
 class TestAmenityEndpoints(unittest.TestCase):
     """Tests des endpoints API amenities"""
@@ -27,6 +26,9 @@ class TestAmenityEndpoints(unittest.TestCase):
             "name": ""
         })
         self.assertEqual(response.status_code, 400)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
 
     def test_get_amenity(self):
         """Test: récupérer un équipement existant"""
@@ -47,6 +49,9 @@ class TestAmenityEndpoints(unittest.TestCase):
         """Test: récupérer un équipement inexistant"""
         response = self.client.get('/api/v1/amenities/99999')
         self.assertEqual(response.status_code, 404)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Amenity not found')
 
     def test_get_all_amenities(self):
         """Test: obtenir toutes les amenities"""
@@ -56,8 +61,8 @@ class TestAmenityEndpoints(unittest.TestCase):
         self.assertIsInstance(amenities, list)  # Vérifie que réponse = liste
         if amenities:  # Vérifie que si amenities existent, ont les bons champs
             for amenity in amenities:
+                self.assertIn('id', amenity)
                 self.assertIn('name', amenity)
-                self.assertIn('description', amenity)
 
     def test_update_amenity(self):
         """Test: mise à jour d'un équipement"""
@@ -84,6 +89,9 @@ class TestAmenityEndpoints(unittest.TestCase):
             "name": "Salle de sport"
         })
         self.assertEqual(response.status_code, 404)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Amenity not found')
 
     def test_update_amenity_invalid_data(self):
         """Test: tentative de mise à jour avec données invalides"""
@@ -98,6 +106,9 @@ class TestAmenityEndpoints(unittest.TestCase):
             "name": ""
         })
         self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
 
 if __name__ == '__main__':
     unittest.main()

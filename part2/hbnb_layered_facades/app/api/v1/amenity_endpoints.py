@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from app.services.exception import InvalidAmenityData, AmenityAlreadyExists, AmenityNotFound
+from app.services.exception import (InvalidAmenityData, AmenityAlreadyExists,
+                                    AmenityNotFound)
 
 
 api = Namespace('amenities', description='Amenity operations')
@@ -26,10 +27,8 @@ class AmenityList(Resource):
                 'id': amenity.id,
                 'name': amenity.name
             }, 201
-        except InvalidAmenityData as e:
-            return {'error': str(e)}, 400
-        except AmenityAlreadyExists as e:
-            return {'error': str(e)}, 400
+        except InvalidAmenityData:
+            return {'error': 'Invalid input data'}, 400
 
     @api.response(200, 'List of amenities retrieved successfully')
     def get(self):
