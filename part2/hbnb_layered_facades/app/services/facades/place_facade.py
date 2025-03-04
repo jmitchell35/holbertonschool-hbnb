@@ -34,15 +34,12 @@ class PlaceFacade:
     
     def update_place(self, place_id, place_data):
         # retreive place updating his profile
-        updating_place = self.gateway.get_by_attribute('id', place_id)
-        if not updating_place:
-            raise PlaceNotFound
-        updating_place.update(place_data)
-        # checking format validation before writing into storage
-        verif = updating_place.format_validation()
-        if not verif:
+        updating_place = self.gateway.get(place_id)
+        # checking data before writing into storage
+        if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        return verif
+        updating_place.format_validation()
+        return updating_place
     
     def delete_review(self, review_id, place_id):
         place = self.get(place_id)
