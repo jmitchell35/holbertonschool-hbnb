@@ -54,7 +54,6 @@ class UserList(Resource):
 # user_id comes from route, not payload / body
 @api.doc(params={'user_id': 'The user ID'})
 class UserResource(Resource):
-    @api.expect(user_model, validate=False)
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
     def get(self, user_id):
