@@ -7,11 +7,6 @@ class Review(BaseEntity):
         self.rating = rating
         self.place_id = place_id
         self.user_id = user_id
-        
-    def format_validation(self):
-        if type(self.rating) is not int:
-            return None        
-        return self
     
     def update(self, data=None):
         super().update()
