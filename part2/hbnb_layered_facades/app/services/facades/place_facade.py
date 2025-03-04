@@ -37,7 +37,7 @@ class PlaceFacade:
         # checking data before writing into storage
         if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        updating_place.format_validation()
+        updating_place.update(place_data)
         return updating_place
     
     def delete_review(self, review_id, place_id):
