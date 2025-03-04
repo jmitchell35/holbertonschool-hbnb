@@ -44,4 +44,4 @@ class AmenityFacade:
         verif = updating_amenity.format_validation()
         if not verif:
             raise InvalidAmenityData
-        return self.gateway.update(amenity.id, amenity_name['name'])
+        return verif
