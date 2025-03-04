@@ -1,5 +1,5 @@
 from app.services.exception import (UserNotFound, PlaceNotFound,
-                                    InvalidReviewData)
+                                    InvalidReviewData, ReviewNotFound)
 
 class ReviewWorkflowManager:
     def __init__(self, place_facade, user_facade, review_facade):
@@ -23,7 +23,20 @@ class ReviewWorkflowManager:
         
     def get_reviews_by_place(self, place_id):
         try:
-            self.place_facade.get(place_id)
-            return 
+            reviews = (self.place_facade.get(place_id)).reviews
+            reviews_list=[]
+            for review in reviews:
+                reviews_list.append(self.review_facade.get(review))
+            return reviews_list
         except PlaceNotFound:
             raise PlaceNotFound
+    
+    def delete_review(self, review_id):
+        try:
+            review = self.review_facade.get(review_id)
+            self.user_facade.delete_review(review_id, review.user_id)
+            self.place_facade.delete_review(review_id, review.place_id)
+            self.review_facade.delete_review(review_id)
+            return {"message": "Review deleted successfully"}, 200
+        except ReviewNotFound:
+            raise ReviewNotFound
