@@ -12,3 +12,20 @@ class ReviewFacade:
         if not verif:
             raise InvalidReviewData
         return self.gateway.add(review)
+    
+    def get_all_reviews(self):
+        reviews = self.gateway.get_all()
+        return [
+        {
+                'id': review.id,
+                'text': review.text,
+                'rating': review.rating
+        } 
+        for review in reviews
+    ]
+    
+    def get(self, review_id):
+        review = self.gateway.get(review_id)
+        if review is None:
+            raise ReviewNotFound
+        return review
