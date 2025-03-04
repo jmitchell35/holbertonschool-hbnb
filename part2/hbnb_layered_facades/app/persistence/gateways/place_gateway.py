@@ -17,3 +17,7 @@ class PlaceGateway(InMemoryRepository):
             obj.update(data)
             return obj
         return None
+    
+    def delete_review(self, obj, review_id):
+        (obj.reviews).remove(review_id)
+        return obj

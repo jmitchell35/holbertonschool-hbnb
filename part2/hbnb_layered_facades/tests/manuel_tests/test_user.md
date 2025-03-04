@@ -6,12 +6,12 @@ Vérification création utilisateur via une requête POST avec les informations 
 ```bash
 curl -X POST http://127.0.0.1:5000/api/v1/users/ \
   -H "Content-Type: application/json" \
-  -d '{"first_name": "Al", "last_name": "Tyt", "email": "al@gmail.com"}'
+  -d '{"first_name": "Al", "last_name": "Tyt", "email": "alx@gmail.com"}'
 ```
 ### Résultat
 ```json
 {
-    "id": "ecbd948d-bd2e-44c9-9d81-9399bf1f668c",
+    "id": "c267695e-9741-4a79-ac03-00f423a5724e",
     "first_name": "al",
     "last_name": "tyt",
     "email": "al@gmail.com"
@@ -22,7 +22,34 @@ curl -X POST http://127.0.0.1:5000/api/v1/users/ \
 ### Description:
 Vérification impossibilité de création utilisateur via une requête POST si information non valide.
 ### Requête CURL:
-**Requête 2.1** contenant un mail invalide
+**Requête 2.1** contenant first_name invalide 
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/users/ \
+  -H "Content-Type: application/json" \
+  -d '{"first_name": "", "last_name": "Tyt", "email": "alx@gmail.com"}'
+```
+### Résultat
+```json
+{
+  "error": "Invalid Input data"
+}
+// 400 BAD REQUEST
+```
+### Requête CURL:
+**Requête 2.2** contenant last_name invalide 
+```bash
+curl -X POST http://127.0.0.1:5000/api/v1/users/ \
+  -H "Content-Type: application/json" \
+  -d '{"first_name": "Al", "last_name": "", "email": "alxd@gmail.com"}'
+```
+### Résultat
+```json
+{
+  "error": "Invalid Input data"
+}
+```
+### Requête CURL:
+**Requête 2.3** contenant un mail invalide
 ```bash
 curl -X POST http://127.0.0.1:5000/api/v1/users/ \
   -H "Content-Type: application/json" \
@@ -36,7 +63,7 @@ curl -X POST http://127.0.0.1:5000/api/v1/users/ \
 // 400 BAD REQUEST
 ```
 ### Requête CURL:
-**Requête 2.2** Contenant un mail déjà existant
+**Requête 2.4** Contenant un mail déjà existant
 ```bash
 curl -X POST http://127.0.0.1:5000/api/v1/users/ \
   -H "Content-Type: application/json" \
@@ -60,16 +87,10 @@ curl GET 'http://127.0.0.1:5000/api/v1/users/'
 ```json
 [
     {
-        "id": "eb289057-f7c6-4d41-982a-1c761741fc90",
-        "first_name": "al",
-        "last_name": "tyt",
-        "email": "al@gmail.com"
-    },
-    {
-        "id": "27aee5a4-dc7c-4e3b-9bbc-bf2c26e03907",
-        "first_name": "al",
-        "last_name": "plp",
-        "email": "plp@gmail.com"
+      "id": "c267695e-9741-4a79-ac03-00f423a5724e",
+      "first_name": "Al",
+      "last_name": "Tyt",
+      "email": "al@gmail.com"
     }
 ]
 // 200 OK
@@ -79,14 +100,14 @@ curl GET 'http://127.0.0.1:5000/api/v1/users/'
 Vérification récupération d'un utilisateur par son id via une requête GET.
 ### Requête CURL:
 ```bash
-curl GET 'http://127.0.0.1:5000/api/v1/users/eb289057-f7c6-4d41-982a-1c761741fc90'
+curl GET 'http://127.0.0.1:5000/api/v1/users/ec267695e-9741-4a79-ac03-00f423a5724e'
 ```
 ### Résultat
 ```json
 {
-    "id": "eb289057-f7c6-4d41-982a-1c761741fc90",
-    "first_name": "al",
-    "last_name": "tyt",
+    "id": "c267695e-9741-4a79-ac03-00f423a5724e",
+    "first_name": "Al",
+    "last_name": "Tyt",
     "email": "al@gmail.com"
 }
 // 200 OK
@@ -110,14 +131,14 @@ curl GET 'http://127.0.0.1:5000/api/v1/users/eb289057-f7c6-4d41-982a-1c7617415c9
 Vérification modification information d'un utilisateur via une requête PUT.
 ### Requête CURL:
 ```bash
-curl -X PUT 'http://127.0.0.1:5000/api/v1/users/1e9e068b-6729-43ba-95bf-53e1268081ac' \
+curl -X PUT 'http://127.0.0.1:5000/api/v1/users/c267695e-9741-4a79-ac03-00f423a5724e' \
   -H "Content-Type: application/json" \
   -d '{"first_name": "alx", "last_name": "tyt", "email": "al@gmail.com"}'
 ```
 ### Résultat
 ```json
 {
-  "id": "1e9e068b-6729-43ba-95bf-53e1268081ac",
+  "id": "c267695e-9741-4a79-ac03-00f423a5724e",
   "first_name": "alx",
   "last_name": "tyt",
   "email": "al@gmail.com"
@@ -129,7 +150,7 @@ curl -X PUT 'http://127.0.0.1:5000/api/v1/users/1e9e068b-6729-43ba-95bf-53e12680
 Vérification modification information d'un utilisateur par une adresse mail existante via une requête PUT sois impossible.
 ### Requête CURL:
 ```bash
-curl -X PUT 'http://127.0.0.1:5000/api/v1/users/1e9e068b-6729-43ba-95bf-53e1268081ac' \
+curl -X PUT 'http://127.0.0.1:5000/api/v1/users/e983436d-2f34-4201-872f-f0d91d833016' \
   -H "Content-Type: application/json" \
   -d '{"first_name": "alx", "last_name": "tyt", "email": "jp@gmail.com"}'
 ```

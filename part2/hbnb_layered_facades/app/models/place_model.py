@@ -35,8 +35,12 @@ class Place(BaseEntity):
         super().update()
         if not data:
             return self
-        updatable_attr = ['title', 'description', 'price', 'latitude', 'longitude', 'amenities']
+        updatable_attr = ['title', 'description', 'price', 'latitude',
+                          'longitude', 'amenities']
         for key in data:
             if key in updatable_attr:
                 setattr(self, key, data[key])
+        if 'reviews' in data.keys():
+            for review in data['reviews']:
+                self.reviews.append(review)
         return self

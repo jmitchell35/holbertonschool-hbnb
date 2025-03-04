@@ -1,6 +1,7 @@
 from app.persistence.gateways.place_gateway import PlaceGateway
 from app.models.place_model import Place
-from app.services.exception import InvalidPlaceData, PlaceNotFound
+from app.services.exception import (InvalidPlaceData, PlaceNotFound,
+                                    ReviewNotFound)
 
 class PlaceFacade:
     def __init__(self):
@@ -17,12 +18,10 @@ class PlaceFacade:
         places = self.gateway.get_all()
         return [
             {
+                'id': place.id,
                 'title': place.title,
-                'description': place.description,
-                'price': place.price,
                 'latitude': place.latitude,
-                'longitude': place.longitude,
-                'owner_id': place.owner_id
+                'longitude': place.longitude
             }
             for place in places
         ]
@@ -43,4 +42,11 @@ class PlaceFacade:
         verif = updating_place.format_validation()
         if not verif:
             raise InvalidPlaceData
-        return self.gateway.update(place_id, place_data)
+        return verif
+    
+    def delete_review(self, review_id, place_id):
+        place = self.get(place_id)
+        self.gateway.delete_review(place, review_id)
+        if review_id in place.reviews:
+            raise ReviewNotFound
+        return place

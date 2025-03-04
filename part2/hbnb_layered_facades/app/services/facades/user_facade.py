@@ -1,22 +1,22 @@
 from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
-                                    UserNotFound)
+                                    UserNotFound, ReviewNotFound)
 
 class UserFacade:
     def __init__(self):
         self.gateway = UserGateway()
-    
+
     def create_user(self, user_data):
-        if self.gateway.email_exists(user_data['email']):
+        if self.gateway.get_by_attribute('email', user_data['email'])\
+            is not None:
             raise EmailAlreadyExists
 
-        user = User(**user_data)
-        verif = user.format_validation()
-        if not verif:
+        if self.is_valid(user_data) == False:
             raise InvalidUserData
-        written = self.gateway.add(user)
-        return written
+        user = User(**user_data)
+
+        return self.gateway.add(user)
 
     def get_all_users(self):
         users = self.gateway.get_all()
@@ -36,23 +36,55 @@ class UserFacade:
         if not updating_user:
             raise UserNotFound
         # retreiving user associated with email if any
-        existing_email = self.gateway.get_by_attribute(
-            'email', user_data['email'])
-        
-        if existing_email and updating_user.id != existing_email.id:
-            raise EmailAlreadyExists
-
-        # Either email is not registered, or registered email matches user
-        updating_user.update(user_data)
-            
+        if 'email' in user_data.keys():
+            existing_email = self.gateway.get_by_attribute(
+                'email', user_data['email'])
+            # Either email is not registered, or registered email matches user
+            if existing_email and updating_user.id != existing_email.id:
+                raise EmailAlreadyExists
         # checking format validation before writing into storage
-        verif = updating_user.format_validation()
-        if not verif:
+        if self.is_valid(user_data) == True:
+            updating_user.update(user_data)
+            return updating_user
+        else:
             raise InvalidUserData
-        return self.gateway.update(user.id, user_data)
-            
+
     def get(self, user_id):
         user = self.gateway.get(user_id)
         if user is None:
             raise UserNotFound
         return user
+
+    def delete_review(self, review_id, user_id):
+        user = self.get(user_id)
+        self.gateway.delete_review(user, review_id)
+        if review_id in user.reviews:
+            raise ReviewNotFound
+        return user
+
+    def is_valid(self, data):
+        from email_validator import validate_email, EmailNotValidError
+
+        if 'first_name' in data.keys() and type(data['first_name']) is not str:
+            return False
+
+        if 'last_name' in data.keys() and type(data['last_name']) is not str:
+            return False
+
+        if 'first_name' in data.keys() and (len(data['first_name']) > 50 or
+            len(data['first_name']) < 1):
+                return False
+
+        if 'last_name' in data.keys() and (len(data['last_name']) > 50 or
+            len(data['last_name']) < 1):
+            return False
+
+        if 'is_admin' in data.keys() and type(data['is_admin']) is not bool:
+            return False
+
+        try:
+            emailinfo = validate_email(data['email'], check_deliverability=True)
+            data['email'] = emailinfo.normalized
+            return True
+        except (EmailNotValidError, AttributeError):
+            return False

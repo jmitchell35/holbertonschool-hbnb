@@ -6,7 +6,7 @@ Vérification création place via une requête POST avec les informations néces
 ```bash
 curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 -H "Content-Type: application/json" \
--d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 40.7128, "longitude": -74.0060, "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"}'
+-d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 40.7128, "longitude": -74.0060, "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"}'
 ```
 ### Résultat
 ```json
@@ -16,7 +16,7 @@ curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
     "price": 100.0,
     "latitude": 40.7128,
     "longitude": -74.006,
-    "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"
+    "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"
 // 201 CREATED
 ```
 ## Test 2 : Création d'une place information non valide
@@ -27,7 +27,7 @@ Vérification création place via une requête POST avec inforamtions invalide s
 ```bash
 curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 -H "Content-Type: application/json" \
--d '{"title": "Titre de la place", "description": "Description de la place", "price": -100.0, "latitude": 40.7128, "longitude": -74.0060, "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"}'
+-d '{"title": "Titre de la place", "description": "Description de la place", "price": -100.0, "latitude": 40.7128, "longitude": -74.0060, "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"}'
 ```
 ### Résultat
 ```json
@@ -38,7 +38,7 @@ curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 ```bash
 curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 -H "Content-Type: application/json" \
--d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 91.0000, "longitude": -74.0060, "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"}'
+-d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 91.0000, "longitude": -74.0060, "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"}'
 ```
 ### Résultat
 ```json
@@ -49,7 +49,7 @@ curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 ```bash
 curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 -H "Content-Type: application/json" \
--d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 89.1200, "longitude": -182.0304, "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"}'
+-d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 89.1200, "longitude": -182.0304, "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"}'
 ```
 ### Résultat
 ```json
@@ -60,7 +60,7 @@ curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 ```bash
 curl -X POST "http://127.0.0.1:5000/api/v1/places/" \
 -H "Content-Type: application/json" \
--d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 89.1200, "longitude": -71.0987, "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac5767f"}'
+-d '{"title": "Titre de la place", "description": "Description de la place", "price": 100.0, "latitude": 89.1200, "longitude": -71.0987, "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"}'
 ```
 ### Résultat
 ```json
@@ -83,7 +83,7 @@ curl GET 'http://127.0.0.1:5000/api/v1/places/'
         "price": 100.0,
         "latitude": 40.7128,
         "longitude": -74.006,
-        "owner_id": "f241e839-a80a-49d2-ab8c-5b799ac57f5f"
+        "owner_id": "c267695e-9741-4a79-ac03-00f423a5724e"
     }
 ]
 // 20O OK

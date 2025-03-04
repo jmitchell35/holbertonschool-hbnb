@@ -3,10 +3,12 @@ from app.services.exception import (UserNotFound, InvalidPlaceData,
                                     AmenityNotFound)
 
 class PlaceWorkflowManager():
-    def __init__(self, place_facade, user_facade, amenity_facade):
+    def __init__(self, place_facade, user_facade, amenity_facade,
+                 review_facade):
         self.place_facade = place_facade
         self.user_facade = user_facade
         self.amenity_facade = amenity_facade
+        self.review_facade = review_facade
 
     def create_place(self, place_data):
         try:
@@ -28,6 +30,10 @@ class PlaceWorkflowManager():
                     'id': obj.id,
                     'name': obj.name
                 })
+            reviews_list = []
+            for id in place.reviews:
+                obj = self.review_facade.get(id)
+                reviews_list.append(obj)
             # Alternative
             # amenity_list = [{'id': obj.id, 'name': obj.name} 
                 # for id in place.amenities
@@ -36,15 +42,18 @@ class PlaceWorkflowManager():
                 'id': place.id,
                 'title': place.title,
                 'description': place.description,
+                'price': place.price,
                 'latitude': place.latitude,
                 'longitude': place.longitude,
+                'owner_id': place.owner_id,
                 'owner': {
                     'id': owner.id,
                     'first_name': owner.first_name,
                     'last_name': owner.last_name,
                     'email': owner.email
                 },
-                'amenities': amenity_list
+                'amenities': amenity_list,
+                'reviews': reviews_list
             }
         except PlaceNotFound:
             raise PlaceNotFound
