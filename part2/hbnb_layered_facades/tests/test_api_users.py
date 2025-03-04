@@ -140,10 +140,19 @@ class TestUserEndpoints(unittest.TestCase):
         response_data = update_response.get_json()
         self.assertIn('error', response_data)
         self.assertEqual(response_data['error'], 'Invalid input data')
-        
+
+    def test_update_user_already_registered(self):
+        """Test: tentative de mise à jour avec un mail enregistré"""
+        # Création d'un utilisateur
+        create_response = self.client.post('/api/v1/users/', json={
+            "first_name": "James",
+            "last_name": "Pond",
+            "email": "james.pond@gmail.com"
+        })
+        user_id = create_response.get_json().get("id")
         update_response = self.client.put(f'/api/v1/users/{user_id}', json={
-            "first_name": "Joey",
-            "last_name": "Avery",
+            "first_name": "James",
+            "last_name": "Bond",
             "email": "john.doe@gmail.com"
         })
         self.assertEqual(update_response.status_code, 400)
