@@ -44,4 +44,10 @@ class User(BaseEntity):
         for key in data:
             if key in updatable_attr:
                 setattr(self, key, data[key])
+        if 'reviews' in data.keys():
+            for review in data['reviews']:
+                self.reviews.append(review)
+        if 'places' in data.keys():
+            for place in data['placess']:
+                self.places.append(place)
         return self
