@@ -5,7 +5,7 @@ from app.services.exception import (InvalidPlaceData, OwnerNotFound,
 
 api = Namespace('places', description='Place operations')
 
-place_input_model = api.model('Place', {
+place_input_model = api.model('PlaceInput', {
     'title': fields.String(
         required=True, description='Title of the place'),
     'description': fields.String(
@@ -20,19 +20,19 @@ place_input_model = api.model('Place', {
         required=True, description='ID of the owner'),
 })
 
-review_output_model = api.model('PlaceReview', {
+review_output_model = api.model('PlaceReviewOutput', {
     'id': fields.String(description='Review ID'),
     'text': fields.String(description='Text of the review'),
     'rating': fields.Integer(description='Rating of the place (1-5)'),
     'user_id': fields.String(description='ID of the user')
 })
 
-amenity_output_model = api.model('Amenity', {
+amenity_output_model = api.model('AmenityOutput', {
     'id': fields.String(description='Amenity ID'),
     'name': fields.String(required=True, description='Name of the amenity')
 })
 
-user_output_model = api.model('User', {
+user_output_model = api.model('UserOutput', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(
         required=True, description='First name of the user'),
@@ -42,7 +42,7 @@ user_output_model = api.model('User', {
         required=True, description='Email of the user')
 })
 
-place_output_model = api.model('Place', {
+place_output_model = api.model('PlaceDetailsOutput', {
     'id': fields.String(description='Place ID'),
     'title': fields.String(
         required=True, description='Title of the place'),
