@@ -8,6 +8,7 @@ def create_app():
         version='1.0',
         title='HBnB API',
         description='HBnB Application API',
+        prefix='/api/v1',
         doc='/api/v1/'
     )
     
