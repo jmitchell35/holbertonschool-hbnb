@@ -29,3 +29,19 @@ class ReviewFacade:
         if review is None:
             raise ReviewNotFound
         return review
+    
+    def update_review(self, review_id, review_data):
+        # retreive place updating his profile
+        review = self.gateway.get(review_id)
+        if not review:
+            raise ReviewNotFound
+        review.update(review_data)
+        # checking format validation before writing into storage
+        verif = review.format_validation()
+        if not verif:
+            raise InvalidReviewData
+        return verif
+    
+    def delete_review(self, review_id):
+        self.gateway.delete(review_id)
+        return True
