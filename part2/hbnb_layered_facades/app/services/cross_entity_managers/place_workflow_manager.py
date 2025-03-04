@@ -1,6 +1,6 @@
 from app.services.exception import (UserNotFound, InvalidPlaceData,
                                     OwnerNotFound, PlaceNotFound,
-                                    AmenityNotFound)
+                                    AmenityNotFound, PlaceOwnerConsistency)
 
 class PlaceWorkflowManager():
     def __init__(self, place_facade, user_facade, amenity_facade,
@@ -64,6 +64,9 @@ class PlaceWorkflowManager():
         
     def update_place(self, place_id, place_data):
         try:
+            initial_owner = (self.place_facade.get(place_id)).owner_id
+            if initial_owner != place_data['owner_id']:
+                raise PlaceOwnerConsistency
             if 'amenities' in place_data.keys():
                 for id in place_data['amenities']:
                     self.amenity_facade.get(id)

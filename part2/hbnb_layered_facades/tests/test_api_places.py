@@ -103,7 +103,7 @@ class TestPlaceEndpoints(unittest.TestCase):
                 "price": 150.0,
                 "latitude": 48.8584,
                 "longitude": 2.2945,
-                "owner_id": "12345"
+                "owner_id": f"{self.__class__.owner_id}"
             })
         self.assertEqual(update_response.status_code, 200)
         updated_data = update_response.get_json()
@@ -123,7 +123,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         updated_data = response.get_json()
         self.assertEqual(updated_data['error'], 'Place not found')
 
-    def test_update_place_invalid_data(self):
+    def test_update_place_invalid_price(self):
         """Test: tentative de mise à jour avec des données invalides"""
         # Tentative de mise à jour avec un prix négatif
         update_response = self.client.put(
@@ -131,12 +131,52 @@ class TestPlaceEndpoints(unittest.TestCase):
             json={
                 "title": "Appartement 2 chambres",
                 "description": "Plus grand et mieux situé",
-                "price": -150,
+                "price": -150.0,
                 "latitude": 48.8584,
                 "longitude": 2.2945,
                 "owner_id": f"{self.__class__.owner_id}"
             })
         self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
+        
+    def test_update_place_invalid_coordinates(self):
+        """Test: tentative de mise à jour avec des données invalides"""
+        # Tentative de mise à jour avec un prix négatif
+        update_response = self.client.put(
+            f'/api/v1/places/{self.__class__.place_id}',
+            json={
+                "title": "Appartement 2 chambres",
+                "description": "Plus grand et mieux situé",
+                "price": 150.0,
+                "latitude": -94.2468,
+                "longitude": 190.1234,
+                "owner_id": f"{self.__class__.owner_id}"
+            })
+        self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
+
+    # make or break ?
+    def test_update_place_invalid_owner(self):
+        """Test: tentative de mise à jour avec des données invalides"""
+        # Tentative de mise à jour avec un prix négatif
+        update_response = self.client.put(
+            f'/api/v1/places/{self.__class__.place_id}',
+            json={
+                "title": "Appartement 2 chambres",
+                "description": "Plus grand et mieux situé",
+                "price": 150.0,
+                "latitude": 47.2468,
+                "longitude": 50.1234,
+                "owner_id": "1234"
+            })
+        self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], "Can't change place owner")
         
     @classmethod
     def tearDownClass(cls):
