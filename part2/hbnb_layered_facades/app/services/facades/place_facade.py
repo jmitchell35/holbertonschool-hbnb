@@ -8,10 +8,9 @@ class PlaceFacade:
         self.gateway = PlaceGateway()
     
     def create_place(self, place_data):
-        place = Place(**place_data)
-        verif = place.format_validation()
-        if not verif:
+        if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
+        place = Place(**place_data)
         return self.gateway.add(place)
 
     def get_all_places(self):
