@@ -12,3 +12,13 @@ class Review(BaseEntity):
         if type(self.rating) is not int:
             return None        
         return self
+    
+    def update(self, data=None):
+        super().update()
+        if not data:
+            return self
+        updatable_attr = ['text', 'rating']
+        for key in data:
+            if key in updatable_attr:
+                setattr(self, key, data[key])
+        return self
