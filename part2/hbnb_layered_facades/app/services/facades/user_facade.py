@@ -39,18 +39,15 @@ class UserFacade:
         if 'email' in user_data.keys():
             existing_email = self.gateway.get_by_attribute(
                 'email', user_data['email'])
-        
+            # Either email is not registered, or registered email matches user
             if existing_email and updating_user.id != existing_email.id:
                 raise EmailAlreadyExists
-
-        # Either email is not registered, or registered email matches user
-        updating_user.update(user_data)
-            
         # checking format validation before writing into storage
-        verif = updating_user.format_validation()
-        if not verif:
+        if self.is_valid(user_data) == True:
+            updating_user.update(user_data)
+            return updating_user
+        else:
             raise InvalidUserData
-        return verif
             
     def get(self, user_id):
         user = self.gateway.get(user_id)
@@ -64,3 +61,22 @@ class UserFacade:
         if review_id in user.reviews:
             raise ReviewNotFound
         return user
+    
+    def is_valid(self, data):
+        from email_validator import validate_email, EmailNotValidError
+        
+        if type(data['first_name']) is not str or\
+            type(data['last_name']) is not str:
+            return False
+        if len(data['first_name']) > 50 or len(data['first_name']) < 1 or\
+            len(data['last_name']) > 50 or len(data['last_name']) < 1:
+            return False
+        if 'is_admin' in data.keys() and type(data['is_admin']) is not bool:
+            return False
+
+        try:
+            emailinfo = validate_email(data['email'], check_deliverability=True)
+            data['email'] = emailinfo.normalized
+            return True
+        except (EmailNotValidError, AttributeError):
+            return False
