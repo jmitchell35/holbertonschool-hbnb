@@ -1,7 +1,7 @@
 from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
-                                    UserNotFound)
+                                    UserNotFound, ReviewNotFound)
 
 class UserFacade:
     def __init__(self):
@@ -50,10 +50,17 @@ class UserFacade:
         verif = updating_user.format_validation()
         if not verif:
             raise InvalidUserData
-        return self.gateway.update(user.id, user_data)
+        return verif
             
     def get(self, user_id):
         user = self.gateway.get(user_id)
         if user is None:
             raise UserNotFound
+        return user
+    
+    def delete_review(self, review_id, user_id):
+        user = self.get(user_id)
+        self.gateway.delete_review(user, review_id)
+        if review_id in user.reviews:
+            raise ReviewNotFound
         return user
