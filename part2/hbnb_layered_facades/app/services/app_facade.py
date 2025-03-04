@@ -16,7 +16,8 @@ class HBnBFacade:
         self.place_manager = PlaceWorkflowManager(
             self.place_facade,
             self.user_facade,
-            self.amenity_facade
+            self.amenity_facade,
+            self.review_facade
         )
         self.review_manager = ReviewWorkflowManager(
             self.place_facade,
