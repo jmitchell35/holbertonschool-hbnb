@@ -36,8 +36,11 @@ class ReviewList(Resource):
     @api.marshal_with(review_details_model, code=201)
     def post(self):
         """Register a new review"""
-        review = facade.review_manager.create_review(api.payload)
-        return review, 201
+        try:
+            review = facade.review_manager.create_review(api.payload)
+            return review, 201
+        except InvalidReviewData:
+            api.abort("Invalid input data", 404)
 
     @api.response(200, 'List of reviews retrieved successfully')
     @api.marshal_list_with(review_output_model, code=200)
@@ -65,15 +68,24 @@ class ReviewResource(Resource):
     @api.response(400, 'Invalid input data')
     def put(self, review_id):
         """Update a review's information"""
-        # Placeholder for the logic to update a review by ID
-        pass
+        try:
+            facade.review_facade.update_review(review_id, api.payload)
+            return {"message": "Review updated successfully"}, 200
+        except ReviewNotFound:
+            return {'error': 'Review not found'}, 404
+        except InvalidReviewData:
+            return {'error': 'Invalid input data'}, 400
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review"""
-        # Placeholder for the logic to delete a review
-        pass
+        try:
+            facade.review_manager.delete_review(review_id)
+            return {"message": "Review deleted successfully"}, 200
+        except ReviewNotFound:
+            return {'error': 'Review not found'}, 404
+            
 
 @api.route('/places/<place_id>/reviews')
 @api.doc(params={'place_id': 'The place ID'})
