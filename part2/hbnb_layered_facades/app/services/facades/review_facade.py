@@ -7,10 +7,11 @@ class ReviewFacade:
         self.gateway = ReviewGateway()
         
     def create_review(self, data):
-        review = Review(**data)
-        verif = review.format_validation()
-        if not verif:
+        if self.is_valid(data) is not True:
             raise InvalidReviewData
+
+        review = Review(**data)
+
         return self.gateway.add(review)
     
     def get_all_reviews(self):
@@ -35,13 +36,24 @@ class ReviewFacade:
         review = self.gateway.get(review_id)
         if not review:
             raise ReviewNotFound
-        review.update(review_data)
         # checking format validation before writing into storage
-        verif = review.format_validation()
-        if not verif:
+        if self.is_valid(review_data) is not True:
             raise InvalidReviewData
-        return verif
+
+        review.update(review_data)
+        return review
     
     def delete_review(self, review_id):
         self.gateway.delete(review_id)
+        return True
+    
+    def is_valid(self, data):
+        if 'rating' in data.keys() and (type(data['rating']) is not int or
+        data['rating'] < 1 or
+        data['rating'] > 5):
+            raise InvalidReviewData
+
+        if 'text' in data.keys() and (type(data['text']) is not str):
+            raise InvalidReviewData
+
         return True
