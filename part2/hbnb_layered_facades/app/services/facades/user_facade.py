@@ -83,8 +83,10 @@ class UserFacade:
             raise InvalidUserData
 
         try:
-            emailinfo = validate_email(data['email'], check_deliverability=True)
-            data['email'] = emailinfo.normalized
+            if 'email' in data.keys():
+                emailinfo = validate_email(data['email'],
+                                           check_deliverability=True)
+                data['email'] = emailinfo.normalized
             return True
         except (EmailNotValidError, AttributeError):
             raise InvalidUserData
