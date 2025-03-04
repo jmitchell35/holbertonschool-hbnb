@@ -9,10 +9,21 @@ class ReviewWorkflowManager:
     
     def create_review(self, data):
         try:
-            self.user_facade.get(data['user_id'])
+            user = self.user_facade.get(data['user_id'])
             self.place_facade.get(data['place_id'])
-            return self.review_facade.create_review(data)
+            new_review = self.review_facade.create_review(data)
+            self.place_facade.update_place(data['place_id'],
+                                     {'reviews': [new_review.id]})
+            self.user_facade.update_user(user, {'reviews': [new_review.id]})
+            return new_review
         except UserNotFound:
             raise UserNotFound
         except PlaceNotFound:
             raise InvalidReviewData
+        
+    def get_reviews_by_place(self, place_id):
+        try:
+            self.place_facade.get(place_id)
+            return 
+        except PlaceNotFound:
+            raise PlaceNotFound
