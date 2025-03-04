@@ -33,6 +33,21 @@ class TestUserEndpoints(unittest.TestCase):
             "email": "invalid-email"
         })
         self.assertEqual(response.status_code, 400)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
+  
+    def test_create_user_already_registered(self):
+        """Test: tentative de création avec mail déjà enregistré"""
+        response = self.client.post('/api/v1/users/', json={
+            "first_name": "Jane",
+            "last_name": "Doe-Clark",
+            "email": "jane.doe@gmail.com"
+        })
+        self.assertEqual(response.status_code, 400)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Email already registered')
 
     def test_get_user(self):
         """Test: récupérer un utilisateur existant"""
@@ -55,6 +70,9 @@ class TestUserEndpoints(unittest.TestCase):
         """Test: récupérer un utilisateur inexistant"""
         response = self.client.get('/api/v1/users/99999')
         self.assertEqual(response.status_code, 404)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'User not found')
 
     def test_get_all_users(self):
         """Test: obtenir la liste de tous les utilisateurs"""
@@ -99,6 +117,9 @@ class TestUserEndpoints(unittest.TestCase):
             "email": "jonathan.doan@gmail.com"
         })
         self.assertEqual(response.status_code, 404)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'User not found')
 
     def test_update_user_invalid_data(self):
         """Test: tentative de mise à jour avec données invalides"""
@@ -112,11 +133,26 @@ class TestUserEndpoints(unittest.TestCase):
 
         # Tentative de mise à jour avec un email invalide
         update_response = self.client.put(f'/api/v1/users/{user_id}', json={
-            "first_name": "Joey",
+            "first_name": "",
             "last_name": "Avery",
             "email": "invalid-email"
         })
         self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Invalid input data')
+        
+        update_response = self.client.put(f'/api/v1/users/{user_id}', json={
+            "first_name": "Joey",
+            "last_name": "Avery",
+            "email": "john.doe@gmail.com"
+        })
+        self.assertEqual(update_response.status_code, 400)
+        response_data = update_response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Email already registered')
+        
+        
 
 if __name__ == '__main__':
     unittest.main()
