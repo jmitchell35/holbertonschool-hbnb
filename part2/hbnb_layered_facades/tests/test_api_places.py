@@ -55,6 +55,21 @@ class TestPlaceEndpoints(unittest.TestCase):
         self.assertIsNotNone(data)  # Vérifie que réponse pas None
         self.assertEqual(data['title'], 'Villa Paradiso')
         self.assertIsNotNone(data['id'])  # Vérifie que l'ID est bien présent
+    
+    def test_create_place_owner_not_found(self):
+        """Test: création d'un lieu, owner inconnu"""
+        response = self.client.post('/api/v1/places/', json={
+            "title": "Villa Paradiso",
+            "description": "paradisiac",
+            "price": 120.0,
+            "latitude": 40.0,
+            "longitude": 70.0,
+            "owner_id": "1234"
+        })
+        self.assertEqual(response.status_code, 404)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], 'Owner not found')
 
     def test_get_place(self):
         """Test: récupérer un lieu existant"""
