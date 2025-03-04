@@ -74,7 +74,7 @@ class TestAmenityEndpoints(unittest.TestCase):
         amenity_id = amenity_data.get("id")
 
         # Mise à jour de l'équipement
-        update_response = self.client.patch(f'/api/v1/amenities/{amenity_id}',
+        update_response = self.client.put(f'/api/v1/amenities/{amenity_id}',
                                             json={
             "name": "WiFi Ultra-Rapide"
         })
@@ -85,7 +85,7 @@ class TestAmenityEndpoints(unittest.TestCase):
 
     def test_update_nonexistent_amenity(self):
         """Test: mise à jour d'un équipement inexistant"""
-        response = self.client.patch('/api/v1/amenities/99999', json={
+        response = self.client.put('/api/v1/amenities/99999', json={
             "name": "Salle de sport"
         })
         self.assertEqual(response.status_code, 404)
@@ -102,7 +102,7 @@ class TestAmenityEndpoints(unittest.TestCase):
         amenity_id = create_response.get_json().get("id")
 
         # Tentative de mise à jour avec un nom vide
-        update_response = self.client.patch(f'/api/v1/amenities/{amenity_id}', json={
+        update_response = self.client.put(f'/api/v1/amenities/{amenity_id}', json={
             "name": ""
         })
         self.assertEqual(update_response.status_code, 400)
