@@ -18,24 +18,6 @@ class User(BaseEntity):
         """Add a place to the user."""
         self.places.append(place)
         
-    def format_validation(self):
-        from email_validator import validate_email, EmailNotValidError
-        
-        if type(self.first_name) is not str or\
-            type(self.last_name) is not str:
-            return None
-        if len(self.first_name) > 50 or len(self.last_name) > 50:
-            return None
-        if type(self.is_admin) is not bool:
-            return None
-
-        try:
-            emailinfo = validate_email(self.email, check_deliverability=True)
-            self.email = emailinfo.normalized
-            return self
-        except (EmailNotValidError, AttributeError):
-            return None
-        
     def update(self, data=None):
         super().update()
         if not data:
