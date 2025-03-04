@@ -1,6 +1,5 @@
 import unittest
 from app import create_app
-from flask import json
 
 class TestUserEndpoints(unittest.TestCase):
     """Tests des endpoints API utilisateur"""
@@ -151,8 +150,6 @@ class TestUserEndpoints(unittest.TestCase):
         response_data = update_response.get_json()
         self.assertIn('error', response_data)
         self.assertEqual(response_data['error'], 'Email already registered')
-        
-        
 
 if __name__ == '__main__':
     unittest.main()
