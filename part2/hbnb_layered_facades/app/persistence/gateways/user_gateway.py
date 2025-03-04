@@ -8,17 +8,14 @@ class UserGateway(InMemoryRepository):
     def add(self, obj):
         self._storage[obj.id] = obj
         return obj
-    
+
     def update(self, obj_id, data):
         obj = self.get(obj_id)
         if obj:
             obj.update(data)
             return obj
         return None
-        
-    def email_exists(self, email):
-        return self.get_by_attribute('email', email)
-    
+
     def delete_review(self, obj, review_id):
         (obj.reviews).remove(review_id)
         return obj
