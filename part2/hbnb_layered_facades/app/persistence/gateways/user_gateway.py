@@ -18,3 +18,7 @@ class UserGateway(InMemoryRepository):
         
     def email_exists(self, email):
         return self.get_by_attribute('email', email)
+    
+    def delete_review(self, obj, review_id):
+        (obj.reviews).remove(review_id)
+        return obj
