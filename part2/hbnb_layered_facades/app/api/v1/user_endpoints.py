@@ -43,7 +43,7 @@ class UserList(Resource):
         except EmailAlreadyExists:
             return {'error': 'Email already registered'}, 400
         except InvalidUserData:
-            return {'error': 'Invalid Input data'}, 400
+            return {'error': 'Invalid input data'}, 400
 
     @api.response(200, 'Users list retrieved successfully')
     def get(self):
@@ -91,4 +91,4 @@ class UserResource(Resource):
         except EmailAlreadyExists:
             return {'error': 'Email already registered'}, 400
         except InvalidUserData:
-            return {'error': 'Invalid Input data'}, 400
+            return {'error': 'Invalid input data'}, 400
