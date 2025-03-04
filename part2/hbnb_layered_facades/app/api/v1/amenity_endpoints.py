@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from app.services.exception import InvalidAmenityData, AmenityAlreadyExists, AmenityNotFound
+from app.services.exception import (InvalidAmenityData, AmenityAlreadyExists,
+                                    AmenityNotFound)
 
 
 api = Namespace('amenities', description='Amenity operations')
