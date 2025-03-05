@@ -79,8 +79,25 @@ class TestReviewEndpoints(unittest.TestCase):
             "place_id": f"{self.__class__.place_id}"
         })
         self.assertEqual(response.status_code, 400)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], "Invalid input data")
 
-    def test_02_get_all_reviews(self):
+    def test_03_create_review_invalid_rating(self):
+        """Test: création d'une review"""
+        # Création d'une review
+        response = self.client.post('/api/v1/reviews/', json={
+            "text": "",
+            "rating": 4,
+            "user_id": f"{self.__class__.user_id}",
+            "place_id": f"{self.__class__.place_id}"
+        })
+        self.assertEqual(response.status_code, 400)
+        response_data = response.get_json()
+        self.assertIn('error', response_data)
+        self.assertEqual(response_data['error'], "Invalid input data")
+
+    def test_04_get_all_reviews(self):
         """Test: obtenir toutes les reviews"""
         response = self.client.get('/api/v1/reviews/')
         self.assertEqual(response.status_code, 200)
@@ -89,7 +106,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertEqual(len(reviews), 1)
         self.assertEqual(reviews[0].get('id'), self.__class__.review_id)
 
-    def test_03_get_reviews_by_place(self):
+    def test_05_get_reviews_by_place(self):
         """Test: obtenir les reviews d'une place spécifique"""
         response = self.client.get(
             f'/api/v1/reviews/places/{self.__class__.place_id}/reviews')
@@ -98,7 +115,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertIsInstance(reviews, list)
         self.assertEqual(reviews[0]["id"], self.__class__.review_id)
 
-    def test_04_delete_review(self):
+    def test_06_delete_review(self):
         """Test: suppression d'une review"""
         # Suppression de la review
         delete_response = self.client.delete(
@@ -115,7 +132,7 @@ class TestReviewEndpoints(unittest.TestCase):
         self.assertIn('error', response_data)
         self.assertEqual(response_data['error'], "Review not found")
 
-    def test_05_delete_nonexistent_review(self):
+    def test_07_delete_nonexistent_review(self):
         """Test: suppression d'une review inexistante"""
         response = self.client.delete('/api/v1/reviews/99999')
         self.assertEqual(response.status_code, 404)

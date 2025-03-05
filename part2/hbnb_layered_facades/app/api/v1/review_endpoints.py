@@ -40,7 +40,7 @@ class ReviewList(Resource):
             review = facade.review_manager.create_review(api.payload)
             return review, 201
         except InvalidReviewData:
-             api.abort(400, message='Invalid input data')
+             api.abort(400, error='Invalid input data')
 
     @api.response(200, 'List of reviews retrieved successfully')
     @api.marshal_list_with(review_output_model, code=200)
@@ -99,4 +99,4 @@ class PlaceReviewList(Resource):
             reviews = facade.review_manager.get_reviews_by_place(place_id)
             return reviews
         except PlaceNotFound:
-            api.abort("Place not found", 404)
+            api.abort(404, error="Place not found")
