@@ -17,7 +17,7 @@ class TestPlaceEndpoints(unittest.TestCase):
         user_response = client.post('/api/v1/users/', json={
             "first_name": "Jane",
             "last_name": "Doe",
-            "email": "jane.doe.test@gmail.com"  # Use a unique email for tests
+            "email": "jane.doe.test@gmail.com"  # Unique email for tests
         })
 
         assert user_response.status_code == 201, "Failed to create test user"

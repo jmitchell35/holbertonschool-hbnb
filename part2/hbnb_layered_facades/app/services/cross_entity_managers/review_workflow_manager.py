@@ -18,7 +18,7 @@ class ReviewWorkflowManager:
             return new_review
         except UserNotFound:
             raise UserNotFound
-        except PlaceNotFound:
+        except (PlaceNotFound, InvalidReviewData):
             raise InvalidReviewData
         
     def get_reviews_by_place(self, place_id):

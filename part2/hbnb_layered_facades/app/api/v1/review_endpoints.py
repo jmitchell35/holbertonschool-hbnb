@@ -40,7 +40,7 @@ class ReviewList(Resource):
             review = facade.review_manager.create_review(api.payload)
             return review, 201
         except InvalidReviewData:
-            api.abort("Invalid input data", 404)
+             api.abort(400, message='Invalid input data')
 
     @api.response(200, 'List of reviews retrieved successfully')
     @api.marshal_list_with(review_output_model, code=200)
@@ -60,7 +60,7 @@ class ReviewResource(Resource):
             review = facade.review_facade.get(review_id)
             return review, 200
         except ReviewNotFound:
-            return {'error': 'Review not found'}, 404
+            api.abort(404, error='Review not found')
 
     @api.expect(review_input_model)
     @api.response(200, 'Review updated successfully')
@@ -84,7 +84,7 @@ class ReviewResource(Resource):
             facade.review_manager.delete_review(review_id)
             return {"message": "Review deleted successfully"}, 200
         except ReviewNotFound:
-            return {'error': 'Review not found'}, 404
+            api.abort(404, error='Review not found')
             
 
 @api.route('/places/<place_id>/reviews')
