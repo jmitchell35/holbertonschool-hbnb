@@ -1,6 +1,5 @@
 import unittest
 from app import create_app
-from flask import json
 
 class TestReviewEndpoints(unittest.TestCase):
     """Tests des endpoints API reviews"""
