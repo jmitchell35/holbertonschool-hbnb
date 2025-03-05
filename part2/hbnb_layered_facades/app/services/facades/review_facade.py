@@ -53,7 +53,8 @@ class ReviewFacade:
         data['rating'] > 5):
             raise InvalidReviewData
 
-        if 'text' in data.keys() and (type(data['text']) is not str):
+        if 'text' in data.keys() and (type(data['text']) is not str or
+                                      len(data['text']) < 2):
             raise InvalidReviewData
 
         return True
