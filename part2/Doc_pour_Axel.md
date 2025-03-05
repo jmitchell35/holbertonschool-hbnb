@@ -1,48 +1,12 @@
 ## Structure generale du projet
 
-hbnb/
-├── app/
-│   ├── api/                     # Gestion des endpoints API
-│   │   ├── v1/                   # Version 1 de l'API
-│   │   │   ├── users_endpoints.py  # Endpoints liés aux utilisateurs
-│   │   │   ├── places_endpoints.py # Endpoints liés aux hébergements
-│   │   │   ├── reviews_endpoints.py # Endpoints liés aux avis
-│   │   │   ├── amenities_endpoints.py # Endpoints liés aux équipements
-│   ├── models/                  # Modèles de données
-│   │   ├── base_model.py         # Modèle de base abstrait
-│   │   ├── user_model.py         # Modèle pour les utilisateurs
-│   │   ├── place_model.py        # Modèle pour les hébergements
-│   │   ├── review_model.py       # Modèle pour les avis
-│   │   ├── amenity_model.py      # Modèle pour les équipements
-│   ├── services/                 # Logique métier
-│   │   ├── user_service.py       # Service pour gérer les utilisateurs
-│   │   ├── place_service.py      # Service pour gérer les hébergements
-│   │   ├── review_service.py     # Service pour gérer les avis
-│   │   ├── amenity_service.py    # Service pour gérer les équipements
-│   │   ├── app_facade.py         # Façade principale pour centraliser les services
-│   ├── persistence/              # Gestion de la persistance des données
-│   │   ├── repository.py         # Interface générique pour interagir avec la base de données
-│   │   ├── gateways/             # Accès aux systèmes externes
-│   │   │   ├── user_gateway.py   # Intégration externe pour les utilisateurs
-│   │   │   ├── place_gateway.py  # Intégration externe pour les hébergements
-│   │   │   ├── review_gateway.py # Intégration externe pour les avis
-│   │   │   ├── amenity_gateway.py # Intégration externe pour les équipements
-│   ├── tests/
-│   │   ├── manual_tests/
-│   │   │   ├── test_amenity.md    # Test manuel pour amenités 
-│   │   │   ├── test_user.md       # Test manuel pour users
-│   │   │   ├── test_review.md     # Test manuel pour reviews
-│   │   │   ├── test_place.md      # Test manuel pour places
-│   │   ├── test_api_amenities.py  # Unittest pour amenities
-│   │   ├── test_api_users.py      # Unittest pour users
-│   │   ├── test_api_reviews.py    # Unittest pour reviews
-│   │   ├── test_api_places.py     # Unittest pour places
-├── run.py                        # Point d'entrée principal de l'application
-├── config/                       # Configuration du projet
-├── tests/                        # Tests unitaires et d'intégration
-└── requirements.txt               # Dépendances Python
+![Architecture](./Architecture.png)
+
 
 ##  Explication des Composants Clés
+
+![LayeredFacade](./LayeredFacade.jpg)
+
 
 ### 1 API (app/api/)
 
