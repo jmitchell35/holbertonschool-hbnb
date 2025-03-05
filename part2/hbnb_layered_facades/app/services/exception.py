@@ -42,6 +42,9 @@ class InvalidPlaceData(PlaceError):
 class PlaceNotFound(PlaceError):
     pass
 
+class PlaceOwnerConsistency(PlaceError):
+    pass
+
 class OwnerNotFound(PlaceError):
     pass
 

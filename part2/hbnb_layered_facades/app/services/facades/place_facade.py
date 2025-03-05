@@ -8,10 +8,9 @@ class PlaceFacade:
         self.gateway = PlaceGateway()
     
     def create_place(self, place_data):
-        place = Place(**place_data)
-        verif = place.format_validation()
-        if not verif:
+        if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
+        place = Place(**place_data)
         return self.gateway.add(place)
 
     def get_all_places(self):
@@ -34,15 +33,12 @@ class PlaceFacade:
     
     def update_place(self, place_id, place_data):
         # retreive place updating his profile
-        updating_place = self.gateway.get_by_attribute('id', place_id)
-        if not updating_place:
-            raise PlaceNotFound
-        updating_place.update(place_data)
-        # checking format validation before writing into storage
-        verif = updating_place.format_validation()
-        if not verif:
+        updating_place = self.gateway.get(place_id)
+        # checking data before writing into storage
+        if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        return verif
+        updating_place.update(place_data)
+        return updating_place
     
     def delete_review(self, review_id, place_id):
         place = self.get(place_id)
@@ -50,3 +46,23 @@ class PlaceFacade:
         if review_id in place.reviews:
             raise ReviewNotFound
         return place
+    
+    def is_valid(self, place_data):
+        if 'price' in place_data.keys() and\
+            (type(place_data['price']) is not float or
+            place_data['price'] < 0.0):
+            raise InvalidPlaceData
+
+        if 'latitude' in place_data.keys() and\
+            (type(place_data['latitude']) is not float or
+            place_data['latitude'] < -90.0 or
+            place_data['latitude'] > 90.0):
+            raise InvalidPlaceData
+        
+        if 'longitude' in place_data.keys() and\
+            (type(place_data['longitude']) is not float or
+            place_data['longitude'] < -180.0 or
+            place_data['longitude'] > 180.0):
+            raise InvalidPlaceData
+
+        return True

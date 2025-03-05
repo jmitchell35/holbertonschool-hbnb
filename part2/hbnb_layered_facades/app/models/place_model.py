@@ -20,17 +20,6 @@ class Place(BaseEntity):
         """Add an amenity to the place."""
         self.amenities.append(amenity)
     
-    def format_validation(self):
-        if type(self.price) is not float:
-            return None
-        if self.price < 0.0:
-            return None
-        if self.latitude < -90.0 or self.latitude > 90.0:
-            return None
-        if self.longitude < -180.0 or self.longitude > 180.0:
-            return None
-        return self
-    
     def update(self, data=None):
         super().update()
         if not data:

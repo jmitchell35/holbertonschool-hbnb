@@ -1,7 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from app.services.exception import (InvalidPlaceData, OwnerNotFound,
-                                    PlaceNotFound, AmenityNotFound)
+                                    PlaceNotFound, AmenityNotFound,
+                                    PlaceOwnerConsistency)
 
 api = Namespace('places', description='Place operations')
 
@@ -116,8 +117,10 @@ class PlaceResource(Resource):
     def put(self, place_id):
         try:
             facade.place_manager.update_place(place_id, api.payload)
-            return { "message": "Place updated successfully"}, 200
+            return {'message': 'Place updated successfully'}, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
         except InvalidPlaceData:
             return {'error': 'Invalid input data'}, 400
+        except PlaceOwnerConsistency:
+            return {"error": "Can't change place owner"}, 400
