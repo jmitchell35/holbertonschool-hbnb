@@ -1,5 +1,7 @@
 from app.models.base_model import BaseEntity
 from app import bcrypt
+
+
 class User(BaseEntity):
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         super().__init__()

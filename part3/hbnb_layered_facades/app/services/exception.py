@@ -11,7 +11,11 @@ class AmenityError(Exception):
     pass
 
 class ReviewError(Exception):
-    """Base exception for amenity-related errors"""
+    """Base exception for review-related errors"""
+    pass
+
+class AuthenticationError(Exception):
+    """Base exception for authentication error"""
     pass
 
 class EmailAlreadyExists(UserError):
@@ -52,4 +56,7 @@ class ReviewNotFound(ReviewError):
     pass
 
 class InvalidReviewData(ReviewError):
+    pass
+
+class UnauthorizedAccess(AuthenticationError):
     pass

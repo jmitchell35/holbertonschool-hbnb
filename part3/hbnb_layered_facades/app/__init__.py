@@ -2,6 +2,9 @@ from flask import Flask, jsonify
 from flask_restx import Api
 from config import DevelopmentConfig
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import JWTManager
+
+jwt = JWTManager()
 
 bcrypt = Bcrypt()
 
@@ -25,7 +28,11 @@ def create_app(config_class=DevelopmentConfig):
     api.add_namespace(amenities_ns, path='/amenities')
     from app.api.v1.review_endpoints import api as review_ns
     api.add_namespace(review_ns, path='/reviews')
+    from app.api.v1.auth import api as auth_ns
+    api.add_namespace(auth_ns, path='/login')
 
     bcrypt.init_app(app)
+
+    jwt.init_app(app)
 
     return app
