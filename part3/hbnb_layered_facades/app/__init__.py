@@ -1,8 +1,11 @@
 from flask import Flask, jsonify
 from flask_restx import Api
 from config import DevelopmentConfig
+from flask_bcrypt import Bcrypt
 
-def create_app(config_class="config.DevelopmentConfig"):
+bcrypt = Bcrypt()
+
+def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     api = Api(
@@ -22,5 +25,7 @@ def create_app(config_class="config.DevelopmentConfig"):
     api.add_namespace(amenities_ns, path='/amenities')
     from app.api.v1.review_endpoints import api as review_ns
     api.add_namespace(review_ns, path='/reviews')
+
+    bcrypt.init_app(app)
 
     return app

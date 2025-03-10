@@ -16,7 +16,10 @@ user_model = api.model('User', {
         description='Last name of the user'),
     'email': fields.String(
         required=True,
-        description='Email of the user')
+        description='Email of the user'),
+    'password': fields.String(
+        required=True,
+        description='Password of the user')
 })
 
 @api.route('/')  # Incomming API call to localhost:5000/users

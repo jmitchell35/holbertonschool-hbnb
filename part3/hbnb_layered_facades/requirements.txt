@@ -1,4 +1,5 @@
 flask
 flask-restx
+flask-bcrypt
 email_validator
 SQLAlchemy
