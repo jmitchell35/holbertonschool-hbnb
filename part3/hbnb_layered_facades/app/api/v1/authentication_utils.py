@@ -1,0 +1,107 @@
+from functools import wraps  # Create homemade decorators (wrapper functions)
+from flask_jwt_extended import get_jwt, verify_jwt_in_request
+from flask import request
+from app.services import facade
+from app.services.exception import UnauthorizedAccess
+
+def admin_required(f):  # custom decorator name, f is decorated function
+    @wraps(f)  # below function is executed when above decorator is used
+    # *args is for undefined number of iterable arguments (list, tuple...)
+    # **args is for undefined number of key-value pairs
+    # Basically comes down to enriched variadic functions from C, OOP way.
+    def decorated(*args, **kwargs):
+        jwt_data = get_jwt()
+        # False if key is missing, or value is True
+        if not jwt_data.get('is_admin', False):
+            return {'error': 'Admin access required'}, 403
+        # Wrapper has done its job, now calls decorated function
+        return f(*args, **kwargs)
+    return decorated
+
+# Triple-nested because we want to consider the user_id from the request URI
+def user_matches_or_admin(func=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Manually verify the JWT
+            verify_jwt_in_request()
+            jwt_data = get_jwt()
+            token_user_id = jwt_data.get('sub')  # logged user
+
+            # Get user_id from Flask's request object
+            user_id = request.view_args.get('user_id')
+
+            # Check permissions
+            if not (jwt_data.get('is_admin') or token_user_id == user_id):
+                return {'error': 'Unauthorized access'}, 403
+                
+            return func(*args, **kwargs)
+        return wrapper
+        
+    # This allows the decorator to be used both with and without parentheses
+    if func:
+        # @user_matches_or_admin (no parentheses)
+        return decorator(func)
+    else:
+        # @user_matches_or_admin() (with parentheses)
+        return decorator
+
+def owner_matches_or_admin(func=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Manually verify the JWT
+            verify_jwt_in_request()
+            jwt_data = get_jwt()
+            token_user_id = jwt_data.get('sub')  # logged user
+
+            # Get user_id from Flask's request object
+            place_id = request.view_args.get('place_id')
+            
+            requesting_user = facade.user_facade.gateway.get(token_user_id)
+
+            # Check permissions
+            if not (jwt_data.get('is_admin') or\
+                    place_id in requesting_user.places):
+                return {'error': 'Unauthorized access'}, 403
+
+            return func(*args, **kwargs)
+        return wrapper
+
+    # This allows the decorator to be used both with and without parentheses
+    if func:
+        # @user_matches_or_admin (no parentheses)
+        return decorator(func)
+    else:
+        # @user_matches_or_admin() (with parentheses)
+        return decorator
+
+def is_author(func=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Manually verify the JWT
+            verify_jwt_in_request()
+            jwt_data = get_jwt()
+            token_user_id = jwt_data.get('sub')  # logged user
+
+            # Get user_id from Flask's request object
+            review_id = request.view_args.get('review_id')
+            
+            requesting_user = facade.user_facade.gateway.get(token_user_id)
+
+            # Check permissions
+            if not (jwt_data.get('is_admin') or\
+                    review_id in requesting_user.reviews):
+                return {'error': 'Unauthorized access'}, 403
+
+            return func(*args, **kwargs)
+        return wrapper
+
+    # This allows the decorator to be used both with and without parentheses
+    if func:
+        # @user_matches_or_admin (no parentheses)
+        return decorator(func)
+    else:
+        # @user_matches_or_admin() (with parentheses)
+        return decorator
