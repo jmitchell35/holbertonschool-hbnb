@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import jwt_required
 from app.services import facade
 from app.services.exception import (InvalidPlaceData, OwnerNotFound,
                                     PlaceNotFound, AmenityNotFound,
@@ -67,6 +68,7 @@ class PlaceList(Resource):
     @api.expect(place_input_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @jwt_required()
     def post(self):
         """Create a new place"""
         place_data = api.payload
@@ -98,6 +100,7 @@ class PlaceResource(Resource):
     @api.marshal_with(place_output_model, code=200)
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
+    @owner_matches_or_admin
     def get(self, place_id):
         """Get place details by ID"""
         try:
