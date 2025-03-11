@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
 from flask_jwt_extended import jwt_required
-from app.api.v1.authentication_utils import is_author
+from app.api.v1.authentication_utils import is_author, not_owner_first_review
 from app.services.exception import (InvalidReviewData, ReviewNotFound,
                                     PlaceNotFound)
 
@@ -35,13 +35,12 @@ class ReviewList(Resource):
     @api.expect(review_input_model, validate=True)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    @api.marshal_with(review_details_model, code=201)
-    @jwt_required()
+    @not_owner_first_review
     def post(self):
         """Register a new review"""
         try:
             review = facade.review_manager.create_review(api.payload)
-            return review, 201
+            return api.marshal(review, review_output_model), 201
         except InvalidReviewData:
              api.abort(400, error='Invalid input data')
 
