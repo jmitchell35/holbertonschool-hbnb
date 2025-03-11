@@ -41,6 +41,6 @@ class User(BaseEntity):
             for review in data['reviews']:
                 self.reviews.append(review)
         if 'places' in data.keys():
-            for place in data['placess']:
+            for place in data['places']:
                 self.places.append(place)
         return self
