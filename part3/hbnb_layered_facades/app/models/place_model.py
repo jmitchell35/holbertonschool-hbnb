@@ -29,6 +29,9 @@ class Place(BaseEntity):
         for key in data:
             if key in updatable_attr:
                 setattr(self, key, data[key])
+        if 'places' in data.keys():
+            for place in data['places']:
+                self.reviews.append(place)
         if 'reviews' in data.keys():
             for review in data['reviews']:
                 self.reviews.append(review)
