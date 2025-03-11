@@ -1,6 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required
 from app.services import facade
+from app.api.v1.authentication_utils import owner_matches_or_admin
 from app.services.exception import (InvalidPlaceData, OwnerNotFound,
                                     PlaceNotFound, AmenityNotFound,
                                     PlaceOwnerConsistency)
@@ -117,6 +118,7 @@ class PlaceResource(Resource):
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
+    @owner_matches_or_admin
     def put(self, place_id):
         try:
             facade.place_manager.update_place(place_id, api.payload)
