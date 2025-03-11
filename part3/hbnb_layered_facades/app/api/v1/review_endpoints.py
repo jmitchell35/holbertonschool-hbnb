@@ -1,5 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from flask_jwt_extended import jwt_required
+from app.api.v1.authentication_utils import is_author
 from app.services.exception import (InvalidReviewData, ReviewNotFound,
                                     PlaceNotFound)
 
@@ -34,6 +36,7 @@ class ReviewList(Resource):
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
     @api.marshal_with(review_details_model, code=201)
+    @jwt_required()
     def post(self):
         """Register a new review"""
         try:
@@ -66,6 +69,7 @@ class ReviewResource(Resource):
     @api.response(200, 'Review updated successfully')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
+    @is_author
     def put(self, review_id):
         """Update a review's information"""
         try:
@@ -78,6 +82,7 @@ class ReviewResource(Resource):
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
+    @is_author
     def delete(self, review_id):
         """Delete a review"""
         try:
