@@ -12,8 +12,12 @@ class PlaceWorkflowManager():
 
     def create_place(self, place_data):
         try:
-            self.user_facade.get(place_data['owner_id'])
-            return self.place_facade.create_place(place_data)
+            owner = self.user_facade.get(place_data['owner_id'])
+            created_place = self.place_facade.create_place(place_data)
+            self.user_facade.update_user(owner,
+                                         {'places': [created_place.id]},
+                                         owner.is_admin)
+            return created_place
         except UserNotFound:
             raise OwnerNotFound
         except InvalidPlaceData:
