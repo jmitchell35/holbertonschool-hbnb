@@ -14,7 +14,10 @@ class ReviewWorkflowManager:
             new_review = self.review_facade.create_review(data)
             self.place_facade.update_place(data['place_id'],
                                      {'reviews': [new_review.id]})
-            self.user_facade.update_user(user, {'reviews': [new_review.id]})
+            self.user_facade.update_user(user,
+                                         {'reviews': [new_review.id]},
+                                         user.is_admin
+                                        )
             return new_review
         except UserNotFound:
             raise UserNotFound
