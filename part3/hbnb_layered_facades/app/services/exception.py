@@ -30,6 +30,10 @@ class UserNotFound(UserError):
     """Raised when user is not found in storage"""
     pass
 
+class UnprivilegedUser(UserError):
+    """Raised when user is not admin (wants to change pwd and email)"""
+    pass
+
 class InvalidAmenityData(AmenityError):
     """Raised when amenity data is invalid."""
     pass
