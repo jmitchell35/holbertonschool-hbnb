@@ -13,11 +13,12 @@ def admin_required(f):  # custom decorator name, f is decorated function
         jwt_data = get_jwt()
         # False if key is missing, or value is True
         if not jwt_data.get('is_admin', False):
-            return {'error': 'Admin access required'}, 403
+            return {'error': 'Admin privileges required'}, 403
         # Wrapper has done its job, now calls decorated function
         return f(*args, **kwargs)
     return decorated
 
+# PUT user
 # Triple-nested because we want to consider the user_id from the request URI
 def user_matches_or_admin(func=None):
     def decorator(func):
@@ -32,8 +33,8 @@ def user_matches_or_admin(func=None):
             user_id = request.view_args.get('user_id')
 
             # Check permissions
-            if not (jwt_data.get('is_admin') or token_user_id == user_id):
-                return {'error': 'Unauthorized access'}, 403
+            if token_user_id != user_id:
+                return {'error': 'Unauthorized action'}, 403
                 
             return func(*args, **kwargs)
         return wrapper
@@ -46,6 +47,7 @@ def user_matches_or_admin(func=None):
         # @user_matches_or_admin() (with parentheses)
         return decorator
 
+# PUT place
 def owner_matches_or_admin(func=None):
     def decorator(func):
         @wraps(func)
@@ -63,6 +65,36 @@ def owner_matches_or_admin(func=None):
             # Check permissions
             if not (jwt_data.get('is_admin') or\
                     place_id in requesting_user.places):
+                return {'error': 'Unauthorized action'}, 403
+
+            return func(*args, **kwargs)
+        return wrapper
+
+    # This allows the decorator to be used both with and without parentheses
+    if func:
+        # @user_matches_or_admin (no parentheses)
+        return decorator(func)
+    else:
+        # @user_matches_or_admin() (with parentheses)
+        return decorator
+
+# PUT / DELETE review
+def is_author(func=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Manually verify the JWT
+            verify_jwt_in_request()
+            jwt_data = get_jwt()
+            token_user_id = jwt_data.get('sub')  # logged user
+
+            # Get user_id from Flask's request object
+            review_id = request.view_args.get('review_id')
+
+            requesting_user = facade.user_facade.gateway.get(token_user_id)
+
+            # Check permissions
+            if review_id not in requesting_user.reviews:
                 return {'error': 'Unauthorized access'}, 403
 
             return func(*args, **kwargs)
@@ -76,7 +108,8 @@ def owner_matches_or_admin(func=None):
         # @user_matches_or_admin() (with parentheses)
         return decorator
 
-def is_author(func=None):
+# POST Review
+def not_owner_first_review(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -85,15 +118,48 @@ def is_author(func=None):
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get user_id from Flask's request object
-            review_id = request.view_args.get('review_id')
+            # Get place_id from Flask's request object body
+            place_id = (request.get_json()).get('place_id')
             
-            requesting_user = facade.user_facade.gateway.get(token_user_id)
+            requesting_user = facade.user_facade.get(token_user_id)
 
             # Check permissions
-            if not (jwt_data.get('is_admin') or\
-                    review_id in requesting_user.reviews):
-                return {'error': 'Unauthorized access'}, 403
+            if place_id in requesting_user.places:
+                return {'error': 'You cannot review your own place'}, 400
+            
+            place = facade.place_facade.get(place_id)
+            for review in place.reviews:
+                if review in requesting_user.reviews:
+                    return {
+                        'error': 'You have already reviewed this place'}, 400
+
+            return func(*args, **kwargs)
+        return wrapper
+
+    # This allows the decorator to be used both with and without parentheses
+    if func:
+        # @user_matches_or_admin (no parentheses)
+        return decorator(func)
+    else:
+        # @user_matches_or_admin() (with parentheses)
+        return decorator
+
+# POST place
+def place_owner_matches_user(func=None):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            # Manually verify the JWT
+            verify_jwt_in_request()
+            jwt_data = get_jwt()
+            token_user_id = jwt_data.get('sub')  # logged user
+
+            # Get place_id from Flask's request object body
+            owner_id = (request.get_json()).get('owner_id')
+
+            # Check permissions
+            if token_user_id != owner_id:
+                return {'error': 'Unauthorized action'}, 403
 
             return func(*args, **kwargs)
         return wrapper
