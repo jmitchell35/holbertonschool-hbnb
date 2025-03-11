@@ -1,5 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
+from app.api.v1.authentication_utils import admin_required
 from app.services.exception import (InvalidAmenityData, AmenityAlreadyExists,
                                     AmenityNotFound)
 
@@ -16,6 +17,7 @@ class AmenityList(Resource):
     @api.expect(amenity_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
+    @admin_required
     def post(self):
         """Register a new amenity"""
         # Placeholder for the logic to register a new amenity
@@ -53,6 +55,7 @@ class AmenityResource(Resource):
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
     @api.response(400, 'Invalid input data')
+    @admin_required
     def put(self, amenity_id):
         """Update an amenity's information"""
         # Placeholder for the logic to update an amenity by ID
