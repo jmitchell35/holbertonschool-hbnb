@@ -10,7 +10,7 @@ from app.services.exception import (EmailAlreadyExists, InvalidUserData,
 api = Namespace('users', description='User operations')
 
 # Define the user model for input validation and documentation
-user_model = api.model('User', {
+user_input_model = api.model('User', {
     'first_name': fields.String(
         required=True,
         description='First name of the user'),
@@ -23,6 +23,13 @@ user_model = api.model('User', {
     'password': fields.String(
         required=True,
         description='Password of the user')
+})
+
+user_output_model = api.model('User', {
+    'id': fields.String(),
+    'first_name': fields.String(),
+    'last_name': fields.String(),
+    'email': fields.String()
 })
 
 @api.route('/')  # Incomming API call to localhost:5000/users
@@ -56,7 +63,9 @@ class UserList(Resource):
     @admin_required  # decorator performs token check in place of jwt_required()
     def get(self):
         """Retrieve list of users requires admin access token"""
-        return facade.user_facade.get_all_users()
+        user_list = facade.user_facade.get_all_users()
+        # Serialize user_list to user_output_model
+        api.marshal(user_list, user_output_model), 200
 
 @api.route('/<user_id>')
 # user_id comes from route, not payload / body
@@ -85,14 +94,8 @@ class UserResource(Resource):
     def put(self, user_id):
         """Update one user details requires user matching or admin rights token"""
         try:
-            user = facade.user_facade.get(user_id)
-            uptd_user = facade.user_facade.update_user(user, api.payload)
-            return {
-                'id': uptd_user.id,
-                'first_name': uptd_user.first_name,
-                'last_name': uptd_user.last_name,
-                'email': uptd_user.email
-            }, 200
+            uptd_user = facade.user_facade.update_user(user_id, api.payload)
+            api.marshal(uptd_user, user_output_model), 200
         except UserNotFound:
             return {'error': 'User not found'}, 404
         except EmailAlreadyExists:

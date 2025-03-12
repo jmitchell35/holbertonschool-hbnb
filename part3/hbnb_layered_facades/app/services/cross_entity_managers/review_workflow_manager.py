@@ -7,6 +7,7 @@ class ReviewWorkflowManager:
         self.user_facade = user_facade
         self.review_facade = review_facade
     
+    # A revoir lors de l'implémentation DB
     def create_review(self, data):
         try:
             user = self.user_facade.get(data['user_id'])
@@ -21,7 +22,7 @@ class ReviewWorkflowManager:
             raise UserNotFound
         except (PlaceNotFound, InvalidReviewData):
             raise InvalidReviewData
-        
+
     def get_reviews_by_place(self, place_id):
         try:
             reviews = (self.place_facade.get(place_id)).reviews
@@ -32,6 +33,7 @@ class ReviewWorkflowManager:
         except PlaceNotFound:
             raise PlaceNotFound
     
+    # A revoir lors de l'implémentation DB
     def delete_review(self, review_id):
         try:
             review = self.review_facade.get(review_id)

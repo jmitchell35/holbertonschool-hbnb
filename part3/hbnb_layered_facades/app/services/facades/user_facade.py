@@ -1,12 +1,12 @@
-from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
                                     UserNotFound, ReviewNotFound,
                                     UserWithoutPlace)
+from app.persistence.gateways.repository import SQLAlchemyRepository
 
 class UserFacade:
     def __init__(self):
-        self.gateway = UserGateway()
+        self.gateway = SQLAlchemyRepository(User)
 
     def create_user(self, user_data):
         if self.gateway.get_by_attribute('email', user_data['email'])\
@@ -17,23 +17,13 @@ class UserFacade:
             raise InvalidUserData
         user = User(**user_data)
 
-        return self.gateway.add(user)
+        self.gateway.add(user)
+        
+        return user
 
-    def get_all_users(self):
-        users = self.gateway.get_all()
-        return [
-        {
-                'id': user.id, 
-                'first_name': user.first_name, 
-                'last_name': user.last_name, 
-                'email': user.email
-        } 
-        for user in users
-    ]
-
-    def update_user(self, user, user_data):
+    def update_user(self, user_id, user_data):
         # retreive user updating his profile
-        updating_user = self.gateway.get_by_attribute('id', user.id)
+        updating_user = self.gateway.get_by_attribute('id', user_id)
         if not updating_user:
             raise UserNotFound
         # retreiving user associated with email if any
@@ -57,6 +47,7 @@ class UserFacade:
             raise UserNotFound
         return user
 
+    # A revoir lors de l'implémentation DB
     def delete_review(self, review_id, user_id):
         user = self.get(user_id)
         self.gateway.delete_review(user, review_id)
@@ -93,6 +84,7 @@ class UserFacade:
         except (EmailNotValidError, AttributeError):
             raise InvalidUserData
         
+    # A revoir lors de l'implémentation
     def delete_place(self, place_id, owner_id):
         owner = self.get(owner_id)
         if place_id not in owner.places:

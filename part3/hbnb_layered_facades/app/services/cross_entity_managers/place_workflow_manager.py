@@ -10,12 +10,12 @@ class PlaceWorkflowManager():
         self.amenity_facade = amenity_facade
         self.review_facade = review_facade
 
+    # A revoir lors de l'implémentation DB
     def create_place(self, place_data):
         try:
             owner = self.user_facade.get(place_data['owner_id'])
             created_place = self.place_facade.create_place(place_data)
-            self.user_facade.update_user(owner,
-                                         {'places': [created_place.id]})
+            self.user_facade.update_user(owner, {'places': [created_place.id]})
             return created_place
         except UserNotFound:
             raise OwnerNotFound
@@ -78,7 +78,8 @@ class PlaceWorkflowManager():
             raise PlaceNotFound
         except (AmenityNotFound, InvalidPlaceData):
             raise InvalidPlaceData
-        
+    
+    # A revoir lors de l'implémentation DB
     def delete_place(self, place_id):
         try:
             place = self.place_facade.get(place_id)  # get place obj
