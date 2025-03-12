@@ -19,3 +19,8 @@ class UserGateway(InMemoryRepository):
     def delete_review(self, obj, review_id):
         (obj.reviews).remove(review_id)
         return obj
+
+    def delete_place(self, obj_id, place_id):
+        obj = self.get(obj_id)
+        (obj.places).remove(place_id)
+        return obj
