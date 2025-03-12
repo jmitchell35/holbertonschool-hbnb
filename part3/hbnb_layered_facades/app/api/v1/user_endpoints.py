@@ -4,7 +4,7 @@ from flask_jwt_extended import jwt_required, get_jwt
 from app.api.v1.authentication_utils import (admin_required,
                                              user_matches_or_admin)
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
-                                    UserNotFound, UnprivilegedUser)
+                                    UserNotFound)
 
 # Defines /users api route, adds documentation for swagger (description)
 api = Namespace('users', description='User operations')
@@ -96,8 +96,6 @@ class UserResource(Resource):
             }, 200
         except UserNotFound:
             return {'error': 'User not found'}, 404
-        except UnprivilegedUser:
-            return {'error': 'You cannot modify email or password'}, 400
         except EmailAlreadyExists:
             return {'error': 'Email already registered'}, 400
         except InvalidUserData:
