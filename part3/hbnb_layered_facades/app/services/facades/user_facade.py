@@ -93,9 +93,9 @@ class UserFacade:
         except (EmailNotValidError, AttributeError):
             raise InvalidUserData
         
-    def delete_place(self, place_id, user_id):
-        user = self.get(user_id)
-        self.gateway.delete_place(user, place_id)
-        if place_id in user.places:
+    def delete_place(self, place_id, owner_id):
+        owner = self.get(owner_id)
+        if place_id not in owner.places:
             raise UserWithoutPlace
-        return user
+        self.gateway.delete_place(owner, place_id)
+        return owner
