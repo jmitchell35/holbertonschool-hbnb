@@ -78,3 +78,15 @@ class PlaceWorkflowManager():
             raise PlaceNotFound
         except (AmenityNotFound, InvalidPlaceData):
             raise InvalidPlaceData
+        
+    def delete_place(self, place_id):
+        try:
+            place = self.place_facade.get(place_id)  # get place obj
+            owner_id = place.owner_id  # get id str from obj
+            # send deletion request to user_facade
+            self.user_facade.delete_place(place_id, owner_id)
+            # send deletion request to place_facade
+            self.place_facade.delete_place(place_id)  # delete place
+            return {"message": "Place deleted successfully"}, 200
+        except PlaceNotFound:
+            raise PlaceNotFound
