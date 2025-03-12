@@ -1,6 +1,6 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required, get_jwt
+from flask_jwt_extended import get_jwt
 from app.api.v1.authentication_utils import (admin_required,
                                              user_matches_or_admin)
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
