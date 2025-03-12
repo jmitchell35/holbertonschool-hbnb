@@ -30,6 +30,10 @@ class UserNotFound(UserError):
     """Raised when user is not found in storage"""
     pass
 
+class UserWithoutPlace(UserError):
+    """Raised when attempting to delete place unregistered to user obj"""
+    pass
+
 class InvalidAmenityData(AmenityError):
     """Raised when amenity data is invalid."""
     pass
