@@ -33,6 +33,7 @@ class UserList(Resource):
     @api.response(201, 'User successfully created')  # Swagger documentation
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
+    @admin_required
     def post(self):
         """Register a new user"""
         # Retrieves validated request data / payload / body as dict object
