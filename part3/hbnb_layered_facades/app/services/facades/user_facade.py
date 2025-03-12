@@ -1,7 +1,8 @@
 from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
-                                    UserNotFound, ReviewNotFound)
+                                    UserNotFound, ReviewNotFound,
+                                    UserWithoutPlace)
 
 class UserFacade:
     def __init__(self):
@@ -91,3 +92,10 @@ class UserFacade:
             return True
         except (EmailNotValidError, AttributeError):
             raise InvalidUserData
+        
+    def delete_place(self, place_id, user_id):
+        user = self.get(user_id)
+        self.gateway.delete_place(user, place_id)
+        if place_id in user.places:
+            raise UserWithoutPlace
+        return user
