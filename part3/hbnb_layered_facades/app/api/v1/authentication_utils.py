@@ -37,9 +37,8 @@ def user_matches_or_admin(func=None):
             request_data = request.get_json()
 
             # Check permissions
-            if token_user_id != user_id or\
-                (token_user_id != user_id and not jwt_data['is_admin']):
-                return {'error': 'Unauthorized action'}, 403
+            if not (token_user_id == user_id or jwt_data['is_admin']):
+                    return {'error': 'Unauthorized action'}, 403
 
             # Check for unallowed modification
             if not jwt_data['is_admin'] and\
@@ -107,7 +106,7 @@ def is_author(func=None):
             # Check permissions
             if not (jwt_data.get('is_admin') or\
                 review_id in requesting_user.reviews):
-                return {'error': 'Unauthorized access'}, 403
+                return {'error': 'Unauthorized action'}, 403
 
             return func(*args, **kwargs)
         return wrapper
