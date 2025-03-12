@@ -66,3 +66,7 @@ class PlaceFacade:
             raise InvalidPlaceData
 
         return True
+    
+    def delete_place(self, place_id):
+        self.gateway.delete(place_id)
+        return True
