@@ -10,6 +10,7 @@ def admin_required(f):  # custom decorator name, f is decorated function
     # **args is for undefined number of key-value pairs
     # Basically comes down to enriched variadic functions from C, OOP way.
     def decorated(*args, **kwargs):
+        verify_jwt_in_request()  # performs token check
         jwt_data = get_jwt()
         # False if key is missing, or value is True
         if not jwt_data.get('is_admin', False):
@@ -25,7 +26,7 @@ def user_matches_or_admin(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()
+            verify_jwt_in_request()  # performs token check
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
@@ -63,7 +64,7 @@ def owner_matches_or_admin(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()
+            verify_jwt_in_request()  # performs token check
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
@@ -94,7 +95,7 @@ def is_author(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()
+            verify_jwt_in_request()  # performs token check
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
@@ -124,7 +125,7 @@ def not_owner_first_review(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()
+            verify_jwt_in_request()  # performs token check
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
@@ -160,7 +161,7 @@ def place_owner_matches_user(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()
+            verify_jwt_in_request()  # performs token check
             jwt_data = get_jwt()
             token_user_id = jwt_data.get('sub')  # logged user
 
