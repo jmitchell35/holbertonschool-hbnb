@@ -32,10 +32,20 @@ def user_matches_or_admin(func=None):
             # Get user_id from Flask's request object
             user_id = request.view_args.get('user_id')
 
+            # get request data
+            request_data = request.get_json()
+
             # Check permissions
-            if token_user_id != user_id:
+            if token_user_id != user_id or\
+                (token_user_id != user_id and not jwt_data['is_admin']):
                 return {'error': 'Unauthorized action'}, 403
-                
+
+            # Check for unallowed modification
+            if not jwt_data['is_admin'] and\
+                ('password' in request_data.keys() or\
+                    'email' in request_data.keys()):
+                    return {'error': 'You cannot modify email or password'}, 400
+
             return func(*args, **kwargs)
         return wrapper
         
