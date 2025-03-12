@@ -2,7 +2,8 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required
 from app.services import facade
 from app.api.v1.authentication_utils import (owner_matches_or_admin,
-                                             place_owner_matches_user)
+                                             place_owner_matches_user,
+                                             admin_required)
 from app.services.exception import (InvalidPlaceData, OwnerNotFound,
                                     PlaceNotFound, AmenityNotFound,
                                     PlaceOwnerConsistency)
@@ -130,3 +131,21 @@ class PlaceResource(Resource):
             return {'error': 'Invalid input data'}, 400
         except PlaceOwnerConsistency:
             return {"error": "Can't change place owner"}, 400
+
+    @api.response(200, 'Place deleted successfully')
+    @api.response(404, 'Place not found')
+    @admin_required
+    def delete(self, place_id):
+        """Delete a place"""
+        try:
+            # Retrieve place
+            place = facade.place_facade.get(place_id)
+            # Iterate reviews
+            for review_id in place.reviews:
+                # delete review (clean up)
+                facade.review_manager.delete_review(review_id)
+            # delete place
+            facade.place_manager.delete_place(place_id)
+            return {"message": "Place deleted successfully"}, 200
+        except PlaceNotFound:
+            api.abort(404, error='Place not found')
