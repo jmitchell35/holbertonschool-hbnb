@@ -76,7 +76,7 @@ class UserResource(Resource):
         except UserNotFound:
             return {'error': 'User not found'}, 404
 
-    @api.expect(user_model, validate=True)
+    @api.expect(user_model)
     @api.response(200, 'User details updated successfully')
     @api.response(404, 'User not found')
     @api.response(400, 'Email already registered')
@@ -86,9 +86,7 @@ class UserResource(Resource):
         """Update one user details requires user matching or admin rights token"""
         try:
             user = facade.user_facade.get(user_id)
-            uptd_user = facade.user_facade.update_user(user,
-                                                       api.payload,
-                                                       user.is_admin)
+            uptd_user = facade.user_facade.update_user(user, api.payload)
             return {
                 'id': uptd_user.id,
                 'first_name': uptd_user.first_name,
