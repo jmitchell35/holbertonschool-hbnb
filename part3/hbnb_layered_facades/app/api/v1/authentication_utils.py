@@ -58,7 +58,7 @@ def user_matches_or_admin(func=None):
         # @user_matches_or_admin() (with parentheses)
         return decorator
 
-# PUT place
+# PUT / DELETE place
 def owner_matches_or_admin(func=None):
     def decorator(func):
         @wraps(func)
@@ -105,7 +105,8 @@ def is_author(func=None):
             requesting_user = facade.user_facade.gateway.get(token_user_id)
 
             # Check permissions
-            if review_id not in requesting_user.reviews:
+            if not (jwt_data.get('is_admin') or\
+                review_id in requesting_user.reviews):
                 return {'error': 'Unauthorized access'}, 403
 
             return func(*args, **kwargs)
