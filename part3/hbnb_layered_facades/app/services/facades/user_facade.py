@@ -1,8 +1,7 @@
 from app.persistence.gateways.user_gateway import UserGateway
 from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
-                                    UserNotFound, ReviewNotFound,
-                                    UnprivilegedUser)
+                                    UserNotFound, ReviewNotFound)
 
 class UserFacade:
     def __init__(self):
@@ -31,23 +30,18 @@ class UserFacade:
         for user in users
     ]
 
-    def update_user(self, user, user_data, is_admin):
+    def update_user(self, user, user_data):
         # retreive user updating his profile
         updating_user = self.gateway.get_by_attribute('id', user.id)
         if not updating_user:
             raise UserNotFound
         # retreiving user associated with email if any
         if 'email' in user_data.keys():
-            if is_admin == False:
-                raise UnprivilegedUser
             existing_email = self.gateway.get_by_attribute(
                 'email', user_data['email'])
             # Either email is not registered, or registered email matches user
             if existing_email and updating_user.id != existing_email.id:
                 raise EmailAlreadyExists
-
-        if 'password' in user_data.keys() and is_admin == False:
-            raise UnprivilegedUser
 
         # checking format validation before writing into storage
         if self.is_valid(user_data) == True:
