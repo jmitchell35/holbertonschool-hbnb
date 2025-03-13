@@ -36,7 +36,7 @@ user_output_model = api.model('User', {
 # Must define all HTTP methods handled by previously defined route (/users)
 class UserList(Resource):
     # validates incomming payload / body
-    @api.expect(user_model, validate=True)
+    @api.expect(user_input_model, validate=True)
     @api.response(201, 'User successfully created')  # Swagger documentation
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
@@ -85,7 +85,7 @@ class UserResource(Resource):
         except UserNotFound:
             return {'error': 'User not found'}, 404
 
-    @api.expect(user_model)
+    @api.expect(user_input_model)
     @api.response(200, 'User details updated successfully')
     @api.response(404, 'User not found')
     @api.response(400, 'Email already registered')

@@ -1,8 +1,16 @@
-from app.models.base_model import BaseEntity
-from app import bcrypt
+from app.models.base_model import SQLBaseModel
+from app import db, bcrypt
 
 
-class User(BaseEntity):
+class User(SQLBaseModel):
+    __tablename__ = 'users'
+
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         super().__init__()
         self.first_name = first_name
@@ -30,10 +38,9 @@ class User(BaseEntity):
         self.places.append(place)
         
     def update(self, data=None):
-        super().update()
         if not data:
             return self
-        updatable_attr = ['first_name', 'last_name', 'email']
+        updatable_attr = ['first_name', 'last_name', 'email', 'password']
         for key in data:
             if key in updatable_attr:
                 setattr(self, key, data[key])

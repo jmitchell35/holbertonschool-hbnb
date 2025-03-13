@@ -2,11 +2,11 @@ from app.models.user_model import User
 from app.services.exception import (EmailAlreadyExists, InvalidUserData,
                                     UserNotFound, ReviewNotFound,
                                     UserWithoutPlace)
-from app.persistence.gateways.repository import SQLAlchemyRepository
+from app.persistence.gateways.user_gateway import UserGateway
 
 class UserFacade:
     def __init__(self):
-        self.gateway = SQLAlchemyRepository(User)
+        self.gateway = UserGateway()
 
     def create_user(self, user_data):
         if self.gateway.get_by_attribute('email', user_data['email'])\
