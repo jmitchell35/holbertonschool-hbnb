@@ -12,7 +12,6 @@ class User(SQLBaseModel):
     is_admin = db.Column(db.Boolean, default=False)
 
     def __init__(self, first_name, last_name, email, password, is_admin=False):
-        super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -29,10 +28,12 @@ class User(SQLBaseModel):
         """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
 
+    # A revoir
     def add_review(self, review):
         """Written review by the user."""
         self.reviews.append(review)
 
+    # A revoir
     def add_places(self, place):
         """Add a place to the user."""
         self.places.append(place)

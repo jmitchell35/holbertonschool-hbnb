@@ -1,5 +1,6 @@
 from functools import wraps  # Create homemade decorators (wrapper functions)
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
+from flask_jwt_extended.exceptions import NoAuthorizationError
 from flask import request
 from app.services import facade
 from app.services.exception import UnauthorizedAccess
@@ -10,13 +11,16 @@ def admin_required(f):  # custom decorator name, f is decorated function
     # **args is for undefined number of key-value pairs
     # Basically comes down to enriched variadic functions from C, OOP way.
     def decorated(*args, **kwargs):
-        verify_jwt_in_request()  # performs token check
-        jwt_data = get_jwt()
-        # False if key is missing, or value is True
-        if not jwt_data.get('is_admin', False):
-            return {'error': 'Admin privileges required'}, 403
-        # Wrapper has done its job, now calls decorated function
-        return f(*args, **kwargs)
+        try:
+            verify_jwt_in_request()  # performs token check
+            jwt_data = get_jwt()
+            # False if key is missing, or value is True
+            if not jwt_data.get('is_admin', False):
+                return {'error': 'Admin privileges required'}, 403
+            # Wrapper has done its job, now calls decorated function
+            return f(*args, **kwargs)
+        except NoAuthorizationError:
+            return {"msg": "Missing Authorization Header"}, 401
     return decorated
 
 # PUT user

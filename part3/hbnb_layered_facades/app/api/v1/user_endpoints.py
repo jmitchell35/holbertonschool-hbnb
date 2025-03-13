@@ -63,7 +63,7 @@ class UserList(Resource):
     @admin_required  # decorator performs token check in place of jwt_required()
     def get(self):
         """Retrieve list of users requires admin access token"""
-        user_list = facade.user_facade.get_all_users()
+        user_list = facade.user_facade.gateway.get_all()
         # Serialize user_list to user_output_model
         api.marshal(user_list, user_output_model), 200
 

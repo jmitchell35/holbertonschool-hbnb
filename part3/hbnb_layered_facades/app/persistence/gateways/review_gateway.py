@@ -1,9 +1,6 @@
-from app.persistence.gateways.repository import InMemoryRepository
+from app.persistence.gateways.repository import SQLAlchemyRepository
 
-class ReviewGateway(InMemoryRepository):
+class ReviewGateway(SQLAlchemyRepository):
     def __init__(self):
-        super().__init__()
-        
-    def add(self, obj):
-        self._storage[obj.id] = obj
-        return obj
+        from app.models.review_model import Review
+        super().__init__(Review)

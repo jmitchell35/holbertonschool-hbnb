@@ -11,7 +11,8 @@ class PlaceFacade:
         if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
         place = Place(**place_data)
-        return self.gateway.add(place)
+        self.gateway.add(place)
+        return place
 
     def get_all_places(self):
         places = self.gateway.get_all()
@@ -33,13 +34,14 @@ class PlaceFacade:
     
     def update_place(self, place_id, place_data):
         # retreive place updating his profile
-        updating_place = self.gateway.get(place_id)
+        updating_place = self.get(place_id)
         # checking data before writing into storage
         if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        updating_place.update(place_data)
+        self.gateway.update(place_id, place_data)
         return updating_place
-    
+
+    # A revoir
     def delete_review(self, review_id, place_id):
         place = self.get(place_id)
         self.gateway.delete_review(place, review_id)
@@ -66,7 +68,7 @@ class PlaceFacade:
             raise InvalidPlaceData
 
         return True
-    
+
     def delete_place(self, place_id):
         self.gateway.delete(place_id)
         return True

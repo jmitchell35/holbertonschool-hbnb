@@ -43,6 +43,7 @@ class ReviewFacade:
         review.update(review_data)
         return review
     
+    # A revoir peut-être
     def delete_review(self, review_id):
         self.gateway.delete(review_id)
         return True

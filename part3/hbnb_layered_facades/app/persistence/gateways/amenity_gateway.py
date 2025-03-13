@@ -1,17 +1,7 @@
-from app.persistence.gateways.repository import InMemoryRepository
+from app.persistence.gateways.repository import SQLAlchemyRepository
 
 
-class AmenityGateway(InMemoryRepository):
+class AmenityGateway(SQLAlchemyRepository):
     def __init__(self):
-        super().__init__()
-
-    def add(self, obj):
-        self._storage[obj.id] = obj
-        return obj
-    
-    def update(self, obj_id, data):
-        obj = self.get(obj_id)
-        if obj:
-            obj.update(data)
-            return obj
-        return None
+        from app.models.amenity_model import Amenity
+        super().__init__(Amenity)

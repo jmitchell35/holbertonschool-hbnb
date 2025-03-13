@@ -95,7 +95,7 @@ class PlaceList(Resource):
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Retrieve a list of all places"""
-        return facade.place_facade.get_all_places()
+        return facade.place_facade.get_all_places(), 200
 
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
@@ -132,6 +132,7 @@ class PlaceResource(Resource):
         except PlaceOwnerConsistency:
             return {"error": "Can't change place owner"}, 400
 
+    # A revoir
     @api.response(200, 'Place deleted successfully')
     @api.response(404, 'Place not found')
     @admin_required
