@@ -6,3 +6,9 @@ __pycache__/
 
 # venv directories
 *venv/
+
+# ignore SQLite instance (DB) folders
+intance/
+
+# ignore db files
+*.db
