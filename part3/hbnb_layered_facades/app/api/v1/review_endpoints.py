@@ -39,7 +39,7 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         try:
-            review = facade.review_manager.create_review(api.payload)
+            review = facade.review_facade.create_review(api.payload)
             return api.marshal(review, review_output_model), 201
         except InvalidReviewData:
              api.abort(400, error='Invalid input data')
@@ -85,7 +85,7 @@ class ReviewResource(Resource):
     def delete(self, review_id):
         """Delete a review"""
         try:
-            facade.review_manager.delete_review(review_id)
+            facade.review_facade.delete_review(review_id)
             return {"message": "Review deleted successfully"}, 200
         except ReviewNotFound:
             api.abort(404, error='Review not found')
@@ -100,7 +100,7 @@ class PlaceReviewList(Resource):
     def get(self, place_id):
         """Get all reviews for a specific place"""
         try:
-            reviews = facade.review_manager.get_reviews_by_place(place_id)
+            reviews = facade.review_facade.gateway.get_by_attribute('place', place_id)
             return reviews
         except PlaceNotFound:
             api.abort(404, error="Place not found")

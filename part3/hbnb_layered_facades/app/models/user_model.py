@@ -11,6 +11,9 @@ class User(SQLBaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
+    places = db.relationship('Place', back_populates='owner', lazy=True)
+    reviews = db.relationship('Review', back_populates='user', lazy=True)
+
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         self.first_name = first_name
         self.last_name = last_name

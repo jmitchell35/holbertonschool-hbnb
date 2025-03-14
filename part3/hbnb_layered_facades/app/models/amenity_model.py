@@ -5,7 +5,12 @@ class Amenity(SQLBaseModel):
     __tablename__ = 'amenities'
 
     name = db.Column(db.Text, nullable=False, unique=True)
+    
+    from app.models.place_model import place_amenity
 
+    places = db.relationship('Place', secondary=place_amenity,
+                             back_populates='amenities')
+    
     def __init__(self, name):
         self.name = name
         self.places = []

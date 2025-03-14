@@ -67,21 +67,24 @@ def owner_matches_or_admin(func=None):
         @wraps(func)
         def wrapper(*args, **kwargs):
             # Manually verify the JWT
-            verify_jwt_in_request()  # performs token check
-            jwt_data = get_jwt()
-            token_user_id = jwt_data.get('sub')  # logged user
+            try:
+                verify_jwt_in_request()  # performs token check
+                jwt_data = get_jwt()
+                token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get user_id from Flask's request object
-            place_id = request.view_args.get('place_id')
-            
-            requesting_user = facade.user_facade.gateway.get(token_user_id)
+                # Get user_id from Flask's request object
+                place_id = request.view_args.get('place_id')
+                
+                place = facade.place_facade.gateway.get(place_id)
 
-            # Check permissions
-            if not (jwt_data.get('is_admin') or\
-                    place_id in requesting_user.places):
-                return {'error': 'Unauthorized action'}, 403
+                # Check permissions
+                if not (jwt_data.get('is_admin') or\
+                        token_user_id == place.owner_id):
+                    return {'error': 'Unauthorized action'}, 403
 
-            return func(*args, **kwargs)
+                return func(*args, **kwargs)
+            except NoAuthorizationError:
+                return {"msg": "Missing Authorization Header"}, 401
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses

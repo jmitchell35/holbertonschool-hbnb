@@ -7,6 +7,12 @@ class Review(SQLBaseModel):
     text = db.Column(db.Text, nullable=False)
     rating = db.Column(db.Integer, nullable=False)
 
+    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
+    place_id = db.Column(db.String, db.ForeignKey('places.id'), nullable=False)
+
+    user = db.relationship('User', back_populates='reviews')
+    place = db.relationship('Place', back_populates='reviews')
+
     def __init__(self, text, rating, place_id, user_id):
         self.text = text
         self.rating = rating

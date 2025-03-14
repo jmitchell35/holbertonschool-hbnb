@@ -11,8 +11,8 @@ class ReviewFacade:
             raise InvalidReviewData
 
         review = Review(**data)
-
-        return self.gateway.add(review)
+        self.gateway.add(review)
+        return review
     
     def get_all_reviews(self):
         reviews = self.gateway.get_all()

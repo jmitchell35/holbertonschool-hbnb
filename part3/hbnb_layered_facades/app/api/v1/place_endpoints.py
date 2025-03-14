@@ -77,7 +77,7 @@ class PlaceList(Resource):
         place_data = api.payload
 
         try:
-            place = facade.place_manager.create_place(place_data)
+            place = facade.place_facade.create_place(place_data)
             return {
                 "id": place.id,
                 "title": place.title,
@@ -107,7 +107,7 @@ class PlaceResource(Resource):
     def get(self, place_id):
         """Get place details by ID"""
         try:
-            place = facade.place_manager.get_place_details(place_id)
+            place = facade.place_facade.get(place_id)
             return place, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
@@ -123,7 +123,7 @@ class PlaceResource(Resource):
     @owner_matches_or_admin
     def put(self, place_id):
         try:
-            facade.place_manager.update_place(place_id, api.payload)
+            facade.place_facade.update_place(place_id, api.payload)
             return {'message': 'Place updated successfully'}, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
@@ -144,9 +144,9 @@ class PlaceResource(Resource):
             # Iterate reviews
             for review_id in place.reviews:
                 # delete review (clean up)
-                facade.review_manager.delete_review(review_id)
+                facade.review_facade.delete_review(review_id)
             # delete place
-            facade.place_manager.delete_place(place_id)
+            facade.place_facade.delete_place(place_id)
             return {"message": "Place deleted successfully"}, 200
         except PlaceNotFound:
             api.abort(404, error='Place not found')
