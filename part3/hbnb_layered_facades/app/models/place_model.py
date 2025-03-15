@@ -15,18 +15,22 @@ class Place(SQLBaseModel):
     owner = db.relationship('User', back_populates='places')
     reviews = db.relationship('Review', back_populates='place', lazy=True)
 
-    amenities = db.relationship('Amenity', secondary=place_amenity, lazy='subquery',
-                                back_populates='places')
+    amenities = db.relationship(
+        'Amenity',
+        secondary=place_amenity,
+        lazy='subquery',
+        back_populates='places'
+    )
 
-    def __init__(self, title, description, price, latitude, longitude, owner_id, amenities=[]):
+    def __init__(self, title, description, price, latitude, longitude,
+                 owner_id):
         self.title = title
         self.description = description
         self.price = price
         self.latitude = latitude
         self.longitude = longitude
         self.owner_id = owner_id
-        self.amenities = amenities
-        self.reviews = []  # List to store related reviews
+        # Constructor doesn't need to set relation. w. Am, re, SQLalchemy does
 
     # encore utile ?
     def add_review(self, review):

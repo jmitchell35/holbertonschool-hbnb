@@ -12,7 +12,7 @@ class Amenity(SQLBaseModel):
     
     def __init__(self, name):
         self.name = name
-        self.places = []
+        # Constructor doesn't need to initialize places - SQLalchemy does that
 
     # A revoir
     def add_places(self, place):
