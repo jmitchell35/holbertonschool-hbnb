@@ -1,3 +1,4 @@
+from app.models.place_model import Place
 from app.services.exception import (UserNotFound, InvalidPlaceData,
                                     OwnerNotFound, PlaceNotFound,
                                     AmenityNotFound, PlaceOwnerConsistency)
@@ -10,13 +11,30 @@ class PlaceWorkflowManager():
         self.amenity_facade = amenity_facade
         self.review_facade = review_facade
 
-    # A revoir lors de l'implémentation DB
     def create_place(self, place_data):
         try:
-            owner = self.user_facade.get(place_data['owner_id'])
-            created_place = self.place_facade.create_place(place_data)
-            self.user_facade.update_user(owner, {'places': [created_place.id]})
-            return created_place
+            self.user_facade.get(place_data['owner_id'])
+            # Instantiation has moved up to manager: so should data validation
+            self.place_facade.is_valid(place_data)  # raising exceptions
+            # Explicit parameters is safer and cleaner for SQLAlchemy
+            place = Place(
+                title=place_data['title'],
+                description=place_data['description'],
+                price=place_data['price'],
+                latitude=place_data['latitude'],
+                longitude=place_data['longitude'],
+                owner_id=place_data['owner_id']
+            )
+            # Add amenities if provided
+            if 'amenities' in place_data.keys():
+                for amenity_id in place_data['amenities']:
+                    amenity = self.amenity_facade.get(amenity_id)
+                    if amenity:
+                        # place.amenities is collection of obj tracked by SQLAl
+                        place.amenities.append(amenity)
+            # Commit from add method writes changes to places, place_amenity
+            self.place_facade.gateway.add(place)
+            return place
         except UserNotFound:
             raise OwnerNotFound
         except InvalidPlaceData:
