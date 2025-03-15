@@ -1,18 +1,10 @@
 from app.persistence.gateways.place_gateway import PlaceGateway
-from app.models.place_model import Place
 from app.services.exception import (InvalidPlaceData, PlaceNotFound,
                                     ReviewNotFound)
 
 class PlaceFacade:
     def __init__(self):
         self.gateway = PlaceGateway()
-    
-    def create_place(self, place_data):
-        if self.is_valid(place_data) is not True:
-            raise InvalidPlaceData
-        place = Place(**place_data)
-        self.gateway.add(place)
-        return place
 
     def get_all_places(self):
         places = self.gateway.get_all()
