@@ -47,7 +47,7 @@ user_output_model = api.model('UserOutput', {
         required=True, description='Email of the user')
 })
 
-place_output_model = api.model('PlaceDetailsOutput', {
+place_detailed_output_model = api.model('PlaceDetailsOutput', {
     'id': fields.String(description='Place ID'),
     'title': fields.String(
         required=True, description='Title of the place'),
@@ -61,9 +61,34 @@ place_output_model = api.model('PlaceDetailsOutput', {
         required=True, description='Longitude of the place'),
     'owner_id': fields.String(
         required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_output_model, description='Owner of the place'),
-    'amenities': fields.List(fields.Nested(amenity_output_model), description='List of amenities'),
-    'reviews': fields.List(fields.Nested(review_output_model), description='List of reviews')
+    'owner': fields.Nested(
+        user_output_model,
+        description='Owner of the place'
+    ),
+    'amenities': fields.List(
+        fields.Nested(amenity_output_model),
+        description='List of amenities'
+    ),
+    'reviews': fields.List(
+        fields.Nested(review_output_model),
+        description='List of reviews'
+    )
+})
+
+place_light_output_model = api.model('PlaceDetailsOutput', {
+    'id': fields.String(description='Place ID'),
+    'title': fields.String(
+        required=True, description='Title of the place'),
+    'description': fields.String(
+        description='Description of the place'),
+    'price': fields.Float(
+        required=True, description='Price per night'),
+    'latitude': fields.Float(
+        required=True, description='Latitude of the place'),
+    'longitude': fields.Float(
+        required=True, description='Longitude of the place'),
+    'owner_id': fields.String(
+        required=True, description='ID of the owner'),
 })
 
 @api.route('/')
@@ -77,16 +102,8 @@ class PlaceList(Resource):
         place_data = api.payload
 
         try:
-            place = facade.place_facade.create_place(place_data)
-            return {
-                "id": place.id,
-                "title": place.title,
-                "description": place.description,
-                "price": place.price,
-                "latitude": place.latitude,
-                "longitude": place.longitude,
-                "owner_id": place.owner_id
-            }, 201
+            place = facade.place_manager.create_place(place_data)
+            api.marshal(place, place_light_output_model), 201
         except InvalidPlaceData:
             return {'error': 'Invalid input data'}, 400
         except OwnerNotFound:
@@ -100,7 +117,6 @@ class PlaceList(Resource):
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
 class PlaceResource(Resource):
-    @api.marshal_with(place_output_model, code=200)
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
     @owner_matches_or_admin
@@ -108,7 +124,7 @@ class PlaceResource(Resource):
         """Get place details by ID"""
         try:
             place = facade.place_facade.get(place_id)
-            return place, 200
+            api.marshal(place, place_detailed_output_model), 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
         except OwnerNotFound:
