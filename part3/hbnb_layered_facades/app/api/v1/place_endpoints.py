@@ -139,7 +139,7 @@ class PlaceResource(Resource):
     @owner_matches_or_admin
     def put(self, place_id):
         try:
-            facade.place_facade.update_place(place_id, api.payload)
+            facade.place_manager.update_place(place_id, api.payload)
             return {'message': 'Place updated successfully'}, 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
@@ -156,7 +156,7 @@ class PlaceResource(Resource):
         """Delete a place"""
         try:
             # Retrieve place
-            place = facade.place_facade.get(place_id)
+            place = facade.place_manager.place_facade.get(place_id)
             # Iterate reviews
             for review_id in place.reviews:
                 # delete review (clean up)
