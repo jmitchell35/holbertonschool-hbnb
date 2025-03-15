@@ -85,16 +85,30 @@ class PlaceWorkflowManager():
         
     def update_place(self, place_id, place_data):
         try:
-            initial_owner = (self.place_facade.get(place_id)).owner_id
+            # Get the place
+            place = self.place_facade.get(place_id)
+            initial_owner = place.owner_id
+            # Check for owner consistency
             if initial_owner != place_data['owner_id']:
                 raise PlaceOwnerConsistency
-            if 'amenities' in place_data.keys():
-                for id in place_data['amenities']:
-                    self.amenity_facade.get(id)
+
+            # Handle amenities
+            if 'amenities' in place_data and place_data['amenities']:
+                amenities = []
+                for amenity_id in place_data['amenities']:
+                    # Get amenity objects
+                    try:
+                        amenity = self.amenity_facade.get(amenity_id)
+                        amenities.append(amenity)
+                    except AmenityNotFound:
+                        raise InvalidPlaceData
+                        
+                # Replace existing amenities
+                place.amenities = amenities  # This replaces the entire collection
             return self.place_facade.update_place(place_id, place_data)
         except PlaceNotFound:
             raise PlaceNotFound
-        except (AmenityNotFound, InvalidPlaceData):
+        except InvalidPlaceData:
             raise InvalidPlaceData
     
     # A revoir lors de l'implémentation DB
