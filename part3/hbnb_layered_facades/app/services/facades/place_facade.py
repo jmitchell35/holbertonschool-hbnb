@@ -30,7 +30,7 @@ class PlaceFacade:
         # checking data before writing into storage
         if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        updating_place.update(place_data)
+        self.gateway.update(place_id, place_data)
         return updating_place
 
     # A revoir
