@@ -31,30 +31,3 @@ class Place(SQLBaseModel):
         self.longitude = longitude
         self.owner_id = owner_id
         # Constructor doesn't need to set relation. w. Am, re, SQLalchemy does
-
-    # encore utile ?
-    def add_review(self, review):
-        """Add a review to the place."""
-        self.reviews.append(review)
-        db.session.commit()
-
-    def add_amenity(self, amenity):
-        """Add an amenity to the place."""
-        if amenity not in self.amenities:
-            self.amenities.append(amenity)
-        db.session.commit()
-    
-    def update(self, data=None):
-        if not data:
-            return self
-        updatable_attr = ['title', 'description', 'price', 'latitude',
-                          'longitude']
-        for key in data:
-            if key in updatable_attr:
-                setattr(self, key, data[key])
-        if 'amenities' in data:
-            for amenity in data['amenities']:
-                if amenity not in self.amenities:
-                    self.amenities.append(amenity)
-        db.session.commit()
-        return self
