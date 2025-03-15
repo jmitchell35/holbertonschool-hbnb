@@ -1,13 +1,7 @@
 from app.models.base_model import SQLBaseModel
 from app import db
+from app.models.associations import place_amenity
 
-
-place_amenity = db.Table('place_amenity',
-                         db.Column('place_id', db.Integer,
-                                   db.ForeignKey('places.id'), primary_key=True),
-                         db.Column('amenity_id', db.Integer,
-                                   db.ForeignKey('amenities.id'), primary_key=True)
-                         )
 class Place(SQLBaseModel):
     __tablename__ = 'places'
 
