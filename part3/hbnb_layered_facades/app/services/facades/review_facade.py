@@ -1,19 +1,11 @@
 from app.persistence.gateways.review_gateway import ReviewGateway
-from app.models.review_model import Review
 from app.services.exception import InvalidReviewData, ReviewNotFound
 
 class ReviewFacade:
     def __init__(self):
         self.gateway = ReviewGateway()
         
-    def create_review(self, data):
-        if self.is_valid(data) is not True:
-            raise InvalidReviewData
 
-        review = Review(**data)
-        self.gateway.add(review)
-        return review
-    
     def get_all_reviews(self):
         reviews = self.gateway.get_all()
         return [
@@ -40,13 +32,12 @@ class ReviewFacade:
         if self.is_valid(review_data) is not True:
             raise InvalidReviewData
 
-        review.update(review_data)
-        return review
+        self.gateway.update(review_id, review_data)
     
     # A revoir peut-être
     def delete_review(self, review_id):
+        self.get(review_id)
         self.gateway.delete(review_id)
-        return True
     
     def is_valid(self, data):
         if 'rating' in data.keys() and (type(data['rating']) is not int or

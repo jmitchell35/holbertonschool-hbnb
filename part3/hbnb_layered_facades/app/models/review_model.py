@@ -9,15 +9,14 @@ class Review(SQLBaseModel):
 
     user_id = db.Column(
         db.String,
-        db.ForeignKey('users.id'),
-        nullable=True,
-        ondelete='SET NULL'  # answers the 'cascade' param on parent side
+        db.ForeignKey('users.id', ondelete='SET NULL'),
+        nullable=True
     )
+
     place_id = db.Column(
         db.String,
-        db.ForeignKey('places.id'),
-        nullable=False,
-        ondelete='CASCADE'  # answers the 'cascade' param on parent side
+        db.ForeignKey('places.id', ondelete='CASCADE'), # answers the 'cascade' param on parent side
+        nullable=False
     )
 
     user = db.relationship(

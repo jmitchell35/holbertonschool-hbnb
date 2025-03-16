@@ -39,16 +39,15 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         try:
-            review = facade.review_facade.create_review(api.payload)
+            review = facade.review_manager.create_review(api.payload)
             return api.marshal(review, review_output_model), 201
         except InvalidReviewData:
-             api.abort(400, error='Invalid input data')
+            api.abort(400, error='Invalid input data')
 
     @api.response(200, 'List of reviews retrieved successfully')
-    @api.marshal_list_with(review_output_model, code=200)
     def get(self):
         """Retrieve a list of all reviews"""
-        return facade.review_facade.get_all_reviews()
+        return api.marshal(facade.review_facade.get_all_reviews(), review_output_model), 200
 
 @api.route('/<review_id>')
 @api.doc(params={'review_id': 'The review ID'})
@@ -100,7 +99,7 @@ class PlaceReviewList(Resource):
     def get(self, place_id):
         """Get all reviews for a specific place"""
         try:
-            reviews = facade.review_facade.gateway.get_by_attribute('place', place_id)
+            reviews = facade.review_facade.gateway.get_by_attribute('place_id', place_id)
             return reviews
         except PlaceNotFound:
             api.abort(404, error="Place not found")

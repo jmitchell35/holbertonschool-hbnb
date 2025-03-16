@@ -103,7 +103,7 @@ class PlaceList(Resource):
 
         try:
             place = facade.place_manager.create_place(place_data)
-            api.marshal(place, place_light_output_model), 201
+            return api.marshal(place, place_light_output_model), 201
         except InvalidPlaceData:
             return {'error': 'Invalid input data'}, 400
         except OwnerNotFound:
@@ -124,7 +124,7 @@ class PlaceResource(Resource):
         """Get place details by ID"""
         try:
             place = facade.place_facade.get(place_id)
-            api.marshal(place, place_detailed_output_model), 200
+            return api.marshal(place, place_detailed_output_model), 200
         except PlaceNotFound:
             return {'error': 'Place not found'}, 404
         except OwnerNotFound:
