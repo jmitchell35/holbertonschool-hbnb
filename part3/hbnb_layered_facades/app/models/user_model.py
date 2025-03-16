@@ -31,8 +31,6 @@ class User(SQLBaseModel):
         self.last_name = last_name
         self.email = email
         self.is_admin = is_admin
-        self.reviews = []
-        self.places = []
         self.hash_password(password)
 
     def hash_password(self, password):
@@ -42,16 +40,6 @@ class User(SQLBaseModel):
     def verify_password(self, password):
         """Verifies if the provided password matches the hashed password."""
         return bcrypt.check_password_hash(self.password, password)
-
-    # A revoir
-    def add_review(self, review):
-        """Written review by the user."""
-        self.reviews.append(review)
-
-    # A revoir
-    def add_places(self, place):
-        """Add a place to the user."""
-        self.places.append(place)
         
     def update(self, data=None):
         if not data:
