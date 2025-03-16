@@ -11,8 +11,20 @@ class User(SQLBaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    places = db.relationship('Place', back_populates='owner', lazy=True)
-    reviews = db.relationship('Review', back_populates='user', lazy=True)
+    places = db.relationship(
+        'Place',
+        back_populates='owner',
+        # parent-side only below
+        lazy='select',  # Select is the default lazy mode
+        cascade='all, delete-orphan'
+    )
+    reviews = db.relationship(
+        'Review',
+        back_populates='user',
+        # parent-side only below
+        lazy='select',  # Select is the default lazy mode
+        cascade='all, delete-orphan'
+    )
 
     def __init__(self, first_name, last_name, email, password, is_admin=False):
         self.first_name = first_name

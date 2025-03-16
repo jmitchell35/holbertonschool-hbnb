@@ -12,14 +12,22 @@ class Place(SQLBaseModel):
     longitude = db.Column(db.Float, nullable=False)
     owner_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
 
-    owner = db.relationship('User', back_populates='places')
-    reviews = db.relationship('Review', back_populates='place', lazy=True)
-
+    owner = db.relationship(
+        'User',
+        back_populates='places'
+    )
+    reviews = db.relationship(
+        'Review',
+        back_populates='place',
+        lazy='select',
+        cascade='all, delete-orphan'  # deletes reviews when place is deleted
+    )
     amenities = db.relationship(
         'Amenity',
         secondary=place_amenity,
         lazy='subquery',
-        back_populates='places'
+        back_populates='places',
+        cascade = 'all, delete'  # deletes amenity_place entries
     )
 
     def __init__(self, title, description, price, latitude, longitude,
