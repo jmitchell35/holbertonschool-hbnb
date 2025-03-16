@@ -10,8 +10,8 @@ class Review(SQLBaseModel):
     user_id = db.Column(
         db.String,
         db.ForeignKey('users.id'),
-        nullable=False,
-        ondelete='CASCADE'  # answers the 'cascade' param on parent side
+        nullable=True,
+        ondelete='SET NULL'  # answers the 'cascade' param on parent side
     )
     place_id = db.Column(
         db.String,

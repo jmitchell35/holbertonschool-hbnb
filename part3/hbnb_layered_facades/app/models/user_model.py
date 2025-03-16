@@ -23,7 +23,7 @@ class User(SQLBaseModel):
         back_populates='user',
         # parent-side only below
         lazy='select',  # Select is the default lazy mode
-        cascade='all, delete-orphan'
+        cascade="save-update, merge, refresh-expire"  # keep reviews on deletion
     )
 
     def __init__(self, first_name, last_name, email, password, is_admin=False):
