@@ -19,10 +19,10 @@ amenity_output_model = api.model('Amenity', {
 
 @api.route('/')
 class AmenityList(Resource):
+    @admin_required
     @api.expect(amenity_input_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
-    @admin_required
     def post(self):
         """Register a new amenity"""
         # Placeholder for the logic to register a new amenity
@@ -54,11 +54,11 @@ class AmenityResource(Resource):
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
 
+    @admin_required
     @api.expect(amenity_input_model)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
     @api.response(400, 'Invalid input data')
-    @admin_required
     def put(self, amenity_id):
         """Update an amenity's information"""
         # Placeholder for the logic to update an amenity by ID

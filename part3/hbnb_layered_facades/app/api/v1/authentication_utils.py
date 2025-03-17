@@ -1,9 +1,9 @@
 from functools import wraps  # Create homemade decorators (wrapper functions)
 from flask_jwt_extended import get_jwt, verify_jwt_in_request
-from flask_jwt_extended.exceptions import NoAuthorizationError
+from flask_jwt_extended.exceptions import (NoAuthorizationError)
 from flask import request
 from app.services import facade
-from app.services.exception import UnauthorizedAccess
+from app.services.exception import PlaceNotFound, ReviewNotFound, UserNotFound
 
 def admin_required(f):  # custom decorator name, f is decorated function
     @wraps(f)  # below function is executed when above decorator is used
@@ -88,6 +88,8 @@ def owner_matches_or_admin(func=None):
                 return func(*args, **kwargs)
             except NoAuthorizationError:
                 return {"Msg": "Missing Authorization Header"}, 401
+            except PlaceNotFound:
+                return {'error': 'Place not found'}, 404
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses
@@ -122,6 +124,8 @@ def author_matches_or_admin(func=None):
                 return func(*args, **kwargs)
             except NoAuthorizationError:
                 return {"Msg": "Missing Authorization Header"}, 401
+            except ReviewNotFound:
+                return {'error': 'Review not found'}, 404
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses
@@ -137,28 +141,33 @@ def not_owner_first_review(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Manually verify the JWT
-            verify_jwt_in_request()  # performs token check
-            jwt_data = get_jwt()
-            token_user_id = jwt_data.get('sub')  # logged user
+            try:
+                # Manually verify the JWT
+                verify_jwt_in_request()  # performs token check
+                jwt_data = get_jwt()
+                token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get place_id from Flask's request object body
-            place_id = (request.get_json()).get('place_id')
-            
-            requesting_user = facade.user_facade.get(token_user_id)
+                # Get place_id from Flask's request object body
+                place_id = (request.get_json()).get('place_id')
+                
+                requesting_user = facade.user_facade.get(token_user_id)
 
-            # Check permissions
-            if place_id in requesting_user.places:
-                return {'error': 'You cannot review your own place'}, 400
-            
-            place = facade.place_facade.get(place_id)
-            for review in place.reviews:
-                if review in requesting_user.reviews:
-                    return {
-                        'error': 'You have already reviewed this place'}, 400
+                # Check permissions
+                if place_id in requesting_user.places:
+                    return {'error': 'You cannot review your own place'}, 400
+                
+                place = facade.place_facade.get(place_id)
+                for review in place.reviews:
+                    if review in requesting_user.reviews:
+                        return {
+                            'error': 'You have already reviewed this place'},\
+                        400
 
-            return func(*args, **kwargs)
-        return wrapper
+                return func(*args, **kwargs)
+            except NoAuthorizationError:
+                return {"Msg": "Missing Authorization Header"}, 401
+            except (PlaceNotFound, UserNotFound):
+                return {'error': 'Invalid input data'}, 400
 
     # This allows the decorator to be used both with and without parentheses
     if func:
@@ -173,19 +182,22 @@ def place_owner_matches_user(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Manually verify the JWT
-            verify_jwt_in_request()  # performs token check
-            jwt_data = get_jwt()
-            token_user_id = jwt_data.get('sub')  # logged user
+            try:
+                # Manually verify the JWT
+                verify_jwt_in_request()  # performs token check
+                jwt_data = get_jwt()
+                token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get place_id from Flask's request object body
-            owner_id = (request.get_json()).get('owner_id')
+                # Get place_id from Flask's request object body
+                owner_id = (request.get_json()).get('owner_id')
 
-            # Check permissions
-            if token_user_id != owner_id:
-                return {'error': 'Unauthorized action'}, 403
+                # Check permissions
+                if token_user_id != owner_id:
+                    return {'error': 'Unauthorized action'}, 403
 
-            return func(*args, **kwargs)
+                return func(*args, **kwargs)
+            except NoAuthorizationError:
+                return {"Msg": "Missing Authorization Header"}, 401
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses

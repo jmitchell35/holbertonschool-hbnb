@@ -93,10 +93,10 @@ place_light_output_model = api.model('PlaceDetailsOutput', {
 
 @api.route('/')
 class PlaceList(Resource):
+    @place_owner_matches_user
     @api.expect(place_input_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
-    @place_owner_matches_user
     def post(self):
         """Create a new place"""
         place_data = api.payload
@@ -117,9 +117,9 @@ class PlaceList(Resource):
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
 class PlaceResource(Resource):
+    @owner_matches_or_admin
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
-    @owner_matches_or_admin
     def get(self, place_id):
         """Get place details by ID"""
         try:
@@ -131,12 +131,12 @@ class PlaceResource(Resource):
             return {'error': 'Owner not found'}, 404
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
-    
+
+    @owner_matches_or_admin
     @api.expect(place_input_model)
     @api.response(200, 'Place updated successfully')
     @api.response(404, 'Place not found')
     @api.response(400, 'Invalid input data')
-    @owner_matches_or_admin
     def put(self, place_id):
         try:
             facade.place_manager.update_place(place_id, api.payload)
@@ -149,9 +149,9 @@ class PlaceResource(Resource):
             return {"error": "Can't change place owner"}, 400
 
     # A revoir
+    @admin_required
     @api.response(200, 'Place deleted successfully')
     @api.response(404, 'Place not found')
-    @admin_required
     def delete(self, place_id):
         """Delete a place"""
         try:

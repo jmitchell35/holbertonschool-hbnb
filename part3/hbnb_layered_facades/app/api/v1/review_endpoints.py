@@ -32,10 +32,10 @@ review_details_model = api.model('ReviewDetails', {
 
 @api.route('/')
 class ReviewList(Resource):
+    @not_owner_first_review
     @api.expect(review_input_model, validate=True)
     @api.response(201, 'Review successfully created')
     @api.response(400, 'Invalid input data')
-    @not_owner_first_review
     def post(self):
         """Register a new review"""
         try:
@@ -64,11 +64,11 @@ class ReviewResource(Resource):
         except ReviewNotFound:
             api.abort(404, error='Review not found')
 
+    @author_matches_or_admin
     @api.expect(review_input_model)
     @api.response(200, 'Review updated successfully')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
-    @author_matches_or_admin
     def put(self, review_id):
         """Update a review's information"""
         try:
@@ -79,9 +79,9 @@ class ReviewResource(Resource):
         except InvalidReviewData:
             return {'error': 'Invalid input data'}, 400
 
+    @author_matches_or_admin
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
-    @author_matches_or_admin
     def delete(self, review_id):
         """Delete a review"""
         try:

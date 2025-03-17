@@ -35,12 +35,12 @@ user_output_model = api.model('User', {
 @api.route('/')  # Incomming API call to localhost:5000/users
 # Must define all HTTP methods handled by previously defined route (/users)
 class UserList(Resource):
+    @admin_required
     # validates incomming payload / body
     @api.expect(user_input_model, validate=True)
     @api.response(201, 'User successfully created')  # Swagger documentation
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
-    @admin_required
     def post(self):
         """Register a new user"""
         # Retrieves validated request data / payload / body as dict object
@@ -59,8 +59,8 @@ class UserList(Resource):
         except InvalidUserData:
             return {'error': 'Invalid input data'}, 400
 
-    @api.response(200, 'Users list retrieved successfully')
     @admin_required  # decorator performs token check in place of jwt_required()
+    @api.response(200, 'Users list retrieved successfully')
     def get(self):
         """Retrieve list of users requires admin access token"""
         user_list = facade.user_facade.gateway.get_all()
@@ -71,9 +71,9 @@ class UserList(Resource):
 # user_id comes from route, not payload / body
 @api.doc(params={'user_id': 'The user ID'})
 class UserResource(Resource):
+    @user_matches_or_admin  # Same as line 55
     @api.response(200, 'User details retrieved successfully')
     @api.response(404, 'User not found')
-    @user_matches_or_admin  # Same as line 55
     def get(self, user_id):
         """Get user details by ID requires a user matching JWT token"""
         try:
@@ -83,12 +83,12 @@ class UserResource(Resource):
         except UserNotFound:
             return {'error': 'User not found'}, 404
 
+    @user_matches_or_admin  # Same as line 55
     @api.expect(user_input_model)
     @api.response(200, 'User details updated successfully')
     @api.response(404, 'User not found')
     @api.response(400, 'Email already registered')
     @api.response(400, 'Invalid input data')
-    @user_matches_or_admin  # Same as line 55
     def put(self, user_id):
         """Update one user details requires user matching token or admin
         rights"""
