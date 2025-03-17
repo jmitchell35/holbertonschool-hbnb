@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services import facade
-from flask_jwt_extended import jwt_required
-from app.api.v1.authentication_utils import is_author, not_owner_first_review
+from app.api.v1.authentication_utils import (author_matches_or_admin,
+                                             not_owner_first_review)
 from app.services.exception import (InvalidReviewData, ReviewNotFound,
                                     PlaceNotFound)
 
@@ -47,7 +47,8 @@ class ReviewList(Resource):
     @api.response(200, 'List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
-        return api.marshal(facade.review_facade.get_all_reviews(), review_output_model), 200
+        return api.marshal(
+            facade.review_facade.get_all_reviews(), review_output_model), 200
 
 @api.route('/<review_id>')
 @api.doc(params={'review_id': 'The review ID'})
@@ -67,7 +68,7 @@ class ReviewResource(Resource):
     @api.response(200, 'Review updated successfully')
     @api.response(404, 'Review not found')
     @api.response(400, 'Invalid input data')
-    @is_author
+    @author_matches_or_admin
     def put(self, review_id):
         """Update a review's information"""
         try:
@@ -80,7 +81,7 @@ class ReviewResource(Resource):
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')
-    @is_author
+    @author_matches_or_admin
     def delete(self, review_id):
         """Delete a review"""
         try:
@@ -99,7 +100,8 @@ class PlaceReviewList(Resource):
     def get(self, place_id):
         """Get all reviews for a specific place"""
         try:
-            reviews = facade.review_facade.gateway.get_by_attribute('place_id', place_id)
+            reviews = facade.review_facade.gateway.get_by_attribute(
+                'place_id', place_id)
             return reviews
         except PlaceNotFound:
             api.abort(404, error="Place not found")
