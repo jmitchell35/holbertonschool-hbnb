@@ -20,7 +20,7 @@ def admin_required(f):  # custom decorator name, f is decorated function
             # Wrapper has done its job, now calls decorated function
             return f(*args, **kwargs)
         except NoAuthorizationError:
-            return {"msg": "Missing Authorization Header"}, 401
+            return {"Msg": "Missing Authorization Header"}, 401
     return decorated
 
 # PUT user
@@ -29,28 +29,31 @@ def user_matches_or_admin(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Manually verify the JWT
-            verify_jwt_in_request()  # performs token check
-            jwt_data = get_jwt()
-            token_user_id = jwt_data.get('sub')  # logged user
+            try:
+                # Manually verify the JWT
+                verify_jwt_in_request()  # performs token check
+                jwt_data = get_jwt()
+                token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get user_id from Flask's request object
-            user_id = request.view_args.get('user_id')
+                # Get user_id from Flask's request object
+                user_id = request.view_args.get('user_id')
 
-            # get request data
-            request_data = request.get_json()
+                # get request data
+                request_data = request.get_json()
 
-            # Check permissions
-            if not (token_user_id == user_id or jwt_data['is_admin']):
-                    return {'error': 'Unauthorized action'}, 403
+                # Check permissions
+                if not (token_user_id == user_id or jwt_data['is_admin']):
+                        return {'error': 'Unauthorized action'}, 403
 
-            # Check for unallowed modification
-            if not jwt_data['is_admin'] and\
-                ('password' in request_data.keys() or\
-                    'email' in request_data.keys()):
-                    return {'error': 'You cannot modify email or password'}, 400
+                # Check for unallowed modification
+                if not jwt_data['is_admin'] and\
+                    ('password' in request_data.keys() or\
+                        'email' in request_data.keys()):
+                        return {'error': 'You cannot modify email or password'}, 400
 
-            return func(*args, **kwargs)
+                return func(*args, **kwargs)
+            except NoAuthorizationError:
+                return {"Msg": "Missing Authorization Header"}, 401
         return wrapper
         
     # This allows the decorator to be used both with and without parentheses
@@ -84,7 +87,7 @@ def owner_matches_or_admin(func=None):
 
                 return func(*args, **kwargs)
             except NoAuthorizationError:
-                return {"msg": "Missing Authorization Header"}, 401
+                return {"Msg": "Missing Authorization Header"}, 401
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses
@@ -100,22 +103,25 @@ def is_author(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            # Manually verify the JWT
-            verify_jwt_in_request()  # performs token check
-            jwt_data = get_jwt()
-            token_user_id = jwt_data.get('sub')  # logged user
+            try:
+                # Manually verify the JWT
+                verify_jwt_in_request()  # performs token check
+                jwt_data = get_jwt()
+                token_user_id = jwt_data.get('sub')  # logged user
 
-            # Get user_id from Flask's request object
-            review_id = request.view_args.get('review_id')
+                # Get user_id from Flask's request object
+                review_id = request.view_args.get('review_id')
 
-            requesting_user = facade.user_facade.gateway.get(token_user_id)
+                requesting_user = facade.user_facade.gateway.get(token_user_id)
 
-            # Check permissions
-            if not (jwt_data.get('is_admin') or\
-                review_id in requesting_user.reviews):
-                return {'error': 'Unauthorized action'}, 403
+                # Check permissions
+                if not (jwt_data.get('is_admin') or\
+                    review_id in requesting_user.reviews):
+                    return {'error': 'Unauthorized action'}, 403
 
-            return func(*args, **kwargs)
+                return func(*args, **kwargs)
+            except NoAuthorizationError:
+                return {"Msg": "Missing Authorization Header"}, 401
         return wrapper
 
     # This allows the decorator to be used both with and without parentheses
