@@ -65,7 +65,7 @@ class UserList(Resource):
         """Retrieve list of users requires admin access token"""
         user_list = facade.user_facade.gateway.get_all()
         # Serialize user_list to user_output_model
-        api.marshal(user_list, user_output_model), 200
+        return api.marshal(user_list, user_output_model), 200
 
 @api.route('/<user_id>')
 # user_id comes from route, not payload / body
@@ -79,9 +79,7 @@ class UserResource(Resource):
         try:
             current_user = get_jwt()
             user = facade.user_facade.get(user_id)
-            return {
-                "message": f"Hello, user {current_user['sub']}"
-                }, 200
+            return {"message": f"Hello, user {current_user['sub']}"}, 200
         except UserNotFound:
             return {'error': 'User not found'}, 404
 
@@ -92,10 +90,11 @@ class UserResource(Resource):
     @api.response(400, 'Invalid input data')
     @user_matches_or_admin  # Same as line 55
     def put(self, user_id):
-        """Update one user details requires user matching or admin rights token"""
+        """Update one user details requires user matching token or admin
+        rights"""
         try:
             uptd_user = facade.user_facade.update_user(user_id, api.payload)
-            api.marshal(uptd_user, user_output_model), 200
+            return api.marshal(uptd_user, user_output_model), 200
         except UserNotFound:
             return {'error': 'User not found'}, 404
         except EmailAlreadyExists:
