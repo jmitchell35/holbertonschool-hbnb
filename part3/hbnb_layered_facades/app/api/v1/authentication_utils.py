@@ -49,7 +49,7 @@ def user_matches_or_admin(func=None):
                 if not jwt_data['is_admin'] and\
                     ('password' in request_data.keys() or\
                         'email' in request_data.keys()):
-                        return {'error': 'You cannot modify email or password'}, 400
+                    return {'error': 'You cannot modify email or password'}, 400
 
                 return func(*args, **kwargs)
             except NoAuthorizationError:
@@ -99,7 +99,7 @@ def owner_matches_or_admin(func=None):
         return decorator
 
 # PUT / DELETE review
-def is_author(func=None):
+def author_matches_or_admin(func=None):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -113,10 +113,14 @@ def is_author(func=None):
                 review_id = request.view_args.get('review_id')
 
                 requesting_user = facade.user_facade.gateway.get(token_user_id)
+                # ORM : user.reviews is now collection of review objects
+                reviews = [reviews.append(review.id)\
+                    # Hence constructing list of IDs for matching purpose
+                    for review in requesting_user.reviews]
 
                 # Check permissions
                 if not (jwt_data.get('is_admin') or\
-                    review_id in requesting_user.reviews):
+                    review_id in reviews):
                     return {'error': 'Unauthorized action'}, 403
 
                 return func(*args, **kwargs)
