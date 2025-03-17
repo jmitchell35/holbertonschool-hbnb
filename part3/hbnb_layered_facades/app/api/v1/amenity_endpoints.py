@@ -8,13 +8,18 @@ from app.services.exception import (InvalidAmenityData, AmenityAlreadyExists,
 api = Namespace('amenities', description='Amenity operations')
 
 # Define the amenity model for input validation and documentation
-amenity_model = api.model('Amenity', {
+amenity_input_model = api.model('Amenity', {
     'name': fields.String(required=True, description='Name of the amenity')
+})
+
+amenity_output_model = api.model('Amenity', {
+    'id': fields.String(),
+    'name': fields.String()
 })
 
 @api.route('/')
 class AmenityList(Resource):
-    @api.expect(amenity_model)
+    @api.expect(amenity_input_model)
     @api.response(201, 'Amenity successfully created')
     @api.response(400, 'Invalid input data')
     @admin_required
@@ -25,10 +30,7 @@ class AmenityList(Resource):
 
         try:
             amenity = facade.amenity_facade.create_amenity(new_amenity)
-            return {
-                'id': amenity.id,
-                'name': amenity.name
-            }, 201
+            return api.marshal(amenity, amenity_output_model), 201
         except InvalidAmenityData:
             return {'error': 'Invalid input data'}, 400
 
@@ -36,7 +38,8 @@ class AmenityList(Resource):
     def get(self):
         """Retrieve a list of all amenities"""
         # Placeholder for logic to return a list of all amenities
-        return facade.amenity_facade.get_all_amenities(), 200
+        list = facade.amenity_facade.get_all_amenities()
+        return api.marshal(list, amenity_output_model), 200
 
 @api.route('/<amenity_id>')
 class AmenityResource(Resource):
@@ -47,11 +50,11 @@ class AmenityResource(Resource):
         # Placeholder for the logic to retrieve an amenity by ID
         try:
             amenity = facade.amenity_facade.get(amenity_id)
-            return {'id': amenity.id, 'name': amenity.name}, 200
+            return api.marshal(amenity, amenity_output_model), 200
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
 
-    @api.expect(amenity_model)
+    @api.expect(amenity_input_model)
     @api.response(200, 'Amenity updated successfully')
     @api.response(404, 'Amenity not found')
     @api.response(400, 'Invalid input data')
@@ -61,11 +64,8 @@ class AmenityResource(Resource):
         # Placeholder for the logic to update an amenity by ID
         try:
             amenity = facade.amenity_facade.get(amenity_id)        
-            updt_amenity = facade.amenity_facade.update_amenity(amenity, api.payload)
-            return {
-                'id': updt_amenity.id,
-                'name': updt_amenity.name
-            }, 200
+            facade.amenity_facade.update_amenity(amenity_id, api.payload)
+            return api.marshal(amenity, amenity_output_model), 200
         except AmenityNotFound:
             return {'error': 'Amenity not found'}, 404
         except AmenityAlreadyExists:
