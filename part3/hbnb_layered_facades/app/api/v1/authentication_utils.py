@@ -112,15 +112,11 @@ def author_matches_or_admin(func=None):
                 # Get user_id from Flask's request object
                 review_id = request.view_args.get('review_id')
 
-                requesting_user = facade.user_facade.gateway.get(token_user_id)
-                # ORM : user.reviews is now collection of review objects
-                reviews = [reviews.append(review.id)\
-                    # Hence constructing list of IDs for matching purpose
-                    for review in requesting_user.reviews]
+                review = facade.review_facade.gateway.get(review_id)
 
                 # Check permissions
                 if not (jwt_data.get('is_admin') or\
-                    review_id in reviews):
+                    review.user_id == token_user_id):
                     return {'error': 'Unauthorized action'}, 403
 
                 return func(*args, **kwargs)
