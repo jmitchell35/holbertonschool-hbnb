@@ -158,9 +158,9 @@ class PlaceResource(Resource):
             # Retrieve place
             place = facade.place_manager.place_facade.get(place_id)
             # Iterate reviews
-            for review_id in place.reviews:
+            for review in place.reviews:
                 # delete review (clean up)
-                facade.review_facade.delete_review(review_id)
+                facade.review_facade.delete_review(review.id)
             # delete place
             facade.place_facade.delete_place(place_id)
             return {"message": "Place deleted successfully"}, 200
