@@ -153,9 +153,11 @@ def not_owner_first_review(func=None):
                 requesting_user = facade.user_facade.get(token_user_id)
 
                 # Check permissions
-                if place_id in requesting_user.places:
-                    return {'error': 'You cannot review your own place'}, 400
-                
+                for place in requesting_user.places:
+                    if place_id == place.id:
+                        return {'error': 'You cannot review your own place'},\
+                            400
+
                 place = facade.place_facade.get(place_id)
                 for review in place.reviews:
                     if review in requesting_user.reviews:
