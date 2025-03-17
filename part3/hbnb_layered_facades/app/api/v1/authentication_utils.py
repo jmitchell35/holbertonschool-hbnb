@@ -114,7 +114,7 @@ def author_matches_or_admin(func=None):
                 # Get user_id from Flask's request object
                 review_id = request.view_args.get('review_id')
 
-                review = facade.review_facade.gateway.get(review_id)
+                review = facade.review_facade.get(review_id)
 
                 # Check permissions
                 if not (jwt_data.get('is_admin') or\
