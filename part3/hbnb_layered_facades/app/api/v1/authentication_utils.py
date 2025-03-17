@@ -168,7 +168,7 @@ def not_owner_first_review(func=None):
                 return {"Msg": "Missing Authorization Header"}, 401
             except (PlaceNotFound, UserNotFound):
                 return {'error': 'Invalid input data'}, 400
-
+        return wrapper
     # This allows the decorator to be used both with and without parentheses
     if func:
         # @user_matches_or_admin (no parentheses)
