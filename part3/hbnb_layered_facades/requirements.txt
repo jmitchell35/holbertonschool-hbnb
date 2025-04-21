@@ -1,7 +1,0 @@
-flask
-flask-restx
-flask-bcrypt
-flask-jwt-extended
-flask-sqlalchemy
-email_validator
-sqlalchemy
