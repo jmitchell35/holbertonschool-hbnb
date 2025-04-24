@@ -12,3 +12,4 @@ instance/
 
 # db files
 *.db
+part3/hbnb_layered_facades/hasher.py

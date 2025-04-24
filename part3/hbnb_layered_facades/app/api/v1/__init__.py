@@ -31,7 +31,7 @@ from app.api.v1.place_endpoints import api as places_ns
 from app.api.v1.review_endpoints import api as reviews_ns
 from app.api.v1.amenity_endpoints import api as amenities_ns
 
-api.add_namespace(auth_ns, path='/')
+api.add_namespace(auth_ns, path='/auth')
 api.add_namespace(users_ns, path='/users')
 api.add_namespace(places_ns, path='/places')
 api.add_namespace(reviews_ns, path='/reviews')
