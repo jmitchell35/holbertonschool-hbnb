@@ -15,9 +15,7 @@ db = SQLAlchemy()
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5500", "http://127.0.0.1:5500"], 
-                                     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-                                     "allow_headers": ["Content-Type", "Authorization"]}})
+    CORS(app, resources={r"/api/*": {"origins": ["http://localhost:5500", "http://127.0.0.1:5500"]}})
 
     # Makes bcrypt hashing available through app object
     bcrypt.init_app(app)
