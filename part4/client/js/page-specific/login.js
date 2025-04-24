@@ -1,31 +1,36 @@
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
+  loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      try {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
 
-  if (loginForm) {
-      loginForm.addEventListener('submit', async (event) => {
-          event.preventDefault();
-          // Your code to handle form submission
-      });
-  }
-});
+        console.log('Attempting login with:', { email });
 
-const form = document.getElementById('myForm');
+        const response = await fetch('/api/v1/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-form.addEventListener('submit', function(event) {
-    // Prevent the default form submission
-    event.preventDefault();
-    
-    // Get form data
-    const formData = new FormData(form);
-    
-    // Do something with the data
-    // For example, log all form values:
-    for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `Server returned ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Login successful, token received');
+
+        localStorage.setItem('accessToken', data.access_token);
+
+        window.location.href = 'index.html';
+
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Login failed: ' + error.message);
     }
-    
-    // You could send the data to a server, update the UI, etc.
+    });
 });
