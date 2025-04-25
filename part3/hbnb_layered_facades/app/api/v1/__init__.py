@@ -4,7 +4,7 @@ from flask_restx import Api
 # Create a Blueprint for v1 API
 api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
 
-# Create RestX API and associate it with the Blueprint
+# Sets authorization type for use of the API
 authorizations = {
     'Bearer Auth': {
         'type': 'apiKey',
@@ -14,6 +14,7 @@ authorizations = {
     }
 }
 
+# Create RestX API and associate it with the Blueprint
 api = Api(
     api_v1,
     version='1.0',
@@ -31,7 +32,7 @@ from app.api.v1.place_endpoints import api as places_ns
 from app.api.v1.review_endpoints import api as reviews_ns
 from app.api.v1.amenity_endpoints import api as amenities_ns
 
-api.add_namespace(auth_ns, path='/auth')
+api.add_namespace(auth_ns, path='/')
 api.add_namespace(users_ns, path='/users')
 api.add_namespace(places_ns, path='/places')
 api.add_namespace(reviews_ns, path='/reviews')
