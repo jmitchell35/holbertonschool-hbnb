@@ -91,7 +91,7 @@ place_light_output_model = api.model('PlaceDetailsOutput', {
         required=True, description='ID of the owner'),
 })
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class PlaceList(Resource):
     @place_owner_matches_user
     @api.expect(place_input_model, validate=True)

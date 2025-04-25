@@ -30,7 +30,7 @@ review_details_model = api.model('ReviewDetails', {
     'place_id': fields.String(required=True, description='ID of the place')
 })
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class ReviewList(Resource):
     @not_owner_first_review
     @api.expect(review_input_model, validate=True)

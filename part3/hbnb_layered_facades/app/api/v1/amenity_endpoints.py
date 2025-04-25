@@ -17,7 +17,7 @@ amenity_output_model = api.model('Amenity', {
     'name': fields.String()
 })
 
-@api.route('/')
+@api.route('/', strict_slashes=False)
 class AmenityList(Resource):
     @admin_required
     @api.expect(amenity_input_model)

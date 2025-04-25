@@ -32,7 +32,7 @@ user_output_model = api.model('User', {
     'email': fields.String()
 })
 
-@api.route('/')  # Incomming API call to localhost:5000/users
+@api.route('/', strict_slashes=False)  # Incomming API call to localhost:5000/users
 # Must define all HTTP methods handled by previously defined route (/users)
 class UserList(Resource):
     @admin_required
