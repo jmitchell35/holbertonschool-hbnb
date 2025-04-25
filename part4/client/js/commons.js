@@ -1,8 +1,6 @@
-/* 
-  This is a SAMPLE FILE to get you started.
-  Please, follow the project instructions to complete the tasks.
-*/
+// Setting up main header and footer
 
+// DECLARATION
 function setUpHeader() {
   const headerElement = document.createElement('header');
   headerElement.classList.add('flex-container');
@@ -75,9 +73,10 @@ function setUpNavBar() {
   document.querySelector('header').appendChild(navBarElement);
 }
 
+// CODE STARTS HERE
 setUpHeader();
 setUpFooter();
 
 document.addEventListener('DOMContentLoaded', () => {
-  
+  console.log('All cookies after setting:', document.cookie);
   });
