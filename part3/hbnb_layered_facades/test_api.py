@@ -2,16 +2,16 @@ import requests
 
 def test_api():
     """Test the login API endpoint directly with requests"""
-    url = "http://127.0.0.1:5000/api/v1/auth/login"
+    url = "http://127.0.0.1:5000/api/v1/login"
     
     # Test credentials - modify as needed
     payload = {
         "email": "admin@gmail.com", 
         "password": "12345"  # Update with the correct password
     }
-    
+
     print(f"Testing POST to {url} with payload: {payload}")
-    
+
     try:
         # First test the OPTIONS request
         options_response = requests.options(
