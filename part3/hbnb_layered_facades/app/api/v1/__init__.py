@@ -2,7 +2,11 @@ from flask import Blueprint
 from flask_restx import Api
 
 # Create a Blueprint for v1 API
-api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
+api_v1 = Blueprint(
+    'api_v1',
+    __name__,
+    url_prefix='/api/v1'
+)
 
 # Sets authorization type for use of the API
 authorizations = {
