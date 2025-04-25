@@ -1,5 +1,4 @@
 // Setting up main header and footer
-
 // DECLARATION
 function setUpHeader() {
   const headerElement = document.createElement('header');
@@ -77,6 +76,7 @@ function setUpNavBar() {
 setUpHeader();
 setUpFooter();
 
+
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('All cookies after setting:', document.cookie);
+  
   });

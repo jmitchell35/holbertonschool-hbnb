@@ -1,21 +1,11 @@
 // DECLARATIONS
-function getCookie(name) {
-  // Function to get a cookie value by its name
-  const cookie = document.cookie // string where key=value are separated by "; " + method chaining
-  .split("; ")
-  .find(cookie => cookie.startsWith(`${name}=`))
-  ?.split("=")[1];
-
-  return cookie;
-}
-
 async function fetchPlaces(token) {
   try {
     const response = await fetch('http://127.0.0.1:5000/api/v1/places', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
-      }
+      },
     });
 
     if (!response.ok) {
@@ -31,6 +21,16 @@ async function fetchPlaces(token) {
   }
 }
 
+function getCookie(name) {
+  // Function to get a cookie value by its name
+  const cookie = document.cookie // string where key=value are separated by "; " + method chaining
+  .split('; ')
+  .find(string => string.startsWith(`${name}=`))
+  ?.split('=')[1];
+
+  return cookie;
+}
+
 // CODE
 const token = getCookie('token');
 const loginLink = document.getElementById('login-link');
@@ -43,5 +43,4 @@ if (token) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const result = await placesPromise;
-  console.log(result);
 });
