@@ -7,13 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
   loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        const response = await fetch('http://localhost:5000/api/v1/login', {
+        const response = await fetch('http://127.0.0.1:5000/api/v1/login', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                email: `${loginForm['email']}`, password: `${loginForm['password']}`}),
+                email: `${loginForm.email.value}`,
+                password: `${loginForm.password.value}`}),
         })
 
         if (response.ok) {
