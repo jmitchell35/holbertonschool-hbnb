@@ -34,6 +34,7 @@ async function fetchPlaces(token) {
 // CODE
 const token = getCookie('token');
 const loginLink = document.getElementById('login-link');
+let placesPromise = null;
 
 if (token) {
   placesPromise = fetchPlaces(token);
@@ -42,4 +43,5 @@ if (token) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const result = await placesPromise;
+  console.log(result);
 });
