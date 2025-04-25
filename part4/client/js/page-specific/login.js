@@ -16,10 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (response.ok) {
             const data = await response.json();
-            console.log('Received token:', data.access_token);
 
             document.cookie = `token=${data.access_token}; path=/`;
-            console.log('All cookies after setting:', document.cookie);
 
             window.location.href = 'index.html';
         } else {
