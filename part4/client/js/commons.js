@@ -72,10 +72,21 @@ function setUpNavBar() {
   document.querySelector('header').appendChild(navBarElement);
 }
 
+function getCookie(name) {
+  // Function to get a cookie value by its name
+  const cookie = document.cookie // string where key=value are separated by "; " + method chaining
+  .split('; ')
+  .find(string => string.startsWith(`${name}=`))
+  ?.split('=')[1];
+
+  return cookie;
+}
+
 // CODE STARTS HERE
 setUpHeader();
 setUpFooter();
-
+const token = getCookie('token');
+console.log(token);
 
 document.addEventListener('DOMContentLoaded', () => {
   
