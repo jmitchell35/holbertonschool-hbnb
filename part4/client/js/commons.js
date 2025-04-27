@@ -15,6 +15,9 @@ function setUpHeader() {
 
 
   const headerLoginNavElement = document.createElement('nav');
+  headerLoginNavElement.classList.add('flex-container');
+  headerLoginNavElement.classList.add('vt-flex-container');
+  headerLoginNavElement.classList.add('header-nav');
 
   const headerLogoElement = document.createElement('img');
   headerLogoElement.setAttribute('src', '../resources/images/logo.png');
@@ -26,6 +29,7 @@ function setUpHeader() {
   loginLinkElement.setAttribute('href', 'login.html');
   loginLinkElement.setAttribute('id', 'login-link');
   loginLinkElement.classList.add('login-button');
+  loginLinkElement.classList.add('button');
   loginLinkElement.textContent = 'Login';
   headerLoginNavElement.appendChild(loginLinkElement);
   divElement.appendChild(headerLoginNavElement);
@@ -34,7 +38,7 @@ function setUpHeader() {
 
   document.querySelector('body').prepend(headerElement);
 
-  setUpNavBar();
+  //setUpNavBar();
 }
 
 function setUpFooter() {
