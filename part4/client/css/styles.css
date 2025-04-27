@@ -1,8 +1,4 @@
-/* 
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
-  You'll probably need to override some of theese styles.
-*/
-
+/* BASE STYLES */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -31,7 +27,7 @@ main {
     padding: 2rem;
 }
 
-/* FLEXBOX BASECLASS */
+/* FLEXBOX CLASSES SELECTORS */
 .flex-container {
     display: flex;
     padding: 0.25rem;
@@ -50,12 +46,53 @@ main {
     align-items: center;
 }
 
+/* GRID CLASSES SELECTORS */
+.grid-container {
+    display: grid;
+    /* Adapt the grid to the number of places */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
 /* HEADER STYLING */
 .top-header {
     justify-content: space-between;
 }
 
-#login-link {
+/* Buttons */
+
+.button {
+    background-color: #f3f7fe;
+    color: #000000;
+    font-size: 0.75rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+
+    text-align: center;
+    display: flex;
+    justify-content: center; /* Horizontal centering of flex items */
+    align-items: center;     /* Vertical centering of flex items */
+    width: 90px;
+    height: 30px;
+  }
+  
+  .button:hover {
+    background-color: #686565;
+    box-shadow: 0 0 0 5px #4747475f;
+    color: #fff;
+  }
+
+.header-nav {
+    text-align: center;
+    display: flex;
+    justify-content: center; /* Horizontal centering of flex items */
+    align-items: center;     /* Vertical centering of flex items */
+}
+
+#login-link-4 {
     text-align: center;
     display: flex;
     justify-content: center; /* Horizontal centering of flex items */
