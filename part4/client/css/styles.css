@@ -63,8 +63,6 @@ main {
 /* Buttons */
 
 .button {
-    background-color: #f3f7fe;
-    color: #000000;
     font-size: 0.75rem;
     border: none;
     cursor: pointer;
@@ -83,6 +81,16 @@ main {
     background-color: #686565;
     box-shadow: 0 0 0 5px #4747475f;
     color: #fff;
+  }
+
+  .login-button {
+    background-color: #f3f7fe;
+    color: #000000;
+  }
+
+  .view-details {
+    background-color: #FF9800;
+    color: #000000;
   }
 
 .header-nav {
