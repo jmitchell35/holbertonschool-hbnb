@@ -112,7 +112,8 @@ class PlaceList(Resource):
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Retrieve a list of all places"""
-        return facade.place_facade.get_all_places(), 200
+        places = facade.place_facade.get_all_places()
+        return api.marshal(places, place_light_output_model), 200
 
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
