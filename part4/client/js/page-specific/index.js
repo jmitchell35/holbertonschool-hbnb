@@ -171,16 +171,12 @@ function populateFilter(placesElements) {
 }
 
 // CODE
-const loginLink = document.getElementById('login-link');
 const placesSection = document.getElementById('places-list');
 let placesPromise = null;
 let placesElements = [];
 
 if (token) {
   placesPromise = fetchPlaces(token);
-  loginLink.style.display = 'none';
-} else {
-  loginLink.style.display = 'block';
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
