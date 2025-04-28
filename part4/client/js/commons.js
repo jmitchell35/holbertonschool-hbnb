@@ -89,8 +89,15 @@ function getCookie(name) {
 // CODE STARTS HERE
 setUpHeader();
 setUpFooter();
+const loginLink = document.getElementById('login-link');
 const token = getCookie('token');
 console.log(token);
+
+if (token) {
+  loginLink.style.display = 'none';
+} else {
+  loginLink.style.display = 'block';
+};
 
 document.addEventListener('DOMContentLoaded', () => {
   
