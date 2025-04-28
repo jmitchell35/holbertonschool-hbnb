@@ -7,16 +7,7 @@ class PlaceFacade:
         self.gateway = PlaceGateway()
 
     def get_all_places(self):
-        places = self.gateway.get_all()
-        return [
-            {
-                'id': place.id,
-                'title': place.title,
-                'latitude': place.latitude,
-                'longitude': place.longitude
-            }
-            for place in places
-        ]
+        return self.gateway.get_all()
     
     def get(self, place_id):
         place = self.gateway.get(place_id)
