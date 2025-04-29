@@ -150,8 +150,6 @@ function populateFilter(placesElements) {
   priceFilter.appendChild(filter4);
 
   if (placesElements.length > 0) {
-    console.log('placesElements is filled');
-    console.log(placesElements);
     const filters = setDynamicFilterValues(placesElements);
     filter1.setAttribute('value', filters.q1);
     filter1.textContent= `${filters.q1}`;
@@ -160,7 +158,6 @@ function populateFilter(placesElements) {
     filter3.setAttribute('value', filters.q3);
     filter3.textContent= `${filters.q3}`;
   } else {
-    console.log('placesElements is empty');
     filter1.setAttribute('value', 10);
     filter1.textContent= '10';
     filter2.setAttribute('value', 50);
@@ -182,21 +179,17 @@ if (token) {
 document.addEventListener('DOMContentLoaded', async () => {
   const result = await placesPromise;
   const filter = document.getElementById('price-filter');
-  console.log(result);
 
   if (result.success) {
-    console.log('Success');
     populatePlaces(result.data);
     populateFilter(placesElements);
   } else {
-    console.log('Failed to fetch');
-    placesSection.textcontent = `${result.error}`;
     populateFilter([]);
+    placesSection.textcontent = `${result.error}`;
   };
 
   filter.addEventListener('change', (event) => {
     const selected = event.target.value;
-    console.log(selected);
     for (placeElement of placesElements) {
       let place = new Place(placeElement.data);
       if (place.price > selected) {
