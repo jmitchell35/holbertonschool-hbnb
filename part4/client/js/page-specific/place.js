@@ -30,21 +30,46 @@ class Place {
     this.amenities=data.amenities;
     this.latitude=data.latitude;
     this.longitude=data.longitude;
-    this.owner=data.owner;
+    this.owner= data.owner;
     this.reviews=data.reviews;
   }
 }
 
-function layoutPage() {
-  const mainElement = document.getElementsByTagName('main')[0];
-  mainElement.classList.add('flex-container');
-  mainElement.classList.add('vt-flex-container');
-  mainElement.classList.add('centered-flex');
-}
-
 function displayPlace(result) {
-  const placeCard = document.getElementById('place-details');
-  
+  const mainElement = mainIsFlex();
+  console.log(result);
+  const pageTitle = document.getElementsByTagName('title')[0];
+  const place = new Place(result.data);
+  pageTitle.textContent = `${place.title}`;
+
+  const title = document.createElement('h1');
+  mainElement.prepend(title);
+  title.textContent = place.title;
+
+  const card = document.getElementById('place-details');
+  card.classList.add('sole-place-card'); // for future retrieval / CSS styling
+  card.classList.add('flex-container');
+  card.classList.add('vt-flex-container');
+  card.classList.add('centered-flex');
+  card.setAttribute('id', `${place.id}`);
+
+  const host = document.createElement('span');
+  host.innerHTML = `<b>Host:</b> ${place.owner.first_name} ${place.owner.last_name}`;
+  card.appendChild(host);
+
+  const price = document.createElement('span');
+  price.innerHTML = `<b>Price per night:</b> ${place.price}$`;
+  card.appendChild(price);
+
+  const description = document.createElement('span');
+  description.innerHTML = `<b>Description:</b> ${place.description}`;
+  card.appendChild(description);
+
+  const amenities = document.createElement('span');
+  amenities.innerHTML = `<b>Amenities:</b> ${place.amenities}`;
+  card.appendChild(amenities);
+
+
 }
 // URL = Protocol://domain/path?querystring. Isolates query string
 const urlParams = new URLSearchParams(window.location.search);
@@ -63,6 +88,5 @@ if (token) {
 document.addEventListener('DOMContentLoaded', async () => {
   const placeResult = await placePromise;
   let place = placeResult.data;
-  layoutPage();
   displayPlace(placeResult);
 });
