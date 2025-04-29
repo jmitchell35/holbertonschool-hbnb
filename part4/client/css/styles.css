@@ -79,7 +79,7 @@ main {
 
 /* Targeted fix for Login button behavior */
 #login-link {
-    display: block !important;
+    display: block;
     width: 90px !important;
     height: 30px !important;
     text-align: center !important;
