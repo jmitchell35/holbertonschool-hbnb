@@ -42,6 +42,12 @@ function setUpHeader() {
   //setUpNavBar();
 }
 
+function MainIsFlex() {
+  const mainElement = document.getElementsByTagName('main')[0];
+  mainElement.classList.add('flex-container');
+  mainElement.classList.add('vt-flex-container');
+  mainElement.classList.add('centered-flex');
+}
 
 function setUpFooter() {
   const footerElement = document.createElement('footer');
@@ -101,8 +107,4 @@ if (token) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  const mainElement = document.getElementsByTagName('main')[0];
-  mainElement.classList.add('flex-container');
-  mainElement.classList.add('vt-flex-container');
-  mainElement.classList.add('centered-flex');
   });
