@@ -17,6 +17,12 @@ header {
     padding: 1rem;
 }
 
+footer {
+    background-color: #FF9800;
+    color: #fff;
+    padding: 1rem;
+}
+
 nav a {
     color: #fff;
     text-decoration: none;
