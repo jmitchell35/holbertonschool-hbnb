@@ -95,9 +95,24 @@ function getCookie(name) {
   return cookie;
 }
 
+// Make main flexible on every page for consistency
+function setupMainForFlexibility() {
+  const mainElement = document.getElementsByTagName('main')[0];
+  if (mainElement) {
+    // We don't overwrite existing classes, just add if not present
+    if (!mainElement.classList.contains('flex-container')) {
+      mainElement.classList.add('flex-container');
+    }
+    if (!mainElement.classList.contains('vt-flex-container')) {
+      mainElement.classList.add('vt-flex-container');
+    }
+  }
+}
+
 // CODE STARTS HERE
 setUpHeader();
 setUpFooter();
+setupMainForFlexibility();
 const loginLink = document.getElementById('login-link');
 const token = getCookie('token');
 console.log(token);
@@ -109,4 +124,5 @@ if (token) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+  setupMainForFlexibility();
   });
