@@ -35,8 +35,16 @@ class Place {
   }
 }
 
-function displayPlace(result) {
+function layoutPage() {
+  const mainElement = document.getElementsByTagName('main')[0];
+  mainElement.classList.add('flex-container');
+  mainElement.classList.add('vt-flex-container');
+  mainElement.classList.add('centered-flex');
+}
 
+function displayPlace(result) {
+  const placeCard = document.getElementById('place-details');
+  
 }
 // URL = Protocol://domain/path?querystring. Isolates query string
 const urlParams = new URLSearchParams(window.location.search);
@@ -55,6 +63,6 @@ if (token) {
 document.addEventListener('DOMContentLoaded', async () => {
   const placeResult = await placePromise;
   let place = placeResult.data;
-  console.log(place);
+  layoutPage();
   displayPlace(placeResult);
 });
