@@ -171,6 +171,7 @@ function populateFilter(placesElements) {
 const placesSection = document.getElementById('places-list');
 let placesPromise = null;
 let placesElements = [];
+populateFilter([]);
 
 if (token) {
   placesPromise = fetchPlaces(token);
