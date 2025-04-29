@@ -1,6 +1,10 @@
 // Setting up main header and footer
 // DECLARATION
 function setUpHeader() {
+  const bodyElement = document.getElementsByTagName('body')[0];
+  bodyElement.classList.add('flex-container');
+  bodyElement.classList.add('vt-flex-container');
+
   const headerElement = document.createElement('header');
   headerElement.classList.add('flex-container');
   headerElement.classList.add('vt-flex-container');
