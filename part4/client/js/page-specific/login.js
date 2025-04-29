@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  mainIsFlex();
   const loginForm = document.getElementById('login-form');
 
   loginForm.addEventListener('submit', async (event) => {
