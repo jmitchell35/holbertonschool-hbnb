@@ -118,15 +118,6 @@ main {
     align-items: center;     /* Vertical centering of flex items */
 }
 
-#login-link-4 {
-    text-align: center;
-    display: flex;
-    justify-content: center; /* Horizontal centering of flex items */
-    align-items: center;     /* Vertical centering of flex items */
-    width: 60px;
-    height: 60px;
-}
-
 /* CARD */
 .place-card:hover {
     transform: translateY(-5px);
