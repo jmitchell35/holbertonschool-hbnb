@@ -42,11 +42,13 @@ function setUpHeader() {
   //setUpNavBar();
 }
 
-function MainIsFlex() {
+function mainIsFlex() {
   const mainElement = document.getElementsByTagName('main')[0];
   mainElement.classList.add('flex-container');
   mainElement.classList.add('vt-flex-container');
   mainElement.classList.add('centered-flex');
+
+  return mainElement;
 }
 
 function setUpFooter() {
@@ -56,7 +58,7 @@ function setUpFooter() {
   footerElement.classList.add('centered-flex');
   
   const spanFooterElement = document.createElement('span');
-  spanFooterElement.textContent = 'all rights reserved';
+  spanFooterElement.textContent = '© 2024 HBnB Evolution. all rights reserved';
 
   footerElement.appendChild(spanFooterElement);
   document.querySelector('body').appendChild(footerElement);
