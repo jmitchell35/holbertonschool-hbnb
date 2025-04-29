@@ -41,7 +41,7 @@ main {
     flex-direction: column;
 }
 
-.centered-flex-single-item {
+.centered-flex {
     justify-content: center;
     align-items: center;
 }
