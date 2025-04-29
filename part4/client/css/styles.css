@@ -6,21 +6,42 @@
     font-family: Arial, sans-serif;
 }
 
+html, body {
+    height: 100%; /* Ensure full height */
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: #f4f4f4;
     color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Minimum height is viewport height */
+    display: flex !important;
+    flex-direction: column !important;
 }
 
 header {
     background-color: #FF9800;
     color: #fff;
     padding: 1rem;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 footer {
     background-color: #FF9800;
     color: #fff;
     padding: 1rem;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: auto; /* Additional safety to push to bottom */
+    flex-shrink: 0; /* Prevent footer from shrinking */
+    width: 100%; /* Ensure footer takes full width */
 }
 
 nav a {
@@ -30,7 +51,9 @@ nav a {
 }
 
 main {
+    flex: 1 0 auto; /* Takes up all available space, doesn't shrink */
     padding: 2rem;
+    width: 100%; /* Ensure main takes full width */
 }
 
 /* FLEXBOX CLASSES SELECTORS */
@@ -59,6 +82,8 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
     padding: 20px;
+    /* This ensures grid works within flex container */
+    width: 100%;
 }
 
 /* HEADER STYLING */
