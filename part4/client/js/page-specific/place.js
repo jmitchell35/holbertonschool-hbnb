@@ -13,11 +13,25 @@ async function fetchPlaceDetails(token, placeId) {
     };
 
     const placeResponse = await response.json();
-    return { success: true, data: place };
+    return { success: true, data: placeResponse };
 
   } catch (error) {
     console.error('Error fetching places:', error);
     return { success: false, error: error.message };
+  }
+}
+
+class Place {
+  constructor(data) {
+    this.id = data.id;
+    this.title = data.title;
+    this.description=data.description;
+    this.price=data.price;
+    this.amenities=data.amenities;
+    this.latitude=data.latitude;
+    this.longitude=data.longitude;
+    this.owner=data.owner;
+    this.reviews=data.reviews;
   }
 }
 
@@ -29,6 +43,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const addReviewSection = document.getElementById('add-review');
 const placeId = urlParams.get('placeId');
 let placePromise = null;
+let place = null;
 
 if (token) {
   addReviewSection.style.display = 'block';
@@ -39,6 +54,7 @@ if (token) {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const placeResult = await placePromise;
-  console.log(placeResult);
+  let place = placeResult.data;
+  console.log(place);
   displayPlace(placeResult);
 });
