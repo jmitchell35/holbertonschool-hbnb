@@ -4,8 +4,6 @@ function setUpHeader() {
   const headerElement = document.createElement('header');
   headerElement.classList.add('flex-container');
   headerElement.classList.add('vt-flex-container');
-  
-
 
   const divElement = document.createElement('div');
   divElement.setAttribute('id', 'main-nav-bar-layout-div');
@@ -18,6 +16,7 @@ function setUpHeader() {
   headerLoginNavElement.classList.add('flex-container');
   headerLoginNavElement.classList.add('vt-flex-container');
   headerLoginNavElement.classList.add('header-nav');
+  headerElement.appendChild(divElement);
 
   const headerLogoElement = document.createElement('img');
   headerLogoElement.setAttribute('src', '../resources/images/logo.png');
@@ -34,12 +33,11 @@ function setUpHeader() {
   headerLoginNavElement.appendChild(loginLinkElement);
   divElement.appendChild(headerLoginNavElement);
 
-  headerElement.appendChild(divElement);
-
   document.querySelector('body').prepend(headerElement);
 
   //setUpNavBar();
 }
+
 
 function setUpFooter() {
   const footerElement = document.createElement('footer');
