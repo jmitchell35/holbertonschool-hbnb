@@ -47,10 +47,9 @@ function setUpFooter() {
   const footerElement = document.createElement('footer');
   footerElement.classList.add('flex-container');
   footerElement.classList.add('hz-flex-container');
-  footerElement.classList.add('centered-flex-single-item');
+  footerElement.classList.add('centered-flex');
   
   const spanFooterElement = document.createElement('span');
-
   spanFooterElement.textContent = 'all rights reserved';
 
   footerElement.appendChild(spanFooterElement);
