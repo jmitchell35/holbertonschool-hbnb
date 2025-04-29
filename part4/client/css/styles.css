@@ -31,6 +31,18 @@ header {
     flex-shrink: 0; /* Prevent header from shrinking */
 }
 
+/* Fix for header content alignment */
+header > div.top-header {
+    width: 100%;
+    justify-content: space-between !important; /* Force space-between */
+    align-items: center !important; /* Vertically center items */
+}
+
+/* Ensure the logo stays left-aligned */
+#main-nav-bar-layout-div img {
+    margin-right: auto; /* Push everything else to the right */
+}
+
 footer {
     background-color: #FF9800;
     color: #fff;
