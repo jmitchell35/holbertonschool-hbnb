@@ -166,6 +166,13 @@ main {
 .place-card {
     background-color:#ffffff;
     border-radius: 15px;
+    padding: 15px;
+    align-items: center;
+    text-align: center;
+}
+
+.place-info {
+    margin-bottom: 8px;
 }
 
 .place-card:hover {
