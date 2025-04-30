@@ -58,7 +58,7 @@ function setUpFooter() {
   footerElement.classList.add('centered-flex');
   
   const spanFooterElement = document.createElement('span');
-  spanFooterElement.textContent = '© 2024 HBnB Evolution. all rights reserved';
+  spanFooterElement.textContent = '© 2024 HBnB Evolution - all rights reserved';
 
   footerElement.appendChild(spanFooterElement);
   document.querySelector('body').appendChild(footerElement);
