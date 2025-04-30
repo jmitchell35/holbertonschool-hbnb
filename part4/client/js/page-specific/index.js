@@ -136,27 +136,37 @@ function setDynamicFilterValues(placesElements) {
 
 function populateFilter(placesElements) {
   const priceFilter = document.getElementById('price-filter');
-  const filter1 = document.createElement('option');
-  const filter2 = document.createElement('option');
-  const filter3 = document.createElement('option');
-  const filter4 = document.createElement('option');
-  filter4.setAttribute('value', 'All');
-  filter4.setAttribute('selected', 'selected');
-  filter4.textContent= 'All';
+  let filter1 = document.getElementById('filter1');
+  let filter2 = document.getElementById('filter2');
+  let filter3 = document.getElementById('filter3');
+  let filter4 = document.getElementById('filter4');
+  if (!filter1) {
+    filter1 = document.createElement('option');
+    filter1.setAttribute('id', 'filter1');
+    filter2 = document.createElement('option');
+    filter2.setAttribute('id', 'filter2');
+    filter3 = document.createElement('option');
+    filter3.setAttribute('id', 'filter3');
+    filter4 = document.createElement('option');
+    filter4.setAttribute('id', 'filter4');
+    filter4.setAttribute('value', 'All');
+    filter4.setAttribute('selected', 'selected');
+    filter4.textContent= 'All';
 
-  priceFilter.appendChild(filter1);
-  priceFilter.appendChild(filter2);
-  priceFilter.appendChild(filter3);
-  priceFilter.appendChild(filter4);
+    priceFilter.appendChild(filter1);
+    priceFilter.appendChild(filter2);
+    priceFilter.appendChild(filter3);
+    priceFilter.appendChild(filter4);
+  };
 
   if (placesElements.length > 0) {
-    const filters = setDynamicFilterValues(placesElements);
-    filter1.setAttribute('value', filters.q1);
-    filter1.textContent= `${filters.q1}`;
-    filter2.setAttribute('value', filters.median);
-    filter2.textContent= `${filters.median}`;
-    filter3.setAttribute('value', filters.q3);
-    filter3.textContent= `${filters.q3}`;
+    const values = setDynamicFilterValues(placesElements);
+    filter1.setAttribute('value', values.q1);
+    filter1.textContent= `${values.q1}`;
+    filter2.setAttribute('value', values.median);
+    filter2.textContent= `${values.median}`;
+    filter3.setAttribute('value', values.q3);
+    filter3.textContent= `${values.q3}`;
   } else {
     filter1.setAttribute('value', 10);
     filter1.textContent= '10';
