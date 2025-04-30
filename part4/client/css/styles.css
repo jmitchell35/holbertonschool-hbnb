@@ -162,6 +162,12 @@ main {
 }
 
 /* CARD */
+
+.place-card {
+    background-color:#ffffff;
+    border-radius: 15px;
+}
+
 .place-card:hover {
     transform: translateY(-5px);
 }
