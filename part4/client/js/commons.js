@@ -109,7 +109,17 @@ function setupMainForFlexibility() {
   }
 }
 
+function setUpFavicon() {
+  const head = document.getElementsByTagName('head')[0];
+  const favicon = document.createElement('link');
+  favicon.setAttribute('rel', 'icon');
+  favicon.setAttribute('href', '../resources/images/icon.png');
+  favicon.setAttribute('type', 'image/png');
+  head.appendChild(favicon);
+}
+
 // CODE STARTS HERE
+setUpFavicon();
 setUpHeader();
 setUpFooter();
 setupMainForFlexibility();
