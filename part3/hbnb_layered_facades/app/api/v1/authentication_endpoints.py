@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import create_access_token
 from app.services import facade
 from app.services.exception import UserNotFound
+from datetime import timedelta
 
 api = Namespace('auth', description='Authentication operations')
 
@@ -32,7 +33,8 @@ class Login(Resource):
                 additional_claims={
                     "is_admin": user.is_admin,
                     "email": user.email  # practical for debugging
-                    }
+                    },
+                expires_delta=timedelta(days=1)
                 )
             
             # Step 4: Return the JWT token to the client
