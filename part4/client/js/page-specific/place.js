@@ -114,9 +114,33 @@ function buildReviewCard(parentElement, review) {
   cardReview.style.padding = '8px 0 8px 0';
 
   const cardRating = document.createElement('p');
-  cardRating.textContent = `Rating: ${review.rating}`;
   cardContent.appendChild(cardRating);
   cardRating.style.padding = '8px 0 8px 0';
+
+  const ratingLabel = document.createElement('span');
+  ratingLabel.textContent = "Rating: ";
+  cardRating.appendChild(ratingLabel);
+
+  const starsContainer = document.createElement('span');
+  starsContainer.style.position = 'relative';
+  starsContainer.style.display = 'inline-block';
+  starsContainer.style.color = '#ddd';
+  cardRating.appendChild(starsContainer);
+
+  const emptyStars = document.createElement('span');
+  emptyStars.textContent = "★★★★★";
+  starsContainer.appendChild(emptyStars);
+
+  const filledStars = document.createElement('span');
+  filledStars.textContent = "★★★★★";
+  filledStars.style.position = 'absolute';
+  filledStars.style.left = '0';
+  filledStars.style.top = '0';
+  filledStars.style.color = '#ff9800';
+  filledStars.style.overflow = 'hidden';
+  filledStars.style.width = `${(review.rating / 5) * 100}%`;
+  filledStars.style.whiteSpace = 'nowrap';
+  starsContainer.appendChild(filledStars);
 }
 
 function displayReviews(result) {
