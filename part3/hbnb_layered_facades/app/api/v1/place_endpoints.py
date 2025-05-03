@@ -25,18 +25,6 @@ place_input_model = api.model('PlaceInput', {
         required=True, description='ID of the owner'),
 })
 
-review_output_model = api.model('PlaceReviewOutput', {
-    'id': fields.String(description='Review ID'),
-    'text': fields.String(description='Text of the review'),
-    'rating': fields.Integer(description='Rating of the place (1-5)'),
-    'user_id': fields.String(description='ID of the user')
-})
-
-amenity_output_model = api.model('AmenityOutput', {
-    'id': fields.String(description='Amenity ID'),
-    'name': fields.String(required=True, description='Name of the amenity')
-})
-
 user_output_model = api.model('UserOutput', {
     'id': fields.String(description='User ID'),
     'first_name': fields.String(
@@ -45,6 +33,21 @@ user_output_model = api.model('UserOutput', {
         required=True, description='Last name of the user'),
     'email': fields.String(
         required=True, description='Email of the user')
+})
+
+review_output_model = api.model('PlaceReviewOutput', {
+    'id': fields.String(description='Review ID'),
+    'text': fields.String(description='Text of the review'),
+    'rating': fields.Integer(description='Rating of the place (1-5)'),
+    'user': fields.Nested(
+        user_output_model,
+        description='Author of review'
+    )
+})
+
+amenity_output_model = api.model('AmenityOutput', {
+    'id': fields.String(description='Amenity ID'),
+    'name': fields.String(required=True, description='Name of the amenity')
 })
 
 place_detailed_output_model = api.model('PlaceDetailsOutput', {
