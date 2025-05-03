@@ -37,6 +37,8 @@ class Place {
 
 function displayPlace(result) {
   const mainElement = mainIsFlex();
+  mainElement.style.justifyContent = 'space-between';
+  mainElement.style.alignItems = 'stretch';
   console.log(result);
   const pageTitle = document.getElementsByTagName('title')[0];
   const place = new Place(result.data);
@@ -45,6 +47,9 @@ function displayPlace(result) {
   const title = document.createElement('h1');
   mainElement.prepend(title);
   title.textContent = place.title;
+  title.style.marginTop = '40px';
+  title.style.marginBottom = '20px';
+  title.style.alignSelf = 'center';
 
   const card = document.getElementById('place-details');
   card.classList.add('sole-place-card'); // for future retrieval / CSS styling
@@ -52,6 +57,11 @@ function displayPlace(result) {
   card.classList.add('vt-flex-container');
   card.classList.add('centered-flex');
   card.setAttribute('id', `${place.id}`);
+  card.style.backgroundColor = '#ffffff';
+  card.style.display = 'flex';
+  card.style.borderRadius = '10px';
+  card.style.boxShadow = 'rgba(0, 0, 0, 0.24) 0px 3px 8px';
+  card.style.flexGrow = '2';
 
   const host = document.createElement('span');
   host.innerHTML = `<b>Host:</b> ${place.owner.first_name} ${place.owner.last_name}`;
