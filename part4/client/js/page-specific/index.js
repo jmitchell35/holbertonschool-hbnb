@@ -49,11 +49,6 @@ function buildPlaceCard(data, parentElement) {
   cardTitle.textContent = `${place.title}`;
   cardContent.appendChild(cardTitle);
 
-  const cardDescription = document.createElement('p');
-  cardDescription.classList.add('place-info'); // to be defined as CSS style
-  cardDescription.textContent = `${place.description}`;
-  cardContent.appendChild(cardDescription);
-
   const cardPrice = document.createElement('p');
   cardPrice.classList.add('place-info');
   cardPrice.textContent = `${place.price}$ per night`;
