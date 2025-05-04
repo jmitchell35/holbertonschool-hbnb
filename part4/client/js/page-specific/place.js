@@ -1,23 +1,4 @@
 /* DECLARATIONS */
-async function fetchPlaceDetails(placeId) {
-  try {
-    const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
-      method: 'GET'
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP request to API failed. Status : ${response.status}`)
-    };
-
-    const placeResponse = await response.json();
-    return { success: true, data: placeResponse };
-
-  } catch (error) {
-    console.error('Error fetching places:', error);
-    return { success: false, error: error.message };
-  }
-}
-
 class Place {
   constructor(data) {
     this.id = data.id;
@@ -196,9 +177,7 @@ let place = null;
 
 placePromise = fetchPlaceDetails(placeId);
 
-if (token) {
-  addReviewSection.style.display = 'block';
-} else {
+if (!token) {
   addReviewSection.style.display = 'none';
 };
 
@@ -210,6 +189,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   displayReviews(placeResult);
 
   const reviewButton = document.getElementById('review-button');
+
+  reviewSubmitListener();
 
   if (token) {
     reviewButton.style.display = 'block';

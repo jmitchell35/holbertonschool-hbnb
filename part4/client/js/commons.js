@@ -107,6 +107,8 @@ function setupMainForFlexibility() {
       mainElement.classList.add('vt-flex-container');
     }
   }
+
+  return mainElement;
 }
 
 function setUpFavicon() {
@@ -118,14 +120,117 @@ function setUpFavicon() {
   head.appendChild(favicon);
 }
 
+async function fetchPlaceDetails(placeId) {
+  try {
+    const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
+      method: 'GET'
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP request to API failed. Status : ${response.status}`)
+    };
+
+    const placeResponse = await response.json();
+    return { success: true, data: placeResponse };
+
+  } catch (error) {
+    console.error('Error fetching places:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+function reloadStylesheets() {
+  const links = document.getElementsByTagName("link");
+  for (let i = 0; i < links.length; i++) {
+    const link = links[i];
+    if (link.rel === "stylesheet") {
+      link.href = link.href.split("?")[0] + "?reload=" + new Date().getTime();
+    }
+  }
+}
+
+function adaptReviewForm() {
+  const form = document.getElementById('review-form');
+  if (form) {
+    const text = form.getElementsByTagName('textarea')[0];
+    text.setAttribute('placeholder', 'Tell us about your stay...')
+
+  };
+
+  const select = document.getElementById('rating');
+
+  if (select) {
+    const rating = document.createElement('input');
+    select.replaceWith(rating);
+    rating.setAttribute('type', 'range');
+    rating.setAttribute('min', '1');
+    rating.setAttribute('max', '5');
+    rating.setAttribute('value', '2');
+  };
+
+  return form;
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = message;
+  document.body.appendChild(toast);
+  
+  // Animation
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 500);
+  }, 5000);
+}
+
+function reviewSubmitListener() {
+  reviewForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const selectedRating = document.querySelector('input[name="rating"]:checked');
+    if (!selectedRating) {
+      alert('Please select a rating');
+      return;
+    }
+
+    const value = parseInt(selectedRating.value, 10);
+    console.log(value);
+
+    const response = await fetch('http://127.0.0.1:5000/api/v1/reviews', {
+      method: 'POST',
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+          text: document.getElementById('review-text').value,
+          rating: value,
+          place_id: placeId,
+      }),
+    });
+
+    if (response.ok) {
+      document.getElementById('review-text').value = '';
+      document.querySelectorAll('input[name="rating"]:checked')
+        .forEach(input => input.checked = false);
+        showToast('Review submitted successfully !');
+      window.location.href = `place.html?placeId=${placeId}`;
+    } else {
+          alert('Review submission failed: ' + response.statusText);
+    }
+  });
+}
+
 // CODE STARTS HERE
 setUpFavicon();
 setUpHeader();
 setUpFooter();
-setupMainForFlexibility();
+const mainElement = setupMainForFlexibility();
 const loginLink = document.getElementById('login-link');
 const token = getCookie('token');
 console.log(token);
+let reviewForm = null;
 
 if (token) {
   loginLink.style.display = 'none';
@@ -135,4 +240,5 @@ if (token) {
 
 document.addEventListener('DOMContentLoaded', () => {
   setupMainForFlexibility();
+  reviewForm = adaptReviewForm();
   });
