@@ -64,6 +64,7 @@ function displayPlace(result) {
   card.style.borderRadius = '10px';
   card.style.boxShadow = '0 3px 10px rgb(0 0 0 / 0.2)';
   card.style.flexGrow = '2';
+  card.style.margin = '0 10px 0 10px';
 
   const host = document.createElement('span');
   host.innerHTML = `<b>Host:</b> ${place.owner.first_name} ${place.owner.last_name}`;
@@ -90,13 +91,15 @@ function buildReviewCard(parentElement, review) {
   const card = document.createElement('article');
 
   card.setAttribute('id', `${review.id}`);
-  card.style.margin = '20px 0 20px 0';
+  card.style.margin = '20px 10px 20px 10px';
   card.style.padding = '30px';
   card.style.backgroundColor = '#ffffff';
   card.style.borderRadius = '15px';
   card.style.padding = '15px';
   card.style.alignItems = 'center';
   card.style.textAlign = 'center';
+  card.style.borderRadius = '10px';
+  card.style.boxShadow = '0 3px 10px rgb(0 0 0 / 0.2)';
   parentElement.appendChild(card);
 
   const cardContent = document.createElement('div');
@@ -150,7 +153,7 @@ function displayReviews(result) {
   const title = document.createElement('h2');
   title.textContent = 'Reviews';
   title.style.textAlign = 'left';
-  title.style.margin = '20px 0 20px 0';
+  title.style.margin = '20px 10px 0 10px';
 
   refElement.parentNode.insertBefore(title, refElement);
 
