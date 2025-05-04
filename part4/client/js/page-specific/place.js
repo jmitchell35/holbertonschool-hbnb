@@ -1,11 +1,8 @@
 /* DECLARATIONS */
-async function fetchPlaceDetails(token, placeId) {
+async function fetchPlaceDetails(placeId) {
   try {
     const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`
-      },
+      method: 'GET'
     });
 
     if (!response.ok) {
@@ -178,9 +175,10 @@ const placeId = urlParams.get('placeId');
 let placePromise = null;
 let place = null;
 
+placePromise = fetchPlaceDetails(placeId);
+
 if (token) {
   addReviewSection.style.display = 'block';
-  placePromise = fetchPlaceDetails(token, placeId);
 } else {
   addReviewSection.style.display = 'none';
 };

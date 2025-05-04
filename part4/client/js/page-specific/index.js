@@ -178,9 +178,8 @@ let placesPromise = null;
 let placesElements = [];
 populateFilter([]);
 
-if (token) {
-  placesPromise = fetchPlaces(token);
-};
+
+placesPromise = fetchPlaces();
 
 document.addEventListener('DOMContentLoaded', async () => {
   const result = await placesPromise;
