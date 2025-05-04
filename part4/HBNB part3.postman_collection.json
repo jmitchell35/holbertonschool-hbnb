@@ -1,0 +1,2130 @@
+{
+	"info": {
+		"_postman_id": "0640f738-0be9-431c-96fd-75b4f7fc1eb3",
+		"name": "HBNB part3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42469156",
+		"_collection_link": "https://hbnbros.postman.co/workspace/HBnBros-Workspace~c8d3a2a5-bafb-4250-8440-92a8bcb523d2/collection/42469156-0640f738-0be9-431c-96fd-75b4f7fc1eb3?action=share&source=collection_link&creator=42469156"
+	},
+	"item": [
+		{
+			"name": "Testing users",
+			"item": [
+				{
+					"name": "/users - add_user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"user_id\", jsonData.id)\r",
+									"    pm.environment.set(\"userFirstName\", jsonData.first_name)\r",
+									"    pm.environment.set(\"userLastName\", jsonData.last_name)\r",
+									"    pm.environment.set(\"userEmail\", jsonData.email)\r",
+									"}\r",
+									"\r",
+									"console.log(pm.environment.get(\"user_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let userLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let userEmail = `${userFirstName.toLowerCase()}.${userLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"console.log({userFirstName})\r",
+									"console.log({userLastName})\r",
+									"console.log({userEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{userFirstName}}\",\r\n    \"last_name\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users - get_all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<user_id> - get one user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc0MTcwMTE5MywianRpIjoiZjkyMzcxMTEtMTExMi00Mjk5LTk3YjMtZWM4MjZlMGEyYjgzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjRjZDgxZjIwLTUzYjQtNDc0Ni1hMmVhLTAyZmJjNTk3M2NjNyIsIm5iZiI6MTc0MTcwMTE5MywiY3NyZiI6ImY0NjgxYjBiLTQ1NjUtNDA2OS1iZjc3LTRmMGMwMzU5MWUwYiIsImV4cCI6MTc0MTcwMjA5MywiaXNfYWRtaW4iOmZhbHNlfQ.Fh1KrA9dD1kh5zT_XjR1kXL7635RXmdZlOpauhxClwQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<user_id> - updt",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let newFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let newLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let newEmail = `${newFirstName.toLowerCase()}.${newLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"newFirstName\", newFirstName)\r",
+									"pm.environment.set(\"newLastName\", newLastName)\r",
+									"pm.environment.set(\"newEmail\", newEmail)\r",
+									"\r",
+									"console.log({newFirstName})\r",
+									"console.log({newLastName})\r",
+									"console.log({newEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{newFirstName}}\",\r\n    \"last_name\": \"{{newLastName}}\",\r\n    \"email\": \"{{newEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users/<user_id> - get modified",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/users - get_all modified",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"nextRequest\", null);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Amenity",
+			"item": [
+				{
+					"name": "create amenity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"pm.environment.set(\"amenity_id\", jsonData.id)\r",
+									"\r",
+									"console.log(pm.environment.get(\"amenity_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let name = pm.environment.replaceIn(\"{{$randomNoun}}\")\r",
+									"\r",
+									"pm.environment.set(\"name\", name)\r",
+									"\r",
+									"console.log({name})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"{{name}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/amenities/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"amenities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all amenities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/amenities/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"amenities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get created amenity",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/amenities/{{amenity_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"amenities",
+								"{{amenity_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update amenity",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let name2 = pm.environment.replaceIn(\"{{$randomNoun}}\")\r",
+									"\r",
+									"pm.environment.set(\"name2\", name2)\r",
+									"\r",
+									"console.log({name2})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"{{amenity_id}}\",\r\n    \"name\": \"{{name2}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/amenities/{{amenity_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"amenities",
+								"{{amenity_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read amenity after update",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/amenities/{{amenity_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"amenities",
+								"{{amenity_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Place",
+			"item": [
+				{
+					"name": "get owner's details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/places - get_all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/places/<place_id> - get one",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/{{place_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								"{{place_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/places/<place_id> - updt",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"{{title}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": -150,\r\n  \"latitude\": {{latitude}},\r\n  \"longitude\": {{longitude}},\r\n  \"owner_id\": \"{{owner_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/{{place_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								"{{place_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Posting a review",
+			"item": [
+				{
+					"name": "get author's details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get reviewed place's details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/:<place_id>",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								":<place_id>"
+							],
+							"variable": [
+								{
+									"key": "<place_id>",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/reviews - get_all",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get review details",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get reviews by place",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/places/{{place_id}}/reviews",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"places",
+								"{{place_id}}",
+								"reviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update by review_id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rawUpdatedText = pm.environment.replaceIn(\"{{$randomLoremText}}\")\r",
+									"// Sanitize it by removing control characters and properly escaping for JSON\r",
+									"let updatedText = JSON.stringify(rawUpdatedText).slice(1, -1) // Remove outer quotes from stringify result\r",
+									"let updatedRating = Math.floor(Math.random() * 5) + 1\r",
+									"\r",
+									"pm.environment.set(\"updatedText\", updatedText)\r",
+									"pm.environment.set(\"updatedRating\", updatedRating)\r",
+									"\r",
+									"console.log({updatedText})\r",
+									"console.log({updatedRating})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"{{updatedText}}\",\r\n    \"rating\": {{updatedRating}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/reviews/<review_id> - delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "log admin in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"pm.environment.set(\"adminToken\", jsonData.access_token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"admin@gmail.com\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User 1",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"user_id\", jsonData.id)\r",
+									"    pm.environment.set(\"userFirstName\", jsonData.first_name)\r",
+									"    pm.environment.set(\"userLastName\", jsonData.last_name)\r",
+									"    pm.environment.set(\"userEmail\", jsonData.email)\r",
+									"}\r",
+									"\r",
+									"console.log(pm.environment.get(\"user_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let userLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let userEmail = `${userFirstName.toLowerCase()}.${userLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"userFirstName\", userFirstName)\r",
+									"pm.environment.set(\"userLastName\", userLastName)\r",
+									"pm.environment.set(\"userEmail\", userEmail)\r",
+									"\r",
+									"console.log({userFirstName})\r",
+									"console.log({userLastName})\r",
+									"console.log({userEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{userFirstName}}\",\r\n    \"last_name\": \"{{userLastName}}\",\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\" : \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"userTwo_id\", jsonData.id)\r",
+									"    pm.environment.set(\"userTwoFirstName\", jsonData.first_name)\r",
+									"    pm.environment.set(\"userTwoLastName\", jsonData.last_name)\r",
+									"    pm.environment.set(\"userTwoEmail\", jsonData.email)\r",
+									"}\r",
+									"\r",
+									"console.log(pm.environment.get(\"userTwo_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let userTwoFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let userTwoLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let userTwoEmail = `${userTwoFirstName.toLowerCase()}.${userTwoLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"userTwoFirstName\", userTwoFirstName)\r",
+									"pm.environment.set(\"userTwoLastName\", userTwoLastName)\r",
+									"pm.environment.set(\"userTwoEmail\", userTwoEmail)\r",
+									"\r",
+									"console.log({userTwoFirstName})\r",
+									"console.log({userTwoLastName})\r",
+									"console.log({userTwoEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{userTwoFirstName}}\",\r\n    \"last_name\": \"{{userTwoLastName}}\",\r\n    \"email\": \"{{userTwoEmail}}\",\r\n    \"password\" : \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Owner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"owner_id\", jsonData.id)\r",
+									"    pm.environment.set(\"ownerFirstName\", jsonData.first_name)\r",
+									"    pm.environment.set(\"ownerLastName\", jsonData.last_name)\r",
+									"    pm.environment.set(\"ownerEmail\", jsonData.email)\r",
+									"}\r",
+									"\r",
+									"console.log(pm.environment.get(\"owner_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let ownerFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let ownerLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let ownerEmail = `${ownerFirstName.toLowerCase()}.${ownerLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"ownerFirstName\", ownerFirstName)\r",
+									"pm.environment.set(\"ownerLastName\", ownerLastName)\r",
+									"pm.environment.set(\"ownerEmail\", ownerEmail)\r",
+									"\r",
+									"console.log({ownerFirstName})\r",
+									"console.log({ownerLastName})\r",
+									"console.log({ownerEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{ownerFirstName}}\",\r\n    \"last_name\": \"{{ownerLastName}}\",\r\n    \"email\": \"{{ownerEmail}}\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "log user 1 in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData != null) {\r",
+									"    pm.environment.set(\"userToken\", jsonData.access_token)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{userEmail}}\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "log user 2 in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData != null) {\r",
+									"    pm.environment.set(\"userTwoToken\", jsonData.access_token)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{userTwoEmail}}\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "log owner in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData != null) {\r",
+									"    pm.environment.set(\"ownerToken\", jsonData.access_token)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"{{ownerEmail}}\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User pwd (as user)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let newFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let newLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let newEmail = `${newFirstName.toLowerCase()}.${newLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"newFirstName\", newFirstName)\r",
+									"pm.environment.set(\"newLastName\", newLastName)\r",
+									"pm.environment.set(\"newEmail\", newEmail)\r",
+									"\r",
+									"console.log({newFirstName})\r",
+									"console.log({newLastName})\r",
+									"console.log({newEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{newFirstName}}\",\r\n    \"last_name\": \"{{newLastName}}\",\r\n    \"email\": \"{{newEmail}}\",\r\n    \"password\": \"password2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User (as user)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let newFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let newLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let newEmail = `${newFirstName.toLowerCase()}.${newLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"newFirstName\", newFirstName)\r",
+									"pm.environment.set(\"newLastName\", newLastName)\r",
+									"pm.environment.set(\"newEmail\", newEmail)\r",
+									"\r",
+									"console.log({newFirstName})\r",
+									"console.log({newLastName})\r",
+									"console.log({newEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{newFirstName}}\",\r\n    \"last_name\": \"{{newLastName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User (as admin)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let newFirstName = pm.environment.replaceIn(\"{{$randomFirstName}}\")\r",
+									"let newLastName = pm.environment.replaceIn(\"{{$randomLastName}}\")\r",
+									"let newEmail = `${newFirstName.toLowerCase()}.${newLastName.toLowerCase()}@gmail.com`\r",
+									"\r",
+									"pm.environment.set(\"newFirstName\", newFirstName)\r",
+									"pm.environment.set(\"newLastName\", newLastName)\r",
+									"pm.environment.set(\"newEmail\", newEmail)\r",
+									"\r",
+									"console.log({newFirstName})\r",
+									"console.log({newLastName})\r",
+									"console.log({newEmail})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"{{newFirstName}}\",\r\n    \"last_name\": \"{{newLastName}}\",\r\n    \"email\": \"{{newEmail}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place as owner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"place_id\", jsonData.id)\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let title = pm.environment.replaceIn(\"{{$randomCatchPhrase}}\")\r",
+									"let description = pm.environment.replaceIn(\"{{$randomCatchPhraseDescriptor}}\")\r",
+									"let price = parseFloat(pm.environment.replaceIn(\"{{$randomPrice}}\"))\r",
+									"let latitude = +pm.environment.replaceIn(\"{{$randomLatitude}}\")\r",
+									"let longitude = +pm.environment.replaceIn(\"{{$randomLongitude}}\")\r",
+									"\r",
+									"pm.environment.set(\"title\", title)\r",
+									"pm.environment.set(\"description\", description)\r",
+									"pm.environment.set(\"price\", price)\r",
+									"pm.environment.set(\"latitude\", latitude)\r",
+									"pm.environment.set(\"longitude\", longitude)\r",
+									"\r",
+									"console.log({title})\r",
+									"console.log({description})\r",
+									"console.log({price})\r",
+									"console.log({latitude})\r",
+									"console.log({longitude})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ownerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"{{title}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"latitude\": {{latitude}},\r\n  \"longitude\": {{longitude}},\r\n  \"owner_id\": \"{{owner_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New place (wrong owner_id)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let title = pm.environment.replaceIn(\"{{$randomCatchPhrase}}\")\r",
+									"let description = pm.environment.replaceIn(\"{{$randomCatchPhraseDescriptor}}\")\r",
+									"let price = parseFloat(pm.environment.replaceIn(\"{{$randomPrice}}\"))\r",
+									"let latitude = +pm.environment.replaceIn(\"{{$randomLatitude}}\")\r",
+									"let longitude = +pm.environment.replaceIn(\"{{$randomLongitude}}\")\r",
+									"\r",
+									"pm.environment.set(\"title\", title)\r",
+									"pm.environment.set(\"description\", description)\r",
+									"pm.environment.set(\"price\", price)\r",
+									"pm.environment.set(\"latitude\", latitude)\r",
+									"pm.environment.set(\"longitude\", longitude)\r",
+									"\r",
+									"console.log({title})\r",
+									"console.log({description})\r",
+									"console.log({price})\r",
+									"console.log({latitude})\r",
+									"console.log({longitude})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ownerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"{{title}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": {{price}},\r\n  \"latitude\": {{latitude}},\r\n  \"longitude\": {{longitude}},\r\n  \"owner_id\": \"{{user_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review user 1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rawText = pm.environment.replaceIn(\"{{$randomLoremText}}\")\r",
+									"// Sanitize it by removing control characters and properly escaping for JSON\r",
+									"let text = JSON.stringify(rawText).slice(1, -1) // Remove outer quotes from stringify result\r",
+									"let rating = Math.floor(Math.random() * 5) + 1\r",
+									"\r",
+									"pm.environment.set(\"text\", text)\r",
+									"pm.environment.set(\"rating\", rating)\r",
+									"\r",
+									"console.log({text})\r",
+									"console.log({rating})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let jsonData=JSON.parse(responseBody)\r",
+									"\r",
+									"if (jsonData.id != null) {\r",
+									"    pm.environment.set(\"review_id\", jsonData.id)\r",
+									"}\r",
+									"    \r",
+									"\r",
+									"console.log(pm.environment.get(\"review_id\"))"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"text\": \"{{text}}\",\r\n  \"rating\": {{rating}},\r\n  \"user_id\": \"{{user_id}}\",\r\n  \"place_id\": \"{{place_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update by review_id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rawUpdatedText = pm.environment.replaceIn(\"{{$randomLoremText}}\")\r",
+									"// Sanitize it by removing control characters and properly escaping for JSON\r",
+									"let updatedText = JSON.stringify(rawUpdatedText).slice(1, -1) // Remove outer quotes from stringify result\r",
+									"let updatedRating = Math.floor(Math.random() * 5) + 1\r",
+									"\r",
+									"pm.environment.set(\"updatedText\", updatedText)\r",
+									"pm.environment.set(\"updatedRating\", updatedRating)\r",
+									"\r",
+									"console.log({updatedText})\r",
+									"console.log({updatedRating})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"{{updatedText}}\",\r\n    \"rating\": {{updatedRating}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review (wrong user token)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rawUpdatedText = pm.environment.replaceIn(\"{{$randomLoremText}}\")\r",
+									"// Sanitize it by removing control characters and properly escaping for JSON\r",
+									"let updatedText = JSON.stringify(rawUpdatedText).slice(1, -1) // Remove outer quotes from stringify result\r",
+									"let updatedRating = Math.floor(Math.random() * 5) + 1\r",
+									"\r",
+									"pm.environment.set(\"updatedText\", updatedText)\r",
+									"pm.environment.set(\"updatedRating\", updatedRating)\r",
+									"\r",
+									"console.log({updatedText})\r",
+									"console.log({updatedRating})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ownerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"text\": \"{{updatedText}}\",\r\n    \"rating\": {{updatedRating}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review as Owner",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let rawText = pm.environment.replaceIn(\"{{$randomLoremText}}\")\r",
+									"// Sanitize it by removing control characters and properly escaping for JSON\r",
+									"let text = JSON.stringify(rawText).slice(1, -1) // Remove outer quotes from stringify result\r",
+									"let rating = Math.floor(Math.random() * 5) + 1\r",
+									"\r",
+									"pm.environment.set(\"text\", text)\r",
+									"pm.environment.set(\"rating\", rating)\r",
+									"\r",
+									"console.log({text})\r",
+									"console.log({rating})"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ownerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"text\": \"{{text}}\",\r\n  \"rating\": {{rating}},\r\n  \"user_id\": \"{{user_id}}\",\r\n  \"place_id\": \"{{place_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place (Wrong user token)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"{{title}}\",\r\n  \"description\": \"{{description}}\",\r\n  \"price\": -150,\r\n  \"latitude\": {{latitude}},\r\n  \"longitude\": {{longitude}},\r\n  \"owner_id\": \"{{owner_id}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/{{place_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								"{{place_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review (wrong user)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ownerToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review (right user)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Review (admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/reviews/{{review_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"reviews",
+								"{{review_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Place (as admin)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{adminToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/api/v1/places/{{place_id}}",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"v1",
+								"places",
+								"{{place_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
