@@ -116,8 +116,7 @@ main {
     display: flex;
     justify-content: center; /* Horizontal centering of flex items */
     align-items: center;     /* Vertical centering of flex items */
-    width: 90px;
-    height: 30px;
+    
 }
 
 /* Targeted fix for Login button behavior */
@@ -153,12 +152,25 @@ main {
     align-self: center;
     margin-top: auto;
     text-align: center;
+    width: 90px;
+    height: 30px;
 }
 
 .view-details:hover {
     background-color: #FF9800;
     box-shadow: 0 0 0 5px #ff990059;
     color: #000000;
+}
+
+.review-button {
+    background-color: #FF9800;
+    color: #000000;
+    align-self: center;
+    margin-top: auto;
+    text-align: center;
+    text-decoration: none;
+    width: 100px;
+    height: 30px;
 }
 
 .header-nav {
