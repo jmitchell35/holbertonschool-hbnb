@@ -152,12 +152,31 @@ function displayReviews(result) {
   const mainElement = document.getElementsByTagName('main')[0];
   const refElement = document.getElementById('reviews');
   
+  const divReview = document.createElement('div');
+  divReview.style.display = 'flex';
+  divReview.style.flexDirection = 'row';
+  divReview.style.alignItems = 'center';
+  divReview.style.justifyContent = 'flex-start';
+  divReview.style.margin = '20px 0 10px 0';
+  refElement.parentNode.insertBefore(divReview, refElement);
+
   const title = document.createElement('h2');
   title.textContent = 'Reviews';
   title.style.textAlign = 'left';
-  title.style.margin = '20px 10px 0 10px';
+  title.style.alignItems = 'center';
+  title.style.justifyContent = 'flex-start';
+  title.style.display = 'flex';
+  divReview.appendChild(title);
 
-  refElement.parentNode.insertBefore(title, refElement);
+  const reviewButton = document.createElement('a');
+  reviewButton.setAttribute('href', `add_review.html?placeId=${placeId}`);
+  reviewButton.setAttribute('id', 'review-button');
+  reviewButton.classList.add('button');
+  reviewButton.classList.add('review-button');
+  reviewButton.textContent = 'Review this place';
+  reviewButton.style.marginLeft = '20px';
+  reviewButton.style.alignContent = 'center';
+  divReview.appendChild(reviewButton);
 
   const section = document.getElementById('reviews');
 
@@ -186,6 +205,15 @@ if (token) {
 document.addEventListener('DOMContentLoaded', async () => {
   const placeResult = await placePromise;
   place = placeResult.data;
+
   displayPlace(placeResult);
   displayReviews(placeResult);
+
+  const reviewButton = document.getElementById('review-button');
+
+  if (token) {
+    reviewButton.style.display = 'block';
+  } else {
+    reviewButton.style.display = 'none';
+  };
 });
