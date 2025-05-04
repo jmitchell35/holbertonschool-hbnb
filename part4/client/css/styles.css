@@ -3,7 +3,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
 html, body {
@@ -173,6 +173,12 @@ main {
     height: 30px;
 }
 
+.review-button:hover {
+    background-color: #FF9800;
+    box-shadow: 0 0 0 5px #ff990059;
+    color: #000000;
+}
+
 .header-nav {
     text-align: center;
     display: flex;
@@ -218,3 +224,84 @@ main {
 .place-card:hover {
     transform: translateY(-5px);
 }
+
+
+#add-review {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+
+}
+
+#review-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    width: 50vw;
+    margin: 20px;
+}
+
+#review-form > textarea {
+    height: 10vw;
+}
+
+#review-form > label {
+    display: none;
+}
+
+#review-form > textarea {
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border-radius: 10px;
+}
+
+#review-form > button[type=submit] {
+    background-color: #FF9800;
+    border-radius: 10px;
+    height: 30px;
+    border: none;
+}
+
+#review-form > button[type=submit]:hover {
+    background-color: #FF9800;
+    box-shadow: 0 0 0 5px #ff990059;
+    color: #000000;
+}
+
+#review-form > input[type=range] {
+    border-radius: 10px;
+    accent-color: #FF9800;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: #333;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  
+  .toast.success {
+    background: #4CAF50;
+  }
+  
+  .toast.error {
+    background: #F44336;
+  }
