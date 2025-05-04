@@ -136,9 +136,9 @@ main {
     transition: 0.3s !important;
 }
 
-.button:hover {
+.login-button:hover {
     background-color: #686565;
-    box-shadow: 0 0 0 5px #4747475f;
+    box-shadow: 0 0 0 5px #ffffff65;
     color: #fff;
 }
 
@@ -152,6 +152,12 @@ main {
     color: #000000;
     align-self: center;
     margin: 10px;
+}
+
+.view-details:hover {
+    background-color: #FF9800;
+    box-shadow: 0 0 0 5px #ff990059;
+    color: #000000;
 }
 
 .header-nav {
