@@ -190,7 +190,7 @@ main {
 }
 
 .placeCardTitle {
-    height: 45px; /* Fixed height for all titles */
+    height: 60px; /* Fixed height for all titles */
     margin-top: 0;
     margin-bottom: 10px;
     overflow: hidden;
