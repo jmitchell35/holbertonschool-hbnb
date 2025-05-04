@@ -7,9 +7,5 @@ __pycache__/
 # venv directories
 *venv/
 
-# folder instance
-instance/
-
-# db files
-*.db
+# util for creating admin user
 part3/hbnb_layered_facades/hasher.py
