@@ -1,6 +1,6 @@
 ## Correction
 
-Lire 
+Lire https://github.com/jmitchell35/holbertonschool-hbnb/blob/main/part4/CORRECTION.md
 
 ## Tasks
 
