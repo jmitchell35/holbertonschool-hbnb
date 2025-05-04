@@ -21,7 +21,11 @@ class PlaceFacade:
         # checking data before writing into storage
         if self.is_valid(place_data) is not True:
             raise InvalidPlaceData
-        self.gateway.update(place_id, place_data)
+
+        # Filter out relationships handled by ORM
+        filtered_data = {k: v for k, v in place_data.items()\
+            if k != 'amenities'}
+        self.gateway.update(place_id, filtered_data)
         return updating_place
 
     # A revoir
