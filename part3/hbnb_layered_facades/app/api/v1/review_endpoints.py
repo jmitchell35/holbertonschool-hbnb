@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from flask_jwt_extended import get_jwt_identity
 from app.services import facade
 from app.api.v1.authentication_utils import (author_matches_or_admin,
                                              not_owner_first_review)
@@ -12,7 +13,7 @@ review_input_model = api.model('ReviewInput', {
     'text': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True,
                              description='Rating of the place (1-5)'),
-    'user_id': fields.String(required=True, description='ID of the user'),
+    'user_id': fields.String(required=False, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
 })
 review_output_model = api.model('ReviewOutput', {
@@ -39,7 +40,9 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         try:
-            review = facade.review_manager.create_review(api.payload)
+            payload = api.payload.copy()
+            payload['user_id'] = get_jwt_identity()
+            review = facade.review_manager.create_review(payload)
             return api.marshal(review, review_output_model), 201
         except InvalidReviewData:
             api.abort(400, error='Invalid input data')
