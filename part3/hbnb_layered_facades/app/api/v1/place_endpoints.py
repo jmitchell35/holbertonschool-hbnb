@@ -121,7 +121,6 @@ class PlaceList(Resource):
 @api.route('/<place_id>')
 @api.doc(params={'place_id': 'The place ID'})
 class PlaceResource(Resource):
-    @owner_matches_or_admin
     @api.response(200, 'Place details retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
