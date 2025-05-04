@@ -102,9 +102,8 @@ class PlaceWorkflowManager():
                         amenities.append(amenity)
                     except AmenityNotFound:
                         raise InvalidPlaceData
-                        
                 # Replace existing amenities
-                place.amenities = amenities  # This replaces the entire collection
+                place.amenities = amenities  # replaces the entire collection
             return self.place_facade.update_place(place_id, place_data)
         except PlaceNotFound:
             raise PlaceNotFound
