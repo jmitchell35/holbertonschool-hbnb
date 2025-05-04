@@ -177,6 +177,12 @@ function showToast(message, type = 'success') {
   toast.innerHTML = message;
   document.body.appendChild(toast);
   
+  // Force reflow to ensure transition works
+  void toast.offsetHeight;
+  
+  // Add show class after DOM insertion
+  toast.classList.add('show');
+  
   // Animation
   setTimeout(() => {
     toast.classList.remove('show');
@@ -214,8 +220,9 @@ function reviewSubmitListener() {
       document.getElementById('review-text').value = '';
       document.querySelectorAll('input[name="rating"]:checked')
         .forEach(input => input.checked = false);
-        showToast('Review submitted successfully !');
-      window.location.href = `place.html?placeId=${placeId}`;
+
+      window.location.href = `place.html?placeId=${placeId}&toast=success`;
+
     } else {
           alert('Review submission failed: ' + response.statusText);
     }

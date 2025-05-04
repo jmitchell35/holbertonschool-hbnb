@@ -172,10 +172,15 @@ function displayReviews(result) {
 const urlParams = new URLSearchParams(window.location.search);
 const addReviewSection = document.getElementById('add-review');
 const placeId = urlParams.get('placeId');
+const toast = urlParams.get('toast');
 let placePromise = null;
 let place = null;
 
 placePromise = fetchPlaceDetails(placeId);
+
+if (toast === 'success') {
+  showToast('Review submitted successfully!');
+}
 
 if (!token) {
   addReviewSection.style.display = 'none';
