@@ -82,7 +82,12 @@ function displayPlace(result) {
   description.style.padding = '8px 0 8px 0';
 
   const amenities = document.createElement('span');
-  amenities.innerHTML = `<b>Amenities:</b> ${place.amenities}`;
+  // reduce(function, initialAccumulatorValue)
+  // reduce((result, amenity, index) => {add separator first if not first element}, iAV = '');
+  const amenityNamesString = place.amenities.reduce((result, amenity, index) => {
+    return result + (index > 0 ? ', ' : '') + amenity.name;
+  }, '');
+  amenities.innerHTML = `<b>Amenities:</b> ${amenityNamesString}`;
   card.appendChild(amenities);
   amenities.style.padding = '8px 0 8px 0';
 }
