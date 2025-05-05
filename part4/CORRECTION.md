@@ -9,7 +9,7 @@ git clone https://github.com/jmitchell35/holbertonschool-hbnb.git
 ```
 
 admin : admin@gmail.com / 12345
-axel : axel.gore@holbertonschool.com / password
+Axel : axel.gore@holbertonschool.com / password
 
 ## Faire des requêtes en back au besoin
 
