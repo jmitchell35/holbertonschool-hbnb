@@ -68,6 +68,10 @@ Le client peut être testé via Live Server sur VS Code ou toute autre forme d'h
 admin : admin@gmail.com / 12345
 Axel : axel.gore@holbertonschool.com / password
 
+## The place to look at
+
+"Proactive leading edge pricing structure" (la première en haut à gauche sur l'index), est la place utilisée pour préparer la correction.
+
 ## Faire des requêtes en back au besoin
 
 J'ai inclus la Collection Postman avec les requêtes de la partie 3 au besoin.
